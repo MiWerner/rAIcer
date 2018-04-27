@@ -1,0 +1,26 @@
+d:\jauer\documents\visual studio 2015\Projects\IBallClient\IBallClient\obj\Release\MainWindow.g.cs
+d:\jauer\documents\visual studio 2015\Projects\IBallClient\IBallClient\obj\Release\App.g.cs
+d:\jauer\documents\visual studio 2015\Projects\IBallClient\IBallClient\obj\Release\MainWindow.baml
+d:\jauer\documents\visual studio 2015\Projects\IBallClient\IBallClient\obj\Release\rAIcerClient.csproj.GenerateResource.Cache
+d:\jauer\documents\visual studio 2015\Projects\IBallClient\IBallClient\bin\Release\RaicerClient.exe.config
+d:\jauer\documents\visual studio 2015\Projects\IBallClient\IBallClient\bin\Release\RaicerClient.exe
+d:\jauer\documents\visual studio 2015\Projects\IBallClient\IBallClient\bin\Release\RaicerClient.pdb
+d:\jauer\documents\visual studio 2015\Projects\IBallClient\IBallClient\obj\Release\RaicerClient_MarkupCompile.cache
+d:\jauer\documents\visual studio 2015\Projects\IBallClient\IBallClient\obj\Release\RaicerClient_MarkupCompile.lref
+d:\jauer\documents\visual studio 2015\Projects\IBallClient\IBallClient\obj\Release\RaicerClient.g.resources
+d:\jauer\documents\visual studio 2015\Projects\IBallClient\IBallClient\obj\Release\RaicerClient.Properties.Resources.resources
+d:\jauer\documents\visual studio 2015\Projects\IBallClient\IBallClient\obj\Release\RaicerClient.exe
+d:\jauer\documents\visual studio 2015\Projects\IBallClient\IBallClient\obj\Release\RaicerClient.pdb
+\\141.83.19.30\robshare\Lehre\Praktika\ki17\client source\IBallClient\IBallClient\bin\Release\RaicerClient.exe.config
+\\141.83.19.30\robshare\Lehre\Praktika\ki17\client source\IBallClient\IBallClient\obj\Release\RaicerClient.exe
+\\141.83.19.30\robshare\Lehre\Praktika\ki17\client source\IBallClient\IBallClient\obj\Release\RaicerClient.pdb
+\\141.83.19.30\robshare\Lehre\Praktika\ki17\client source\IBallClient\IBallClient\bin\Release\RaicerClient.exe
+\\141.83.19.30\robshare\Lehre\Praktika\ki17\client source\IBallClient\IBallClient\bin\Release\RaicerClient.pdb
+\\141.83.19.30\robshare\Lehre\Praktika\ki17\client source\IBallClient\IBallClient\obj\Release\MainWindow.g.cs
+\\141.83.19.30\robshare\Lehre\Praktika\ki17\client source\IBallClient\IBallClient\obj\Release\App.g.cs
+\\141.83.19.30\robshare\Lehre\Praktika\ki17\client source\IBallClient\IBallClient\obj\Release\RaicerClient_MarkupCompile.cache
+\\141.83.19.30\robshare\Lehre\Praktika\ki17\client source\IBallClient\IBallClient\obj\Release\RaicerClient_MarkupCompile.lref
+\\141.83.19.30\robshare\Lehre\Praktika\ki17\client source\IBallClient\IBallClient\obj\Release\MainWindow.baml
+\\141.83.19.30\robshare\Lehre\Praktika\ki17\client source\IBallClient\IBallClient\obj\Release\RaicerClient.g.resources
+\\141.83.19.30\robshare\Lehre\Praktika\ki17\client source\IBallClient\IBallClient\obj\Release\RaicerClient.Properties.Resources.resources
+\\141.83.19.30\robshare\Lehre\Praktika\ki17\client source\IBallClient\IBallClient\obj\Release\rAIcerClient.csproj.GenerateResource.Cache

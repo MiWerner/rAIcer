@@ -1,0 +1,14 @@
+d:\jauer\documents\visual studio 2015\Projects\IBallClient\IBallClient\bin\Debug\IBallClient.exe.config
+d:\jauer\documents\visual studio 2015\Projects\IBallClient\IBallClient\bin\Debug\IBallClient.exe
+d:\jauer\documents\visual studio 2015\Projects\IBallClient\IBallClient\bin\Debug\IBallClient.pdb
+d:\jauer\documents\visual studio 2015\Projects\IBallClient\IBallClient\obj\Debug\IBallClient.csprojResolveAssemblyReference.cache
+d:\jauer\documents\visual studio 2015\Projects\IBallClient\IBallClient\obj\Debug\MainWindow.g.cs
+d:\jauer\documents\visual studio 2015\Projects\IBallClient\IBallClient\obj\Debug\App.g.cs
+d:\jauer\documents\visual studio 2015\Projects\IBallClient\IBallClient\obj\Debug\IBallClient_MarkupCompile.cache
+d:\jauer\documents\visual studio 2015\Projects\IBallClient\IBallClient\obj\Debug\IBallClient_MarkupCompile.lref
+d:\jauer\documents\visual studio 2015\Projects\IBallClient\IBallClient\obj\Debug\MainWindow.baml
+d:\jauer\documents\visual studio 2015\Projects\IBallClient\IBallClient\obj\Debug\IBallClient.g.resources
+d:\jauer\documents\visual studio 2015\Projects\IBallClient\IBallClient\obj\Debug\IBallClient.Properties.Resources.resources
+d:\jauer\documents\visual studio 2015\Projects\IBallClient\IBallClient\obj\Debug\IBallClient.csproj.GenerateResource.Cache
+d:\jauer\documents\visual studio 2015\Projects\IBallClient\IBallClient\obj\Debug\IBallClient.exe
+d:\jauer\documents\visual studio 2015\Projects\IBallClient\IBallClient\obj\Debug\IBallClient.pdb

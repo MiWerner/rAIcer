@@ -23,9 +23,12 @@ fprintf('Countdown started, preprocessing...\n')
 
 
 fprintf('Preprocessing done! Waiting for game to start...\n')
-keys=[0,0,0,0]; 
+
+global keys
+keys = [0,0,0,0]; 
 h = figure; 
-set(h,'KeyPressFcn',@KeyPressCb) ;
+set(h,'KeyPressFcn',@KeyPressCb);
+set(h,'KeyReleaseFcn', @KeyReleaseCb);
 
 %wait for game start
 isRunning=0;
@@ -62,7 +65,7 @@ end
 %The next lines extract the image from the data stream.
 J=uint8(screen);
 Ir=reshape(J,[3,512,288]);
-I=permute(Ir,[2,3,1]);
+I=flipud(permute(Ir,[3,2,1]));
 imagesc(I);
 
 %TODO: Insert intelligence here
@@ -72,6 +75,7 @@ imagesc(I);
 
 %send command
 msg=uint8([ID,keys]);
+disp(msg)
 write(t,msg);
 
 end
@@ -80,20 +84,36 @@ fprintf('\n Game ended! \n')
 
 function KeyPressCb(~,evnt)
     fprintf('key pressed: %s\n',evnt.Key);
-    keys = [0 ,0 ,0, 0];
-    if strcmpi(evnt.Key,'leftarrow')
-       keys(3) = 1;
-    end
-    if strcmpi(evnt.Key,'rightarrow')
-        keys(4) = 1;
-    end  
+    global keys
     if strcmpi(evnt.Key,'uparrow')
         keys(1) = 1;
-    end  
+    end
     if strcmpi(evnt.Key,'downarrow')
         keys(2) = 1;
     end
-    disp(keys)
+    if strcmpi(evnt.Key,'leftarrow')
+        keys(3) = 1;
+    end
+    if strcmpi(evnt.Key,'rightarrow')
+        keys(4) = 1;
+    end
+end
+
+function KeyReleaseCb(~,evnt)
+    fprintf('key released: %s\n',evnt.Key);
+    global keys
+    if strcmpi(evnt.Key,'uparrow')
+        keys(1) = 0;
+    end
+    if strcmpi(evnt.Key,'downarrow')
+        keys(2) = 0;
+    end
+    if strcmpi(evnt.Key,'leftarrow')
+        keys(3) = 0;
+    end
+    if strcmpi(evnt.Key,'rightarrow')
+        keys(4) = 0;
+    end
 end
 
 

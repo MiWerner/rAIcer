@@ -59,7 +59,7 @@ end
 %The next lines extract the image from the data stream.
 J=uint8(screen);
 Ir=reshape(J,[3,512,288]);
-I=permute(Ir,[2,3,1]);
+I=flipud(permute(Ir,[3,2,1]));
 imagesc(I);
 
 %TODO: Insert intelligence here

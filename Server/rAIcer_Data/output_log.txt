@@ -17,14 +17,14 @@ Platform assembly: C:\Users\Marius\PythonProjects\rAIcer\Server\rAIcer_Data\Mana
 Loading C:\Users\Marius\PythonProjects\rAIcer\Server\rAIcer_Data\Managed\UnityEngine.Networking.dll into Unity Child Domain
 Platform assembly: C:\Users\Marius\PythonProjects\rAIcer\Server\rAIcer_Data\Managed\UnityEngine.PlaymodeTestsRunner.dll (this message is harmless)
 Loading C:\Users\Marius\PythonProjects\rAIcer\Server\rAIcer_Data\Managed\UnityEngine.PlaymodeTestsRunner.dll into Unity Child Domain
-- Completed reload, in  0.041 seconds
+- Completed reload, in  0.479 seconds
 Platform assembly: C:\Users\Marius\PythonProjects\rAIcer\Server\rAIcer_Data\Managed\System.Core.dll (this message is harmless)
 Platform assembly: C:\Users\Marius\PythonProjects\rAIcer\Server\rAIcer_Data\Managed\System.dll (this message is harmless)
-desktop: 1920x1080 60Hz; virtual: 3200x1080 at -1280,0
+desktop: 1920x1080 40Hz; virtual: 1920x1080 at 0,0
 <RI> Initializing input.
 <RI> Input initialized.
 <RI> Initialized touch support.
-UnloadTime: 2.476636 ms
+UnloadTime: 1.974038 ms
 Server is running ...
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
@@ -34,7 +34,7 @@ Wait for new clients
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
 
 Setting up 1 worker threads for Enlighten.
-  Thread -> id: 3078 -> priority: 1 
+  Thread -> id: 1424 -> priority: 1 
 New Client #1...
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)

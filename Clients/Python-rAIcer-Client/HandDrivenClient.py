@@ -10,7 +10,7 @@ display.fill((255, 64, 64))
 
 while 1:
 
-    ID, status, lap_id, lap_total, damage, rank, image = s.recieve()
+    ID, status, lap_id, lap_total, damage, rank, image = s.receive()
 
     if status in [S_WAIT, S_COUNTDOWN, S_RUNNING, S_FINISHED]:
         display.blit(pygame.surfarray.make_surface(image), (0, 0))
@@ -26,14 +26,13 @@ while 1:
 
     elif status == S_COUNTDOWN:
         print('Countdown')
-        total_laps = lap_total
     elif status == S_WAIT:
         print('Waiting for start')
     elif status == S_FINISHED:
         print('Finished!')
         break
     elif status == S_CRASHED:
-        print('Broken')
+        print('Crashed')
         break
     elif status == S_CANCELED:
         print('Canceled')

@@ -28,8 +28,8 @@ class RaicerSocket(object):
     def connect(self, ip=TCP_IP, port=TCP_PORT):
         """
         Connects the socket to the address defined by ip and port
-        :param ip: the IP-Adress of the
-        :param port: the Port-ID
+        :param ip: the IP address of the server
+        :param port: the port of the server
         :return:
         """
         self.socket.connect((ip, port))
@@ -44,12 +44,12 @@ class RaicerSocket(object):
         img = np.fromstring(b_img, dtype=np.uint8)
         img = img.reshape(IMG_HEIGHT, IMG_WIDTH, 3)
         img = np.transpose(img, (1, 0, 2))
-        img = np.flip(img, 1) # Invert x axis
+        img = np.flip(img, 1)  # Invert x axis
         return img
 
-    def __recieve(self):
+    def __receive(self):
         """
-        Reads a the full message send by the server and returns the data as binary
+        Reads the full message sent by the server and returns the data as binary
         :return: binary server message
         """
         chunks = []
@@ -62,12 +62,12 @@ class RaicerSocket(object):
             bytes_recd = bytes_recd + len(chunk)
         return b''.join(chunks)
 
-    def recieve(self):
+    def receive(self):
         """
         Receives a message from the server, saves the data and return components of the message as a tuple.
         :return: tuple with (ID, status, lap-ID, max_lap, damage, rank, image)
         """
-        data = self.__recieve()
+        data = self.__receive()
         print_debug("Length", len(data))
         self.id = data[0]
         self.status = data[1]
@@ -82,10 +82,10 @@ class RaicerSocket(object):
     def send(self, up, down, left, right):
         """
         Sends a message to the server containing the commands for moving
-        :param up: flag for moving up-war
+        :param up: flag for moving up
         :param down: flag for moving down
-        :param left: flag for moving to the left
-        :param right: flag for moving to the right
+        :param left: flag for moving left
+        :param right: flag for moving right
         :return:
         """
         msg = [self.id]

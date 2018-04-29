@@ -1,6 +1,6 @@
 import socket
 from Utils import TCP_IP, TCP_PORT, IMG_HEIGHT, IMG_WIDTH, print_debug
-import numpy as np
+from ImageUtils import byte_array_to_image
 
 
 class RaicerSocket(object):
@@ -8,17 +8,11 @@ class RaicerSocket(object):
     MSGLEN = 6 + IMG_WIDTH*IMG_HEIGHT*3
 
     id = -1
-
     status = -1
-
     lap_id = -1
-
     lap_max = -1
-
     damage = -1
-
     rank = -1
-
     image = -1
 
     def __init__(self):
@@ -33,19 +27,6 @@ class RaicerSocket(object):
         :return:
         """
         self.socket.connect((ip, port))
-
-    @staticmethod
-    def convert_image(b_img):
-        """
-        Converts the binary image b_img into a normal image
-        :param b_img: the binary image
-        :return: converted image
-        """
-        img = np.fromstring(b_img, dtype=np.uint8)
-        img = img.reshape(IMG_HEIGHT, IMG_WIDTH, 3)
-        img = np.transpose(img, (1, 0, 2))
-        img = np.flip(img, 1)  # Invert x axis
-        return img
 
     def __receive(self):
         """
@@ -75,7 +56,7 @@ class RaicerSocket(object):
         self.lap_max = data[3]
         self.damage = data[4]
         self.rank = data[5]
-        self.image = self.convert_image(data[6:])
+        self.image = byte_array_to_image(data[6:])
 
         return self.id, self.status, self.lap_id, self.lap_max, self.damage, self.rank, self.image
 

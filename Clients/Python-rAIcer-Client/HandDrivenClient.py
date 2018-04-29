@@ -1,6 +1,7 @@
 import RaicerSocket
 import pygame
-from Utils import S_WAIT, S_COUNTDOWN, S_RUNNING, S_FINISHED, S_CRASHED, S_CANCELED, IMG_WIDTH, IMG_HEIGHT
+from Utils import S_WAIT, S_COUNTDOWN, S_RUNNING, S_FINISHED, S_CRASHED, S_CANCELED, IMG_WIDTH, IMG_HEIGHT, print_debug
+from ImageUtils import get_ball_position
 
 s = RaicerSocket.RaicerSocket()
 s.connect()
@@ -23,6 +24,9 @@ while 1:
         pygame.event.pump()  # needed to get the latest events
         keys = pygame.key.get_pressed()  # sequence of flags for each key
         s.send(keys[pygame.K_UP], keys[pygame.K_DOWN], keys[pygame.K_LEFT], keys[pygame.K_RIGHT])
+
+        # get the position of the ball
+        print_debug('Ball at position', get_ball_position(ID, image))
 
     elif status == S_COUNTDOWN:
         print('Countdown')

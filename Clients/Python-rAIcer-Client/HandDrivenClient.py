@@ -1,13 +1,15 @@
 import RaicerSocket
 import pygame
 from Utils import S_WAIT, S_COUNTDOWN, S_RUNNING, S_FINISHED, S_CRASHED, S_CANCELED, IMG_WIDTH, IMG_HEIGHT, print_debug
-from ImageUtils import get_ball_position
+from ImageUtils import get_ball_position, get_track
 
 s = RaicerSocket.RaicerSocket()
 s.connect()
 
 display = pygame.display.set_mode((IMG_WIDTH, IMG_HEIGHT))
 display.fill((255, 64, 64))
+
+track = None
 
 while 1:
 
@@ -30,6 +32,10 @@ while 1:
 
     elif status == S_COUNTDOWN:
         print('Countdown')
+
+        if track is None:
+            track = get_track(image)
+
     elif status == S_WAIT:
         print('Waiting for start')
     elif status == S_FINISHED:

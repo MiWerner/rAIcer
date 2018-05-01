@@ -2,10 +2,11 @@ import RaicerSocket
 import pygame
 from Utils import S_WAIT, S_COUNTDOWN, S_RUNNING, S_FINISHED, S_CRASHED, S_CANCELED, IMG_WIDTH, IMG_HEIGHT, print_debug
 from ImageUtils import get_ball_position, get_track
+import time
 
 s = RaicerSocket.RaicerSocket()
 s.connect()
-
+s.start__threads()
 display = pygame.display.set_mode((IMG_WIDTH, IMG_HEIGHT))
 display.fill((255, 64, 64))
 
@@ -14,7 +15,6 @@ track = None
 while 1:
 
     ID, status, lap_id, lap_total, damage, rank, image = s.receive()
-
     if status in [S_WAIT, S_COUNTDOWN, S_RUNNING, S_FINISHED]:
         display.blit(pygame.surfarray.make_surface(image), (0, 0))
         pygame.display.update()
@@ -47,5 +47,7 @@ while 1:
     elif status == S_CANCELED:
         print('Canceled')
         break
+
+    time.sleep(.1)
 
 s.close()

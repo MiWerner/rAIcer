@@ -9,8 +9,7 @@ class RaicerSocket(object):
     MSGLEN = 6 + IMG_WIDTH*IMG_HEIGHT*3
 
     is_active = False
-    rs_thread = None
-    send_msgs = []
+    thread = None
 
     id = -1
     status = -1
@@ -20,13 +19,15 @@ class RaicerSocket(object):
     rank = -1
     image = -1
 
+    send_msg = None
+
     def __init__(self):
         """Initialize the socket"""
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
     def connect(self, ip=TCP_IP, port=TCP_PORT):
         """
-        Connects the socket to the address defined by ip and port
+        Connects the socket to the address defined by ip and port and starts the communication thread
         :param ip: the IP address of the server
         :param port: the port of the server
         :return:
@@ -34,20 +35,20 @@ class RaicerSocket(object):
         self.socket.connect((ip, port))
         self.is_active = True
 
-    def start__threads(self):
-        """
-        Starts the threads that receive all message from the server and sends messages to the server
-        :return:
-        """
-        self.rs_thread = Thread(target=self.__receive_and_send_thread, args=())
-        self.rs_thread.start()
+        self.thread = Thread(target=self.__receive_and_send_thread, args=())
+        self.thread.start()
 
     def __receive_and_send_thread(self):
         """
-        Receives and send messages and save the data als long self.is_active is True
+        Receives and sends messages and saves the data as long as self.is_active is True
         :return:
         """
         while self.is_active:
+            # send the latest message if it exists
+            if self.send_msg:
+                self.socket.send(self.send_msg)
+                print_debug(self.send_msg)
+
             # receive message
             b_msg = self.__receive()
             # save data
@@ -58,11 +59,6 @@ class RaicerSocket(object):
             self.damage = b_msg[4]
             self.rank = b_msg[5]
             self.image = byte_array_to_image(b_msg[6:])
-
-            if self.send_msgs:  # if list contains at least one element
-                msg = self.send_msgs[0]
-                self.send_msgs.remove(msg)
-                self.socket.send(msg)
 
     def __receive(self):
         """
@@ -88,7 +84,7 @@ class RaicerSocket(object):
 
     def send(self, up, down, left, right):
         """
-        Creates and adds a message for movements commands to a queue of messages
+        Creates and sets the message for movements commands
         :param up: flag for moving up
         :param down: flag for moving down
         :param left: flag for moving left
@@ -98,8 +94,7 @@ class RaicerSocket(object):
         msg = [self.id]
         for flag in [up, down, left, right]:
             msg.append(0x01 if flag else 0x00)
-        print_debug(msg)
-        self.send_msgs.append(bytes(msg))
+        self.send_msg = bytes(msg)
 
     def close(self):
         """
@@ -108,7 +103,7 @@ class RaicerSocket(object):
         """
 
         self.is_active = False
-        if self.rs_thread is not None:
-            self.rs_thread.join()
-            self.rs_thread = None
+        if self.thread is not None:
+            self.thread.join()
+            self.thread = None
         self.socket.close()

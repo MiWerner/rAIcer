@@ -6,7 +6,6 @@ import time
 
 s = RaicerSocket.RaicerSocket()
 s.connect()
-s.start__threads()
 display = pygame.display.set_mode((IMG_WIDTH, IMG_HEIGHT))
 display.fill((255, 64, 64))
 
@@ -36,8 +35,10 @@ while 1:
         if track is None:
             track = get_track(image)
 
+        time.sleep(0.1)
     elif status == S_WAIT:
         print('Waiting for start')
+        time.sleep(0.1)
     elif status == S_FINISHED:
         print('Finished!')
         break
@@ -48,6 +49,5 @@ while 1:
         print('Canceled')
         break
 
-    time.sleep(.05)
 
 s.close()

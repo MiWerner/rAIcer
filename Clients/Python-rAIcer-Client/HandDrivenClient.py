@@ -48,6 +48,6 @@ while 1:
         print('Canceled')
         break
 
-    time.sleep(.1)
+    time.sleep(.05)
 
 s.close()

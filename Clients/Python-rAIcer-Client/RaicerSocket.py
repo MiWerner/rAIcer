@@ -2,15 +2,14 @@ import socket
 from Utils import TCP_IP, TCP_PORT, IMG_HEIGHT, IMG_WIDTH, print_debug
 from ImageUtils import byte_array_to_image
 from threading import Thread
-import time
+
 
 class RaicerSocket(object):
 
     MSGLEN = 6 + IMG_WIDTH*IMG_HEIGHT*3
 
     is_active = False
-    rcv_thread = None
-    send_thread = None
+    rs_thread = None
     send_msgs = []
 
     id = -1
@@ -40,14 +39,12 @@ class RaicerSocket(object):
         Starts the threads that receive all message from the server and sends messages to the server
         :return:
         """
-        self.rcv_thread = Thread(target=self.___receive_thread, args=())
-        self.rcv_thread.start()
-        self.send_thread = Thread(target=self.__send_thread, args=())
-        self.send_thread.start()
+        self.rs_thread = Thread(target=self.__receive_and_send_thread, args=())
+        self.rs_thread.start()
 
-    def ___receive_thread(self):
+    def __receive_and_send_thread(self):
         """
-        Receives messages and save the data als long self.is_active is True
+        Receives and send messages and save the data als long self.is_active is True
         :return:
         """
         while self.is_active:
@@ -62,13 +59,6 @@ class RaicerSocket(object):
             self.rank = b_msg[5]
             self.image = byte_array_to_image(b_msg[6:])
 
-    def __send_thread(self):
-        """
-        Checks if there are messages left for sending as long self.is_active is True.
-        If a message is left this message will send to the server.
-        :return:
-        """
-        while self.is_active:
             if self.send_msgs:  # if list contains at least one element
                 msg = self.send_msgs[0]
                 self.send_msgs.remove(msg)
@@ -118,11 +108,7 @@ class RaicerSocket(object):
         """
 
         self.is_active = False
-        if self.rcv_thread is not None:
-            self.rcv_thread.join()
-            self.rcv_thread = None
-        if self.send_thread is not None:
-            self.send_thread.join()
-            self.send_thread = None
-            self.send_msgs = []
+        if self.rs_thread is not None:
+            self.rs_thread.join()
+            self.rs_thread = None
         self.socket.close()

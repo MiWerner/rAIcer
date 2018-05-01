@@ -14,6 +14,7 @@ class RaicerSocket(object):
     damage = -1
     rank = -1
     image = -1
+    b_image = -1
 
     def __init__(self):
         """Initialize the socket"""
@@ -56,6 +57,7 @@ class RaicerSocket(object):
         self.lap_max = data[3]
         self.damage = data[4]
         self.rank = data[5]
+        self.b_image = data[6:0]
         self.image = byte_array_to_image(data[6:])
 
         return self.id, self.status, self.lap_id, self.lap_max, self.damage, self.rank, self.image

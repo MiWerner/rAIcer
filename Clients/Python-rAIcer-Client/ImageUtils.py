@@ -2,6 +2,7 @@ from Utils import IMG_HEIGHT, IMG_WIDTH, print_debug
 import cv2 as cv
 import numpy as np
 
+MIN_BALL_RADIUS = 5
 MIN_PRIMARY_COLOR_VALUE_BALL = 100
 MAX_OTHER_COLOR_VALUE_BALL = 10
 
@@ -72,8 +73,9 @@ def get_track(img):
 
         point1 = contours[0][index1][0]
         point2 = contours[1][(number_of_sections-i-1) * len(contours[1])//number_of_sections][0]
-        cv.line(image, tuple(point1), tuple(point2), (0, 0, 0))
+        #cv.line(image, tuple(point1), tuple(point2), (0, 0, 0))
 
-    cv.imshow("track", track) # TODO image
-    return track, image  # Not sure what to actually return later, just return anything so this does not get called again
+    # image and track seem to be the same image
+    cv.imshow("track", image)
+    return image  # Not sure what to actually return later, just return anything so this does not get called again
 

@@ -2,7 +2,7 @@ import RaicerSocket
 import pygame
 from Utils import S_WAIT, S_COUNTDOWN, S_RUNNING, S_FINISHED, S_CRASHED, S_CANCELED, IMG_WIDTH, IMG_HEIGHT, print_debug
 from ImageUtils import get_ball_position, get_track
-from Features import calc_distance_features, draw_features
+from Features import calc_distance_features, draw_features, calc_speed_features
 import time
 import numpy as np
 
@@ -12,14 +12,14 @@ display = pygame.display.set_mode((IMG_WIDTH, IMG_HEIGHT))
 display.fill((255, 64, 64))
 
 track = None
-track_image = None
+last_ball_pos = None
 
 while 1:
 
     ID, status, lap_id, lap_total, damage, rank, image = s.receive()
 
     if status == S_RUNNING:
-        print('Game is running')
+        print_debug('Game is running')
 
         # check keys and send commands to server
         pygame.event.pump()  # needed to get the latest events
@@ -32,6 +32,9 @@ while 1:
         print_debug('Ball at position', ball_pos)
 
         du, dd, dl, dr = calc_distance_features(ball_pos, track)
+        vx, vy = calc_speed_features(last_ball_pos, ball_pos)
+        print_debug("vx: ", vx, ", vy", vy)
+        last_ball_pos = ball_pos
 
         display.blit(pygame.surfarray.make_surface(image), (0, 0))
         draw_features(display, ball_pos, du, dd, dl, dr)
@@ -40,26 +43,26 @@ while 1:
     elif status == S_COUNTDOWN:
         display.blit(pygame.surfarray.make_surface(image), (0, 0))
         pygame.display.update()
-        print('Countdown')
-        if track_image is None:
-            track, track_image = get_track(image)
+        print_debug('Countdown')
+        if track is None:
+            track = get_track(image)
 
         time.sleep(0.1)
     elif status == S_WAIT:
         display.blit(pygame.surfarray.make_surface(image), (0, 0))
         pygame.display.update()
-        print('Waiting for start')
+        print_debug('Waiting for start')
         time.sleep(0.1)
     elif status == S_FINISHED:
         display.blit(pygame.surfarray.make_surface(image), (0, 0))
         pygame.display.update()
-        print('Finished!')
+        print_debug('Finished!')
         break
     elif status == S_CRASHED:
-        print('Crashed')
+        print_debug('Crashed')
         break
     elif status == S_CANCELED:
-        print('Canceled')
+        print_debug('Canceled')
         break
 
 

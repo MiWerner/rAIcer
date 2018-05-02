@@ -74,6 +74,6 @@ def get_track(img):
         point2 = contours[1][(number_of_sections-i-1) * len(contours[1])//number_of_sections][0]
         cv.line(image, tuple(point1), tuple(point2), (0, 0, 0))
 
-    cv.imshow("track", image)
-    return image  # Not sure what to actually return later, just return anything so this does not get called again
+    cv.imshow("track", track) # TODO image
+    return track, image  # Not sure what to actually return later, just return anything so this does not get called again
 

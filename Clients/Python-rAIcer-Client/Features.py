@@ -173,7 +173,7 @@ def __calc_distance(ball_pos, track_mask, direction_x, direction_y):
     while track_mask[current_x, current_y]:
         current_x += direction_x
         current_y += direction_y
-    dx = abs(ball_pos[0] - current_x)
-    dy = abs(ball_pos[1] - current_y)
+    dx = abs(ball_pos[0] - current_x) - 1
+    dy = abs(ball_pos[1] - current_y) - 1
 
     return dx, dy, sqrt(dx**2 + dy**2)

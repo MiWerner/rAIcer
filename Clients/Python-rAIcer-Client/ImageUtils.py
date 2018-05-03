@@ -40,7 +40,6 @@ def get_ball_position(ID, img):
 
     # Get a binary image which only highlights the ball
     ball_mask = cv.inRange(img, lower_bounds, upper_bounds)
-    cv.imshow('mask', ball_mask)
 
     # Get the mean position of all non-zero points in the mask to get the center of the ball
     center = np.mean(np.transpose(np.nonzero(ball_mask)), axis=0)
@@ -55,7 +54,8 @@ def get_track(img):
     # Closing (Dilate + Erode) to remove noise (of the ball border)
     track = cv.morphologyEx(track, cv.MORPH_CLOSE, np.ones((5, 5), np.uint8))
 
-    image, contours, hierarchy = cv.findContours(track, cv.RETR_TREE, cv.CHAIN_APPROX_NONE)
+    _, contours, hierarchy = cv.findContours(track, cv.RETR_TREE, cv.CHAIN_APPROX_NONE)
+    image = track.copy()
     print_debug("Contours: ", len(contours))
     for c in contours:
         print_debug("Contour-Length: ", len(c))
@@ -73,9 +73,9 @@ def get_track(img):
 
         point1 = contours[0][index1][0]
         point2 = contours[1][(number_of_sections-i-1) * len(contours[1])//number_of_sections][0]
-        #cv.line(image, tuple(point1), tuple(point2), (0, 0, 0))
+        cv.line(image, tuple(point1), tuple(point2), (0, 0, 0))
 
     # image and track seem to be the same image
     cv.imshow("track", image)
-    return image  # Not sure what to actually return later, just return anything so this does not get called again
+    return track  # Not sure what to actually return later, just return anything so this does not get called again
 

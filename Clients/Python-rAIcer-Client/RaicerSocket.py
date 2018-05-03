@@ -36,6 +36,7 @@ class RaicerSocket(object):
         self.is_active = True
 
         self.thread = Thread(target=self.__receive_and_send_thread, args=())
+        self.thread.daemon = True
         self.thread.start()
 
     def __receive_and_send_thread(self):

@@ -19,6 +19,7 @@ class RaicerSocket(object):
     rank = -1
     image = -1
 
+    new_message = False
     send_msg = None
 
     def __init__(self):
@@ -41,7 +42,8 @@ class RaicerSocket(object):
 
     def __receive_and_send_thread(self):
         """
-        Receives and sends messages and saves the data as long as self.is_active is True
+        Receives and sends messages and saves the data as long as self.is_active is True.
+        After receiving as message the flag new_message will be set
         :return:
         """
         while self.is_active:
@@ -61,6 +63,7 @@ class RaicerSocket(object):
             self.damage = b_msg[4]
             self.rank = b_msg[5]
             self.image = byte_array_to_image(b_msg[6:])
+            self.new_message = True
 
     def __receive(self):
         """
@@ -80,8 +83,10 @@ class RaicerSocket(object):
     def receive(self):
         """
         Returns the components of the last received message as a tuple.
+        Reset the flag new_message due the newes message is delivered now.
         :return: tuple with (ID, status, lap-ID, max_lap, damage, rank, image)
         """
+        self.new_message = False
         return self.id, self.status, self.lap_id, self.lap_max, self.damage, self.rank, self.image
 
     def send(self, up, down, left, right):

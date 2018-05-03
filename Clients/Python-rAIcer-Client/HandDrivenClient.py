@@ -2,10 +2,11 @@ import RaicerSocket
 import pygame
 from Utils import S_WAIT, S_COUNTDOWN, S_RUNNING, S_FINISHED, S_CRASHED, S_CANCELED, IMG_WIDTH, IMG_HEIGHT, print_debug
 from ImageUtils import get_ball_position, get_track
-from Features import calc_distance_features, draw_features, calc_speed_features
+from Features import FeatureCalculator
 import time
 import numpy as np
 
+fc = FeatureCalculator()
 s = RaicerSocket.RaicerSocket()
 s.connect()
 display = pygame.display.set_mode((IMG_WIDTH, IMG_HEIGHT))
@@ -13,8 +14,13 @@ display.fill((255, 64, 64))
 
 track = None
 last_ball_pos = None
+ball_pos_time_stamp = None
+speed = None
 
 while 1:
+
+    while not s.new_message:
+        pass
 
     ID, status, lap_id, lap_total, damage, rank, image = s.receive()
 
@@ -28,23 +34,23 @@ while 1:
 
         # get the position of the ball
         ball_pos = get_ball_position(ID, image)
-        ball_pos = np.asarray(ball_pos, np.int64)
+        ball_pos_int = np.asarray(ball_pos, np.int64)
         print_debug('Ball at position', ball_pos)
 
         # ~~~~~~~~~~~~~~  Calc Features ~~~~~~~~~~~~~~~~~~~~~~~
-        du, dd, dl, dr, dul, dur, ddl, ddr = calc_distance_features(ball_pos, track)
+        du, dd, dl, dr, dul, dur, ddl, ddr = fc.calc_distance_features(ball_pos_int, track)
         # note: du, dd, dl, dr are scalars
         #       dul, dur, ddl, ddr are list: [horizontal dist, vertical dist, total dist]
         #       this is only for graphical reasons and could be removed if graphical support is not longer needed
 
-        vx, vy = calc_speed_features(last_ball_pos, ball_pos)
-        print_debug("vx: ", vx, ", vy", vy)
-        last_ball_pos = ball_pos
+        speed = fc.calc_speed_features(ball_pos)
+
+        print_debug("vx: ", speed[0], ", vy", speed[1])
 
         # ~~~~~~~~~~~~~~  display image and draw features ~~~~~~~~~~~~~~~~~~~~~~~
 
         display.blit(pygame.surfarray.make_surface(image), (0, 0))
-        draw_features(display, ball_pos, du, dd, dl, dr, dul, dur, ddl, ddr)
+        fc.draw_features(display, ball_pos, du, dd, dl, dr, dul, dur, ddl, ddr)
         pygame.display.update()
 
     elif status == S_COUNTDOWN:
@@ -71,6 +77,5 @@ while 1:
     elif status == S_CANCELED:
         print_debug('Canceled')
         break
-
 
 s.close()

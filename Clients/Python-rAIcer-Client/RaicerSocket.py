@@ -48,6 +48,7 @@ class RaicerSocket(object):
             if self.send_msg:
                 self.socket.send(self.send_msg)
                 print_debug(self.send_msg)
+                self.send_msg = None
 
             # receive message
             b_msg = self.__receive()

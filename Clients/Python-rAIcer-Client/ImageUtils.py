@@ -100,6 +100,10 @@ def get_track(img):
         sections[i][1] = outer_contour[outer_index][0]
         cv.line(image, tuple(sections[i][0]), tuple(sections[i][1]), (0, 0, 0))
 
+    # Init and draw the racing line
+    racing_line_values = 0.5 * np.ones([number_of_sections])
+    _draw_racing_line(image, sections, racing_line_values)
+
     cv.imshow("track", image)
     return track  # Not sure what to actually return later, just return anything so this does not get called again
 
@@ -139,3 +143,13 @@ def _get_inner_and_outer_contour(contours, finish_line_coords):
                     outer_contour = c
                     outer_start_index = intersection_index
     return inner_contour, outer_contour, inner_start_index, outer_start_index
+
+
+def _draw_racing_line(image, sections, values):
+    for i in range(0, len(sections)):
+        point1 = MatrixOps.convex_combination(sections[i][0], sections[i][1], values[i])
+        index_next = (i+1) % len(sections)
+        point2 = MatrixOps.convex_combination(sections[index_next][0], sections[index_next][1], values[index_next])
+        print(point1)
+        print(point2)
+        cv.line(image, tuple(point1.astype(int)), tuple(point2.astype(int)), (0, 0, 0))

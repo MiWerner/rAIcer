@@ -31,13 +31,20 @@ while 1:
         ball_pos = np.asarray(ball_pos, np.int64)
         print_debug('Ball at position', ball_pos)
 
-        du, dd, dl, dr = calc_distance_features(ball_pos, track)
+        # ~~~~~~~~~~~~~~  Calc Features ~~~~~~~~~~~~~~~~~~~~~~~
+        du, dd, dl, dr, dul, dur, ddl, ddr = calc_distance_features(ball_pos, track)
+        # note: du, dd, dl, dr are scalars
+        #       dul, dur, ddl, ddr are list: [horizontal dist, vertical dist, total dist]
+        #       this is only for graphical reasons and could be removed if graphical support is not longer needed
+
         vx, vy = calc_speed_features(last_ball_pos, ball_pos)
         print_debug("vx: ", vx, ", vy", vy)
         last_ball_pos = ball_pos
 
+        # ~~~~~~~~~~~~~~  display image and draw features ~~~~~~~~~~~~~~~~~~~~~~~
+
         display.blit(pygame.surfarray.make_surface(image), (0, 0))
-        draw_features(display, ball_pos, du, dd, dl, dr)
+        draw_features(display, ball_pos, du, dd, dl, dr, dul, dur, ddl, ddr)
         pygame.display.update()
 
     elif status == S_COUNTDOWN:

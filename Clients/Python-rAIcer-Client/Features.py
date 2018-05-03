@@ -1,10 +1,25 @@
 import pygame
 from ImageUtils import MIN_BALL_RADIUS
+from math import sqrt
 
 MIN_DISTANCE = MIN_BALL_RADIUS
 
 
-def draw_features(display, ball_pos, du, dd, dl, dr):
+def draw_features(display, ball_pos, du, dd, dl, dr, dul, dur, ddl, ddr):
+    """
+    Draw lines to the obstacles in all eight directions
+    :param display: current pygame screen
+    :param ball_pos: position of the ball
+    :param du: distance in upper direction
+    :param dd: distance in lower direction
+    :param dl: distance to the left
+    :param dr: distance to the right
+    :param dul: distance in upper left direction (list containing horizontal, vertical and total distance)
+    :param dur: distance in upper right direction (list containing horizontal, vertical and total distance)
+    :param ddl: distance in lower left direction (list containing horizontal, vertical and total distance)
+    :param ddr: distance in lower right direction (list containing horizontal, vertical and total distance)
+    :return:
+    """
     pygame.draw.line(display, (255, 200, 200), (ball_pos[0], ball_pos[1] - du),
                      (ball_pos[0], ball_pos[1]))  # dist up
     pygame.draw.line(display, (255, 200, 200), (ball_pos[0], ball_pos[1] + dd),
@@ -13,6 +28,14 @@ def draw_features(display, ball_pos, du, dd, dl, dr):
                      (ball_pos[0], ball_pos[1]))  # dist left
     pygame.draw.line(display, (255, 200, 200), (ball_pos[0] + dr, ball_pos[1]),
                      (ball_pos[0], ball_pos[1]))  # dist right
+    pygame.draw.line(display, (255, 200, 200), (ball_pos[0] - dul[0], ball_pos[1] - dul[1]),
+                     (ball_pos[0], ball_pos[1]))  # dist up left
+    pygame.draw.line(display, (255, 200, 200), (ball_pos[0] + dur[0], ball_pos[1] - dur[1]),
+                     (ball_pos[0], ball_pos[1]))  # dist up right
+    pygame.draw.line(display, (255, 200, 200), (ball_pos[0] - ddl[0], ball_pos[1] + ddl[1]),
+                     (ball_pos[0], ball_pos[1]))  # dist down left
+    pygame.draw.line(display, (255, 200, 200), (ball_pos[0] + ddr[0], ball_pos[1] + ddr[1]),
+                     (ball_pos[0], ball_pos[1]))  # dist down right
 
 
 def calc_speed_features(last_ball_pos, ball_pos):
@@ -26,11 +49,28 @@ def calc_speed_features(last_ball_pos, ball_pos):
 
 
 def calc_distance_features(ball_pos, track_mask):
+    """
+    Calculates the distance to obstacles in eight directoins
+    :param ball_pos: the position of the ball
+    :param track_mask: mask of the track. Obstacles are labled as False or 0
+    :return: distance in upper direction
+             distance in lower direction
+             distance to the left
+             distance to the right
+             distance in the upper left direction (is list)
+             distance in the upper right direction (is list)
+             distance in the lower left direction (is list)
+             distance in the lower right direction (is list)
+    """
     dist_up = _calc_distance_up(ball_pos, track_mask)
     dist_down = _calc_distance_down(ball_pos, track_mask)
     dist_left = _calc_distance_left(ball_pos, track_mask)
     dist_right = _calc_distance_right(ball_pos, track_mask)
-    return dist_up, dist_down, dist_left, dist_right
+    dist_up_left = _calc_distance_up_left(ball_pos, track_mask)
+    dist_up_right = _calc_distance_up_right(ball_pos, track_mask)
+    dist_down_left = _calc_distance_down_left(ball_pos, track_mask)
+    dist_down_right = _calc_distance_down_right(ball_pos, track_mask)
+    return dist_up, dist_down, dist_left, dist_right, dist_up_left, dist_up_right, dist_down_left, dist_down_right
 
 
 def _calc_distance_up(ball_pos, track_mask):
@@ -40,12 +80,8 @@ def _calc_distance_up(ball_pos, track_mask):
     :param track_mask: mask of the track. Obstacles are labeled as False or 0.
     :return: the distance to the next obstacle upwards
     """
-    current_y = ball_pos[1] - MIN_DISTANCE
-
-    while track_mask[ball_pos[0], current_y]:
-        current_y -= 1
-
-    return ball_pos[1] - current_y - 1 # ball_pos[1] is larger or equal to current_y
+    _, du, _ = __calc_distance(ball_pos=ball_pos, track_mask=track_mask, direction_x=0, direction_y=-1)
+    return du
 
 
 def _calc_distance_down(ball_pos, track_mask):
@@ -55,12 +91,8 @@ def _calc_distance_down(ball_pos, track_mask):
     :param track_mask: mask of the track. Obstacles are labeled as False or 0.
     :return: the distance to the next obstacle downwards
     """
-    current_y = ball_pos[1] + MIN_DISTANCE
-
-    while track_mask[ball_pos[0], current_y]:
-        current_y += 1
-
-    return current_y - ball_pos[1] - 1  # current_y is larger or equal to ball_pos[1]
+    _, dd, _ = __calc_distance(ball_pos=ball_pos, track_mask=track_mask, direction_x=0, direction_y=1)
+    return dd
 
 
 def _calc_distance_left(ball_pos, track_mask):
@@ -70,12 +102,8 @@ def _calc_distance_left(ball_pos, track_mask):
     :param track_mask: mask of the track. Obstacles are labeled as False or 0.
     :return: the distance to the next obstacle on the left
     """
-    current_x = ball_pos[0] - MIN_DISTANCE
-
-    while track_mask[current_x, ball_pos[1]]:
-        current_x -= 1
-
-    return ball_pos[0] - current_x - 1  # ball_pos[0] is larger or equal to current_x
+    dl, _, _ = __calc_distance(ball_pos=ball_pos, track_mask=track_mask, direction_x=-1, direction_y=0)
+    return dl
 
 
 def _calc_distance_right(ball_pos, track_mask):
@@ -85,10 +113,67 @@ def _calc_distance_right(ball_pos, track_mask):
     :param track_mask: mask of the track. Obstacles are labeled as False or 0.
     :return: the distance to the next obstacle on the right
     """
-    current_x = ball_pos[0] + MIN_DISTANCE
+    dr, _, _ = __calc_distance(ball_pos=ball_pos, track_mask=track_mask, direction_x=1, direction_y=0)
+    return dr
 
-    while track_mask[current_x, ball_pos[1]]:
-        current_x += 1
 
-    return current_x - ball_pos[0] - 1  # current_x is larger or equal to ball_pos[0]
+def _calc_distance_up_left(ball_pos, track_mask):
+    """
+    Calculates the distance from the ball to the next obstacle in the upper left direction
+    :param ball_pos: the position of the ball
+    :param track_mask: mask of the track. Obstacles are labeled as False or 0
+    :return: the distance to the next obstacle in the upper left direction
+    """
+    return list(__calc_distance(ball_pos=ball_pos, track_mask=track_mask, direction_x=-1, direction_y=-1))
 
+
+def _calc_distance_up_right(ball_pos, track_mask):
+    """
+    Calculates the distance from the ball to the next obstacle in the upper right direction
+    :param ball_pos: the position of the ball
+    :param track_mask: mask of the track. Obstacles are labeled as False or 0
+    :return: the distance to the next obstacle in the upper right direction
+    """
+    return list(__calc_distance(ball_pos=ball_pos, track_mask=track_mask, direction_x=1, direction_y=-1))
+
+
+def _calc_distance_down_right(ball_pos, track_mask):
+    """
+    Calculates the distance from the ball to the next obstacle in the lower right direction
+    :param ball_pos: the position of the ball
+    :param track_mask: mask of the track. Obstacles are labeled as False or 0
+    :return: the distance to the next obstacle in the lower right direction
+    """
+    return list(__calc_distance(ball_pos=ball_pos, track_mask=track_mask, direction_x=1, direction_y=1))
+
+
+def _calc_distance_down_left(ball_pos, track_mask):
+    """
+    Calculates the distance from the ball to the next obstacle in the lower left direction
+    :param ball_pos: the position of the ball
+    :param track_mask: mask of the track. Obstacles are labeled as False or 0
+    :return: the distance to the next obstacle in the lower left direction
+    """
+    return list(__calc_distance(ball_pos=ball_pos, track_mask=track_mask, direction_x=-1, direction_y=1))
+
+
+def __calc_distance(ball_pos, track_mask, direction_x, direction_y):
+    """
+    Calculates the horizontal and vertical distance from the ball to the next obstacle in the direction defined by
+     direction_x and direction_y
+    :param ball_pos: the position of the ball
+    :param track_mask: mask of the track. Obstacles are labeled as False or 0
+    :param direction_x: direction of horizontal movement: -1: left, 0: no movement, 1: right
+    :param direction_y: direction of vertical movement: -1: up, 0: no movement, 1: down
+    :return: horizontal_distance, vertical distance, total distance
+    """
+    current_x = ball_pos[0] + (MIN_DISTANCE * direction_x)
+    current_y = ball_pos[1] + (MIN_DISTANCE * direction_y)
+
+    while track_mask[current_x, current_y]:
+        current_x += direction_x
+        current_y += direction_y
+    dx = abs(ball_pos[0] - current_x)
+    dy = abs(ball_pos[1] - current_y)
+
+    return dx, dy, sqrt(dx**2 + dy**2)

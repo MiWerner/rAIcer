@@ -43,7 +43,7 @@ class RaicerSocket(object):
     def __receive_and_send_thread(self):
         """
         Receives and sends messages and saves the data as long as self.is_active is True.
-        After receiving as message the flag new_message will be set
+        After receiving a message the flag new_message will be set
         :return:
         """
         while self.is_active:
@@ -83,7 +83,7 @@ class RaicerSocket(object):
     def receive(self):
         """
         Returns the components of the last received message as a tuple.
-        Reset the flag new_message due the newes message is delivered now.
+        Resets the flag new_message because the newest message is delivered now.
         :return: tuple with (ID, status, lap-ID, max_lap, damage, rank, image)
         """
         self.new_message = False
@@ -108,7 +108,6 @@ class RaicerSocket(object):
         Close the current connection
         :return:
         """
-
         self.is_active = False
         if self.thread is not None:
             self.thread.join()

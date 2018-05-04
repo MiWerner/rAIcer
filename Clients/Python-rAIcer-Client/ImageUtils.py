@@ -150,6 +150,4 @@ def _draw_racing_line(image, sections, values):
         point1 = MatrixOps.convex_combination(sections[i][0], sections[i][1], values[i])
         index_next = (i+1) % len(sections)
         point2 = MatrixOps.convex_combination(sections[index_next][0], sections[index_next][1], values[index_next])
-        print(point1)
-        print(point2)
         cv.line(image, tuple(point1.astype(int)), tuple(point2.astype(int)), (0, 0, 0))

@@ -82,9 +82,9 @@ class FeatureCalculator(object):
 
     def calc_distance_features(self, ball_pos, track_mask):
         """
-        Calculates the distance to obstacles in eight directoins
+        Calculates the distance to obstacles in eight directions
         :param ball_pos: the position of the ball
-        :param track_mask: mask of the track. Obstacles are labled as False or 0
+        :param track_mask: mask of the track. Obstacles are labeled as False or 0
         :return: distance in upper direction
                  distance in lower direction
                  distance to the left

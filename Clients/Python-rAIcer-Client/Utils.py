@@ -1,3 +1,4 @@
+import os
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 #                Server Parameter                       #
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
@@ -32,3 +33,17 @@ DEBUG = True
 def print_debug(*args):
     if DEBUG:
         print(args)
+
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+#                   path links                          #
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+PATH_TO_ROOT = os.path.dirname(os.path.realpath(__file__))
+PATH_TO_RES = os.path.join(PATH_TO_ROOT, "res")
+PATH_TO_CONFIGS = os.path.join(PATH_TO_RES, "configs")
+
+
+def make_dir(path):
+    if not os.path.exists(path):
+        os.makedirs(path)
+    return path

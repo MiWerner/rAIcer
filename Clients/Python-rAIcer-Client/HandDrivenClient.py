@@ -20,7 +20,7 @@ speed = None
 while 1:
 
     while not s.new_message:
-        time.sleep(.1)
+        print("", end="")
 
     ID, status, lap_id, lap_total, damage, rank, image = s.receive()
 

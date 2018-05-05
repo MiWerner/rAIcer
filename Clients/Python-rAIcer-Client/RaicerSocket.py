@@ -1,5 +1,5 @@
 import socket
-from Utils import TCP_IP, TCP_PORT, IMG_HEIGHT, IMG_WIDTH, print_debug
+from Utils import TCP_IP, TCP_PORT, IMG_HEIGHT, IMG_WIDTH, S_WAIT
 from ImageUtils import byte_array_to_image
 from threading import Thread
 
@@ -20,7 +20,9 @@ class RaicerSocket(object):
     image = -1
 
     new_message = False
-    send_msg = None
+    __keys_msg = None
+    __setting_msg = None
+    __kill_msg = None
 
     def __init__(self):
         """Initialize the socket"""
@@ -48,10 +50,15 @@ class RaicerSocket(object):
         """
         while self.is_active:
             # send the latest message if it exists
-            if self.send_msg:
-                self.socket.send(self.send_msg)
-                print_debug(self.send_msg)
-                self.send_msg = None
+            if self.__keys_msg is not None:
+                self.socket.send(self.__keys_msg)
+                self.__keys_msg = None
+            if self.__setting_msg is not None:
+                self.socket.send(self.__setting_msg)
+                self.__setting_msg = None
+            if self.__kill_msg is not None:
+                self.socket.send(self.__kill_msg)
+                self.__kill_msg = None
 
             # receive message
             b_msg = self.__receive()
@@ -89,7 +96,7 @@ class RaicerSocket(object):
         self.new_message = False
         return self.id, self.status, self.lap_id, self.lap_max, self.damage, self.rank, self.image
 
-    def send(self, up, down, left, right):
+    def send_key_msg(self, up, down, left, right):
         """
         Creates and sets the message for movements commands
         :param up: flag for moving up
@@ -101,13 +108,34 @@ class RaicerSocket(object):
         msg = [self.id]
         for flag in [up, down, left, right]:
             msg.append(0x01 if flag else 0x00)
-        self.send_msg = bytes(msg)
+        self.__keys_msg = bytes(msg)
+
+    def send_kill_msg(self):
+        """
+        Queues a message for the server with a ID of 255. This results into shutdown the server
+        :return:
+        """
+        self.__kill_msg = bytes([255, 0, 0, 0, 0])
+
+    def send_setting_msg(self, track_id=1, num_laps=3, start_countdown=True):
+        """
+        Queues a message for the server as long self.status is S_WAIT.
+        This message could be used to choose a map, set the maximum number of laps and to start the countdown
+        :param track_id: the id of a track (Numbering starts with 1)
+        :param num_laps: the maximum number of laps in this race
+        :param start_countdown: int or boolean. If not 0 the countdown starts
+        :return:
+        """
+        if self.status == S_WAIT:
+            self.__setting_msg = bytes([self.id, track_id, num_laps, 0, int(start_countdown)])
 
     def close(self):
         """
         Close the current connection
         :return:
         """
+        if self.__kill_msg is not None:
+            self.socket.send(self.__kill_msg)
         self.is_active = False
         if self.thread is not None:
             self.thread.join()

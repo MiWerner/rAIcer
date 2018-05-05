@@ -30,7 +30,7 @@ while 1:
         # check keys and send commands to server
         pygame.event.pump()  # needed to get the latest events
         keys = pygame.key.get_pressed()  # sequence of flags for each key
-        s.send(keys[pygame.K_UP], keys[pygame.K_DOWN], keys[pygame.K_LEFT], keys[pygame.K_RIGHT])
+        s.send_key_msg(keys[pygame.K_UP], keys[pygame.K_DOWN], keys[pygame.K_LEFT], keys[pygame.K_RIGHT])
 
         # get the position of the ball
         ball_pos = get_ball_position(ID, image)

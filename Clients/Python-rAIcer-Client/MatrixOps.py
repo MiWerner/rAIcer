@@ -45,3 +45,16 @@ def convex_combination(point1, point2, factor=0.5, flip=False):
     """
     result = point1*factor + point2*(1-factor)
     return np.flip(result, 0) if flip else result
+
+
+def angle_between_vectors(vector1, vector2):
+    """
+    Calculates the angle in radians between two vectors by taking the dot product of their unit vectors
+    :param vector1: the first vector
+    :param vector2: the second vector
+    :return: the angle in radians between both vectors
+    """
+    vector1 = vector1 / np.linalg.norm(vector1)
+    vector2 = vector2 / np.linalg.norm(vector2)
+    return np.arccos(np.clip(np.dot(vector1, vector2), -1.0, 1.0))
+

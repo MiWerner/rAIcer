@@ -41,59 +41,69 @@ def __eval_genomes(genomes, config):
     :param config: the current configuration
     :return:
     """
-    # TODO start server and skip settings
-    # TODO evaluation on multiples tracks
-
-    # create Queue for storing the fitness-values of each genome, to get them from the created processes
-    out_q = multiprocessing.Queue()
-
-    # create and a new process for each genome
-    # a process includes the connection-handling to the server and the client-logic of the corresponding genome
-    jobs = []
     for g_id, genome in genomes:
-        job = multiprocessing.Process(target=GenomeEvaluator().run,
-                                      args=(g_id, genome, config, out_q))
-        job.start()
-        jobs.append(job)
+        genome.fitness = 0
 
-    # create dict to collect all fitness-values
-    result_dict = {}
+    for track_id in [2]:  # , 2, 3]:
+        # TODO start server
 
-    for _ in range(len(jobs)):
-        result_dict.update(out_q.get())
+        # TODO check if server is ready ( maybe port)
+        # create Queue for storing the fitness-values of each genome, to get them from the created processes
+        out_q = multiprocessing.Queue()
 
-    # TODO if all current evaluators are connected, chose map and start the game
-    # TODO Detection if all clients are connected is possible via result_dict
-    #      with (keys,values) like "g_id_connected:True"
+        # create and a new process for each genome
+        # a process includes the connection-handling to the server and the client-logic of the corresponding genome
+        jobs = []
+        evaluators = []
+        for g_id, genome in genomes:
+            e = GenomeEvaluator()
+            evaluators.append(e)
+            job = multiprocessing.Process(target=e.run,
+                                          args=(g_id, genome, config, out_q, len(genomes), track_id))
 
-    # Wait for all processes to terminate
-    for job in jobs:
-        job.join()
+            job.start()  # includes socket.connect(). This muss be performed in the new process...
+            jobs.append(job)
 
-    # store fitness-values in the genomes
-    for g_id, genome in genomes:
-        genome.fitness = result_dict[g_id]
+        # create dict to collect all fitness-values
+        result_dict = {}
+        for _ in range(len(jobs)):
+            result_dict.update(out_q.get())
 
-    # TODO kill server
+        # Wait for all processes to terminate
+        for job in jobs:
+            job.join()
+
+        # close the sockets and kill the server with the last client
+        while len(evaluators) > 0:
+            e = evaluators[0]
+            evaluators.remove(e)
+            if len(evaluators) == 0:
+                e.socket.send_kill_msg()
+                # TODO check sever shutdown totally
+            e.socket.close()
+
+        # store fitness-values in the genomes
+        for g_id, genome in genomes:
+            genome.fitness += result_dict[g_id]
 
 
 if __name__ == "__main__":
     time_stamp = datetime.datetime.now()
     current_folder = make_dir(os.path.join(PATH_TO_RES, "NEAT-AI", str(time_stamp)))
 
-    config = neat.Config(neat.DefaultGenome,
-                         neat.DefaultReproduction,
-                         neat.DefaultSpeciesSet,
-                         neat.DefaultStagnation,
-                         os.path.join(PATH_TO_CONFIGS, "neat_test_config"))
+    neat_config = neat.Config(neat.DefaultGenome,
+                              neat.DefaultReproduction,
+                              neat.DefaultSpeciesSet,
+                              neat.DefaultStagnation,
+                              os.path.join(PATH_TO_CONFIGS, "neat_test_config"))
     # TODO update config file
 
     # create population
-    p = neat.Population(config=config)
+    p = neat.Population(config=neat_config)
 
     # TODO add reporters
 
-    # TODO population class lags of using fitness_creterion min!!
+    # TODO population class lags of using fitness_criterion min!!
     winner = p.run(fitness_function=fitness_function, n=N)
     print("\nBest genome:\n{!s}".format(winner))
 

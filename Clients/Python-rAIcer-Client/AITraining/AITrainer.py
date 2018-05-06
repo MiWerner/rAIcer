@@ -94,7 +94,7 @@ def __eval_genomes(genomes, config):
 
 def run_training():
     time_stamp = datetime.datetime.now()
-    current_folder = make_dir(os.path.join(PATH_TO_RES, "NEAT-AI", str(time_stamp)))
+    current_folder = make_dir(os.path.join(PATH_TO_RES, "NEAT-AI", str(time_stamp).replace(":", "_")))
 
     neat_config = neat.Config(neat.DefaultGenome,
                               neat.DefaultReproduction,

@@ -9,7 +9,7 @@ import time
 
 class GenomeEvaluator(object):
 
-    time_out = 4*60  # s  (maximum time for one run)
+    time_out = 10  # 4*60  # s  (maximum time for one run)
 
     start_timestamp = None
 
@@ -22,6 +22,20 @@ class GenomeEvaluator(object):
         self.thread = None
         self.fc = FeatureCalculator()
         self.track = None
+
+    def __connect_to_server(self):
+        """
+        Tries to connect to the server for 100s.
+        :return: True if connection was successful, else False
+        """
+        t = time.time() + 100
+        while time.time() <= t:
+            try:
+                self.socket.connect()
+                return True
+            except ConnectionRefusedError:
+                time.sleep(.5)
+        return False
 
     def run(self, genome_id, genome, config, out_q, max_id, track_id, num_laps=3):
         """
@@ -36,8 +50,9 @@ class GenomeEvaluator(object):
         :param num_laps: the number of laps in the current race
         :return:
         """
+        if not self.__connect_to_server():
+            return
 
-        self.socket.connect()
         net = neat.nn.FeedForwardNetwork.create(genome=genome, config=config)  # TODO evt also RNN
 
         # receive client_id to check if all current clients are connected

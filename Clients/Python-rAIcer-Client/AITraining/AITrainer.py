@@ -1,9 +1,9 @@
 import neat
-from Utils import PATH_TO_CONFIGS, PATH_TO_RES, make_dir
 import datetime
 import os
 from AITraining.GenomeEvaluator import GenomeEvaluator
 import multiprocessing
+from Utils import PATH_TO_CONFIGS, PATH_TO_RES, make_dir, start_server
 
 # number of generations to evolve
 N = 1
@@ -44,10 +44,12 @@ def __eval_genomes(genomes, config):
     for g_id, genome in genomes:
         genome.fitness = 0
 
-    for track_id in [2]:  # , 2, 3]:
-        # TODO start server
+    for track_id in [1]:  # , 2, 3]:
 
-        # TODO check if server is ready ( maybe port)
+        # start server
+        server = start_server()
+        server.start()
+
         # create Queue for storing the fitness-values of each genome, to get them from the created processes
         out_q = multiprocessing.Queue()
 
@@ -61,7 +63,7 @@ def __eval_genomes(genomes, config):
             job = multiprocessing.Process(target=e.run,
                                           args=(g_id, genome, config, out_q, len(genomes), track_id))
 
-            job.start()  # includes socket.connect(). This muss be performed in the new process...
+            job.start()  # includes socket.connect() and start of game. This muss be performed in the new process...
             jobs.append(job)
 
         # create dict to collect all fitness-values
@@ -79,15 +81,17 @@ def __eval_genomes(genomes, config):
             evaluators.remove(e)
             if len(evaluators) == 0:
                 e.socket.send_kill_msg()
-                # TODO check sever shutdown totally
             e.socket.close()
+
+        # Wait for server shutdown
+        server.join()
 
         # store fitness-values in the genomes
         for g_id, genome in genomes:
             genome.fitness += result_dict[g_id]
 
 
-if __name__ == "__main__":
+def run_training():
     time_stamp = datetime.datetime.now()
     current_folder = make_dir(os.path.join(PATH_TO_RES, "NEAT-AI", str(time_stamp)))
 

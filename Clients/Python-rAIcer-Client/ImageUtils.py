@@ -49,12 +49,12 @@ def get_ball_position(ID, img):
 
 def get_distance_to_center(point):
     """
-    Returns the Hammington distance of the given point to the window center
+    Returns the Hamming distance of the given point to the window center
     :param point: the point
-    :return: the Hammington distance of the given point to the window center
+    :return: the Hamming distance of the given point to the window center
     """
-    window_center = np.array([IMG_WIDTH/2, IMG_HEIGHT/2])
-    return np.sum(np.abs(np.subtract(window_center, point)))  # Hammington distance is good enough
+    window_center = np.array([IMG_HEIGHT/2, IMG_WIDTH/2])
+    return np.sum(np.abs(np.subtract(window_center, point)))  # Hamming distance is good enough
 
 
 def get_track(img):
@@ -101,9 +101,9 @@ def get_track(img):
         cv.line(image, tuple(sections[i][0]), tuple(sections[i][1]), (0, 0, 0))
 
     # Init and draw the racing line
-    racing_line_values = np.ones([number_of_sections])
+    racing_line_values = np.zeros([number_of_sections])
     ANGLE_FACTOR = 100
-    ITERATIONS = 25
+    ITERATIONS = 50
     for k in range(0, ITERATIONS):
         for i in range(0, number_of_sections):
             # Get the points around the current one and the vectors between them

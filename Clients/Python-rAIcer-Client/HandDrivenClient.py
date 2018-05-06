@@ -20,13 +20,11 @@ speed = None
 while 1:
 
     while not s.new_message:
-        print("", end="")
+        time.sleep(0.01)
 
     ID, status, lap_id, lap_total, damage, rank, image = s.receive()
 
     if status == S_RUNNING:
-        print_debug('Game is running')
-
         # check keys and send commands to server
         pygame.event.pump()  # needed to get the latest events
         keys = pygame.key.get_pressed()  # sequence of flags for each key
@@ -56,7 +54,6 @@ while 1:
     elif status == S_COUNTDOWN:
         display.blit(pygame.surfarray.make_surface(image), (0, 0))
         pygame.display.update()
-        print_debug('Countdown')
         if track is None:
             track = get_track(image)
 
@@ -64,7 +61,6 @@ while 1:
     elif status == S_WAIT:
         display.blit(pygame.surfarray.make_surface(image), (0, 0))
         pygame.display.update()
-        print_debug('Waiting for start')
         time.sleep(0.1)
     elif status == S_FINISHED:
         display.blit(pygame.surfarray.make_surface(image), (0, 0))

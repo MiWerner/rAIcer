@@ -4,9 +4,10 @@ import os
 from AITraining.GenomeEvaluator import GenomeEvaluator
 import multiprocessing
 from Utils import PATH_TO_CONFIGS, PATH_TO_RES, make_dir, start_server
+from AITraining import visualize
 
 # number of generations to evolve
-N = 1
+N = 2
 
 
 def fitness_function(genomes, config):
@@ -105,11 +106,37 @@ def run_training():
     # create population
     p = neat.Population(config=neat_config)
 
+    stats = neat.StatisticsReporter()
+    p.add_reporter(stats)
+
     # TODO add reporters
 
     # TODO population class lags of using fitness_criterion min!!
     winner = p.run(fitness_function=fitness_function, n=N)
     print("\nBest genome:\n{!s}".format(winner))
+    # TODO save winner for later use (pickle)
+
+    node_names = {
+        0: "up",
+        1: "down",
+        2: "left",
+        3: "right",
+        -1: "du",
+        -2: "dur",
+        -3: "dr",
+        -4: "ddr",
+        -5: "dd",
+        -6: "ddl",
+        -7: "dl",
+        -8: "dul",
+        -9: "vx",
+        -10: "vy",
+    }
+
+    visualize.draw_net(config=neat_config, genome=winner, node_names=node_names, view=False,
+                       filename=os.path.join(current_folder, "winner_net"), fmt="svg")
+    visualize.plot_stats(stats, ylog=False, view=False, filename=os.path.join(current_folder, 'avg_fitness.svg'))
+    visualize.plot_species(stats, view=False, filename=os.path.join(current_folder, 'speciation.svg'))
 
     # TODO evt Plot statistics and so on
     print("finished")

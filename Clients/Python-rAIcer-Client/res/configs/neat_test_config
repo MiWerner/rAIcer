@@ -9,7 +9,7 @@ reset_on_extinction   = False
 # network parameters
 num_inputs = 10
 num_outputs = 4
-num_hidden = 1
+num_hidden = 0
 
 # genome compatibility options
 compatibility_disjoint_coefficient = 1.0

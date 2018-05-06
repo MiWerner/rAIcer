@@ -104,3 +104,5 @@ Clients/Python-rAIcer-Client/\.idea/
 Server/rAIcer_Data/output_log.txt
 
 Custom_Server_Linux/
+
+Clients/Python-rAIcer-Client/res/NEAT-AI/

@@ -83,22 +83,47 @@ def get_track(img):
     image = track.copy()
 
     # Get the inner and outer contour and the indices of the points where they touch the finish line
-    inner_contour, outer_contour, inner_start_index, outer_start_index = _get_inner_and_outer_contour(contours, finish_line_coords)
+    inner_contour, outer_contour, inner_start_index, outer_start_index, other_contours = _get_inner_and_outer_contour(contours, finish_line_coords)
 
     # Calculate the starting direction based on the center of the actual start line and center of the orange area
-    direction = finish_line_center - MatrixOps.convex_combination(inner_contour[inner_start_index][0], outer_contour[outer_start_index][0], 0.5, True)
+    direction = finish_line_center - MatrixOps.convex_combination(inner_contour[inner_start_index], outer_contour[outer_start_index], 0.5, True)
 
     # Calculate cross sections of the track
-    number_of_sections = 50
+    number_of_sections = 100
     sections = np.empty([number_of_sections, 2, 2], dtype=int)
-    for i in range(0, number_of_sections):
-        # Indices have different signs in their calculation because on goes clockwise
-        # and the other one goes counter-clockwise
-        inner_index = (inner_start_index + i*len(inner_contour)//number_of_sections) % len(inner_contour)
-        outer_index = (outer_start_index - i*len(outer_contour)//number_of_sections) % len(outer_contour)
-        sections[i][0] = inner_contour[inner_index][0]
-        sections[i][1] = outer_contour[outer_index][0]
-        cv.line(image, tuple(sections[i][0]), tuple(sections[i][1]), (0, 0, 0))
+    section_center = 0.5 if len(contours) > 2 else 0.2
+    # Init the first line (start/finish line) outside the loop
+    sections[0][0] = inner_contour[inner_start_index]
+    sections[0][1] = outer_contour[outer_start_index]
+    cv.line(image, tuple(sections[0][0]), tuple(sections[0][1]), (0, 0, 0))
+    for i in range(1, number_of_sections):
+        prev_section_center = MatrixOps.convex_combination(sections[i-1][0], sections[i-1][1], section_center)
+        prev_section_direction = MatrixOps.get_perpendicular_vector(sections[i-1][0], sections[i-1][1])
+
+        step_size = 20
+        # Set them to the previous values so the loop is run at least once
+        sections[i][0] = sections[i-1][0]
+        sections[i][1] = sections[i-1][1]
+        last_index = MatrixOps.multidim_indexof(inner_contour, sections[i-1][0])
+        #print("Last index:", last_index)
+        while (MatrixOps.multidim_indexof(sections[:i-1], sections[i]) != -1 or
+               last_index > MatrixOps.multidim_indexof(inner_contour, sections[i][0])) and step_size < 500:
+            #print("New index:", MatrixOps.multidim_indexof(inner_contour, sections[i][0]))
+            new_point = prev_section_center + step_size*prev_section_direction
+            sections[i][0] = MatrixOps.find_closest_point(new_point, inner_contour)
+            sections[i][1] = MatrixOps.find_closest_point(new_point, other_contours)
+            #if step_size > 10:
+                #print(step_size)
+            step_size += 20
+
+        new_point = prev_section_center + (step_size-5)*prev_section_direction
+        #print(step_size)
+        #print(sections[i][0])
+        #print(sections[i][1])
+        #print("###############")
+        cv.line(image, tuple(prev_section_center.astype(int)), tuple(new_point.astype(int)), (0, 0, 0))
+        cv.line(image, tuple(sections[i][0].astype(int)), tuple(sections[i][1].astype(int)), (0, 0, 0))
+
 
     # Init and draw the racing line
     racing_line_values = np.zeros([number_of_sections])
@@ -157,7 +182,7 @@ def get_track(img):
                     smallest_value = new_value
                     racing_line_values[i] = steps[j]
 
-    _draw_racing_line(image, sections, racing_line_values)
+    #_draw_racing_line(image, sections, racing_line_values)
 
     cv.imshow("track", image)
     return track  # Not sure what to actually return later, just return anything so this does not get called again
@@ -169,10 +194,12 @@ def _get_inner_and_outer_contour(contours, finish_line_coords):
     as well as the index of the point where the start/finish line touches the contour
     :param contours: all found contours
     :param finish_line_coords: array containing all coordinates of the finish line
-    :return: the inner and outer contour and the indices of the points where they touch the finish line
+    :return: the inner and outer contour and the indices of the points where they touch the finish line as well as a
+    combined list of all contours except the inner one
     """
     inner_contour = None
     outer_contour = None
+    other_contours = np.array([], dtype=int).reshape(0, 2)
     inner_start_index = None
     outer_start_index = None
     for c in contours:
@@ -181,23 +208,26 @@ def _get_inner_and_outer_contour(contours, finish_line_coords):
         if intersection.any():
             # If there is ar intersecting points, get the median point and find their index
             median_intersection = intersection[int(len(intersection) / 2)]
-            intersection_index = MatrixOps.multidim_indexof(c, median_intersection)
+            intersection_index = MatrixOps.multidim_indexof(c.reshape(len(c), 2), median_intersection)
 
             # Determine if the found point belongs to the inner or outer contour and set it accordingly
             if inner_start_index is None:
                 inner_contour = c
                 inner_start_index = intersection_index
             else:
-                if get_distance_to_center(median_intersection) < get_distance_to_center(
-                        inner_contour[inner_start_index]):
+                if get_distance_to_center(median_intersection) < get_distance_to_center(inner_contour[inner_start_index]):
                     outer_contour = inner_contour
                     inner_contour = c
                     outer_start_index = inner_start_index
                     inner_start_index = intersection_index
+                    other_contours = np.r_[other_contours, outer_contour.reshape(len(outer_contour), 2)]
                 else:
                     outer_contour = c
                     outer_start_index = intersection_index
-    return inner_contour, outer_contour, inner_start_index, outer_start_index
+                    other_contours = np.r_[other_contours, c.reshape(len(c), 2)]
+        else:
+            other_contours = np.r_[other_contours, c.reshape(len(c), 2)]
+    return inner_contour.reshape(len(inner_contour), 2), outer_contour.reshape(len(outer_contour), 2), inner_start_index, outer_start_index, other_contours
 
 
 def _draw_racing_line(image, sections, values):

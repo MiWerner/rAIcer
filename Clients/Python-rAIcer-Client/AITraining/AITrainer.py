@@ -78,19 +78,25 @@ def __eval_genomes(genomes, config):
         for job in jobs:
             job.join()
 
-        # close the sockets and kill the server with the last client
-        while len(evaluators) > 0:
-            e = evaluators[0]
-            evaluators.remove(e)
-            if len(evaluators) == 0:
-                e.socket.send_kill_msg()
-            e.socket.close()
+        for e in evaluators:
+            e.socket.is_active = False
+            e.socket.send_kill_msg()
+            #e.socket.close()
 
-        while server.is_alive():
-            time.sleep(.1)
 
         # Wait for server shutdown
-        #server.join()
+        server.join()
+
+       # for e in evaluators:
+       #     e.socket.close()
+
+        # close the sockets and kill the server with the last client
+        #while len(evaluators) > 0:
+        #    e = evaluators[0]
+        #    evaluators.remove(e)
+        #    e.socket.send_kill_msg()
+        #    e.socket.close()
+
 
         # store fitness-values in the genomes
         for g_id, genome in genomes:

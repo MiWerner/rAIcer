@@ -5,6 +5,7 @@ from AITraining.GenomeEvaluator import GenomeEvaluator
 import multiprocessing
 from Utils import PATH_TO_CONFIGS, PATH_TO_RES, make_dir, start_server
 from AITraining import visualize
+import time
 
 # number of generations to evolve
 N = 2
@@ -49,6 +50,7 @@ def __eval_genomes(genomes, config):
 
         # start server
         server = start_server()
+        server.daemon = True
         server.start()
 
         # create Queue for storing the fitness-values of each genome, to get them from the created processes
@@ -84,8 +86,11 @@ def __eval_genomes(genomes, config):
                 e.socket.send_kill_msg()
             e.socket.close()
 
+        while server.is_alive():
+            time.sleep(.1)
+
         # Wait for server shutdown
-        server.join()
+        #server.join()
 
         # store fitness-values in the genomes
         for g_id, genome in genomes:

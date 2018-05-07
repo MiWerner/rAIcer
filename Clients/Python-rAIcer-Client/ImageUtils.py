@@ -89,100 +89,100 @@ def get_track(img):
     direction = finish_line_center - MatrixOps.convex_combination(inner_contour[inner_start_index], outer_contour[outer_start_index], 0.5, True)
 
     # Calculate cross sections of the track
-    number_of_sections = 100
-    sections = np.empty([number_of_sections, 2, 2], dtype=int)
-    section_center = 0.5 if len(contours) > 2 else 0.2
-    # Init the first line (start/finish line) outside the loop
-    sections[0][0] = inner_contour[inner_start_index]
-    sections[0][1] = outer_contour[outer_start_index]
-    cv.line(image, tuple(sections[0][0]), tuple(sections[0][1]), (0, 0, 0))
-    for i in range(1, number_of_sections):
-        prev_section_center = MatrixOps.convex_combination(sections[i-1][0], sections[i-1][1], section_center)
-        prev_section_direction = MatrixOps.get_perpendicular_vector(sections[i-1][0], sections[i-1][1])
-
-        step_size = 20
-        # Set them to the previous values so the loop is run at least once
-        sections[i][0] = sections[i-1][0]
-        sections[i][1] = sections[i-1][1]
-        last_index = MatrixOps.multidim_indexof(inner_contour, sections[i-1][0])
-        #print("Last index:", last_index)
-        while (MatrixOps.multidim_indexof(sections[:i-1], sections[i]) != -1 or
-               last_index > MatrixOps.multidim_indexof(inner_contour, sections[i][0])) and step_size < 500:
-            #print("New index:", MatrixOps.multidim_indexof(inner_contour, sections[i][0]))
-            new_point = prev_section_center + step_size*prev_section_direction
-            sections[i][0] = MatrixOps.find_closest_point(new_point, inner_contour)
-            sections[i][1] = MatrixOps.find_closest_point(new_point, other_contours)
-            #if step_size > 10:
-                #print(step_size)
-            step_size += 20
-
-        new_point = prev_section_center + (step_size-5)*prev_section_direction
-        #print(step_size)
-        #print(sections[i][0])
-        #print(sections[i][1])
-        #print("###############")
-        cv.line(image, tuple(prev_section_center.astype(int)), tuple(new_point.astype(int)), (0, 0, 0))
-        cv.line(image, tuple(sections[i][0].astype(int)), tuple(sections[i][1].astype(int)), (0, 0, 0))
-
-
-    # Init and draw the racing line
-    racing_line_values = np.zeros([number_of_sections])
-    ANGLE_FACTOR = 100
-    ITERATIONS = 50
-    for k in range(0, ITERATIONS):
-        for i in range(0, number_of_sections):
-            # Get the points around the current one and the vectors between them
-            previous_previous_index = (i-2) % number_of_sections
-            previous_index = (i-1) % number_of_sections
-            next_index = (i+1) % number_of_sections
-            next_next_index = (i+2) % number_of_sections
-            point0 = MatrixOps.convex_combination(sections[previous_previous_index][0], sections[previous_previous_index][1], racing_line_values[previous_previous_index])
-            point1 = MatrixOps.convex_combination(sections[previous_index][0], sections[previous_index][1], racing_line_values[previous_index])
-            point3 = MatrixOps.convex_combination(sections[next_index][0], sections[next_index][1], racing_line_values[next_index])
-            point4 = MatrixOps.convex_combination(sections[next_next_index][0], sections[next_next_index][1], racing_line_values[next_next_index])
-            vector0 = point1 - point0
-            vector3 = point4 - point3
-            norm0 = np.linalg.norm(vector0)
-            norm3 = np.linalg.norm(vector3)
-
-            smallest_value = -1
-            # Only check a few values around the current one per iteration
-            steps = [racing_line_values[i]]
-            for j in range(1, 6):
-                if racing_line_values[i] + j*0.01 <= 1.0:
-                    steps.append(racing_line_values[i] + j*0.01)
-                else:
-                    break
-            for j in range(1, 11):
-                if racing_line_values[i] - j*0.01 >= 0:
-                    steps.append(racing_line_values[i] - j*0.01)
-                else:
-                    break
-
-            for j in range(0, len(steps)):
-                # Try out different points for the current section and get the vectors accordingly
-                point2 = MatrixOps.convex_combination(sections[i][0], sections[i][1], steps[j])
-                vector1 = point2 - point1
-                vector2 = point3 - point2
-                norm1 = np.linalg.norm(vector1)
-                norm2 = np.linalg.norm(vector2)
-
-                # Calculate the distance of the vectors and the angles between them
-                dist0 = norm0 + norm1
-                dist1 = norm1 + norm2
-                dist2 = norm2 + norm3
-                angle0 = -np.clip(np.dot(vector0/norm0, vector1/norm1), -1.0, 1.0)
-                angle1 = -np.clip(np.dot(vector1/norm1, vector2/norm2), -1.0, 1.0)
-                angle2 = -np.clip(np.dot(vector2/norm2, vector3/norm3), -1.0, 1.0)
-
-                # The actual evaluation function for the current point of the racing line (smaller -> better)
-                new_value = dist1 + ANGLE_FACTOR * (angle0/dist0 + angle1/dist1 + angle2/dist2)
-
-                if new_value < smallest_value or smallest_value < 0:
-                    smallest_value = new_value
-                    racing_line_values[i] = steps[j]
-
-    #_draw_racing_line(image, sections, racing_line_values)
+    # number_of_sections = 100
+    # sections = np.empty([number_of_sections, 2, 2], dtype=int)
+    # section_center = 0.5 if len(contours) > 2 else 0.2
+    # # Init the first line (start/finish line) outside the loop
+    # sections[0][0] = inner_contour[inner_start_index]
+    # sections[0][1] = outer_contour[outer_start_index]
+    # cv.line(image, tuple(sections[0][0]), tuple(sections[0][1]), (0, 0, 0))
+    # for i in range(1, number_of_sections):
+    #     prev_section_center = MatrixOps.convex_combination(sections[i-1][0], sections[i-1][1], section_center)
+    #     prev_section_direction = MatrixOps.get_perpendicular_vector(sections[i-1][0], sections[i-1][1])
+    #
+    #     step_size = 20
+    #     # Set them to the previous values so the loop is run at least once
+    #     sections[i][0] = sections[i-1][0]
+    #     sections[i][1] = sections[i-1][1]
+    #     last_index = MatrixOps.multidim_indexof(inner_contour, sections[i-1][0])
+    #     #print("Last index:", last_index)
+    #     while (MatrixOps.multidim_indexof(sections[:i-1], sections[i]) != -1 or
+    #            last_index > MatrixOps.multidim_indexof(inner_contour, sections[i][0])) and step_size < 500:
+    #         #print("New index:", MatrixOps.multidim_indexof(inner_contour, sections[i][0]))
+    #         new_point = prev_section_center + step_size*prev_section_direction
+    #         sections[i][0] = MatrixOps.find_closest_point(new_point, inner_contour)
+    #         sections[i][1] = MatrixOps.find_closest_point(new_point, other_contours)
+    #         #if step_size > 10:
+    #             #print(step_size)
+    #         step_size += 20
+    #
+    #     new_point = prev_section_center + (step_size-5)*prev_section_direction
+    #     #print(step_size)
+    #     #print(sections[i][0])
+    #     #print(sections[i][1])
+    #     #print("###############")
+    #     cv.line(image, tuple(prev_section_center.astype(int)), tuple(new_point.astype(int)), (0, 0, 0))
+    #     cv.line(image, tuple(sections[i][0].astype(int)), tuple(sections[i][1].astype(int)), (0, 0, 0))
+    #
+    #
+    # # Init and draw the racing line
+    # racing_line_values = np.zeros([number_of_sections])
+    # ANGLE_FACTOR = 100
+    # ITERATIONS = 50
+    # for k in range(0, ITERATIONS):
+    #     for i in range(0, number_of_sections):
+    #         # Get the points around the current one and the vectors between them
+    #         previous_previous_index = (i-2) % number_of_sections
+    #         previous_index = (i-1) % number_of_sections
+    #         next_index = (i+1) % number_of_sections
+    #         next_next_index = (i+2) % number_of_sections
+    #         point0 = MatrixOps.convex_combination(sections[previous_previous_index][0], sections[previous_previous_index][1], racing_line_values[previous_previous_index])
+    #         point1 = MatrixOps.convex_combination(sections[previous_index][0], sections[previous_index][1], racing_line_values[previous_index])
+    #         point3 = MatrixOps.convex_combination(sections[next_index][0], sections[next_index][1], racing_line_values[next_index])
+    #         point4 = MatrixOps.convex_combination(sections[next_next_index][0], sections[next_next_index][1], racing_line_values[next_next_index])
+    #         vector0 = point1 - point0
+    #         vector3 = point4 - point3
+    #         norm0 = np.linalg.norm(vector0)
+    #         norm3 = np.linalg.norm(vector3)
+    #
+    #         smallest_value = -1
+    #         # Only check a few values around the current one per iteration
+    #         steps = [racing_line_values[i]]
+    #         for j in range(1, 6):
+    #             if racing_line_values[i] + j*0.01 <= 1.0:
+    #                 steps.append(racing_line_values[i] + j*0.01)
+    #             else:
+    #                 break
+    #         for j in range(1, 11):
+    #             if racing_line_values[i] - j*0.01 >= 0:
+    #                 steps.append(racing_line_values[i] - j*0.01)
+    #             else:
+    #                 break
+    #
+    #         for j in range(0, len(steps)):
+    #             # Try out different points for the current section and get the vectors accordingly
+    #             point2 = MatrixOps.convex_combination(sections[i][0], sections[i][1], steps[j])
+    #             vector1 = point2 - point1
+    #             vector2 = point3 - point2
+    #             norm1 = np.linalg.norm(vector1)
+    #             norm2 = np.linalg.norm(vector2)
+    #
+    #             # Calculate the distance of the vectors and the angles between them
+    #             dist0 = norm0 + norm1
+    #             dist1 = norm1 + norm2
+    #             dist2 = norm2 + norm3
+    #             angle0 = -np.clip(np.dot(vector0/norm0, vector1/norm1), -1.0, 1.0)
+    #             angle1 = -np.clip(np.dot(vector1/norm1, vector2/norm2), -1.0, 1.0)
+    #             angle2 = -np.clip(np.dot(vector2/norm2, vector3/norm3), -1.0, 1.0)
+    #
+    #             # The actual evaluation function for the current point of the racing line (smaller -> better)
+    #             new_value = dist1 + ANGLE_FACTOR * (angle0/dist0 + angle1/dist1 + angle2/dist2)
+    #
+    #             if new_value < smallest_value or smallest_value < 0:
+    #                 smallest_value = new_value
+    #                 racing_line_values[i] = steps[j]
+    #
+    # #_draw_racing_line(image, sections, racing_line_values)
 
     cv.imshow("track", image)
     return track  # Not sure what to actually return later, just return anything so this does not get called again

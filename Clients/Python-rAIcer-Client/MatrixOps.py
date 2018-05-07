@@ -28,7 +28,7 @@ def multidim_indexof(array, element):
     """
     # Maybe improve performance later? The numpy variants do not seem to work though
     for i in range(0, len(array)):
-        if np.array_equal(array[i][0], element):
+        if np.array_equal(array[i], element):
             return i
     return -1
 
@@ -44,7 +44,7 @@ def convex_combination(point1, point2, factor=0.5, flip=False):
     :return: the convex combination of both points
     """
     result = point1*factor + point2*(1-factor)
-    return np.flip(result, 0) if flip else result
+    return np.flip(result, axis=0) if flip else result
 
 
 def angle_between_vectors(vector1, vector2):
@@ -58,3 +58,27 @@ def angle_between_vectors(vector1, vector2):
     vector2 = vector2 / np.linalg.norm(vector2)
     return np.arccos(np.clip(np.dot(vector1, vector2), -1.0, 1.0))
 
+
+def find_closest_point(point, points):
+    """
+    Find and return the point closest to the given point from a list of points
+    :param point: the point to find the closest to
+    :param points: the list of points
+    :return: the point closest to the given point
+    """
+    distances = np.linalg.norm(points - point, axis=1)
+    return points[np.argmin(distances)]
+
+
+def get_perpendicular_vector(point1, point2, direction=0, normalized=True):
+    """
+    Returns one of the two perpendicular vector between the two given points and optionally normalizes it.
+    :param point1: the first point
+    :param point2: the second point
+    :param direction: the direction of the resulting vector (either 0 or 1)
+    :param normalized: whether the result should be normalized
+    :return: the perpendicular vector to the vector between the two points
+    """
+    result = np.flip(point2 - point1, axis=0)
+    result[direction] = -result[direction]
+    return result / np.linalg.norm(result) if normalized else result

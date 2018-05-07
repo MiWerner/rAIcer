@@ -115,7 +115,8 @@ class RaicerSocket(object):
         Queues a message for the server with a ID of 255. This results into shutdown the server
         :return:
         """
-        self.__kill_msg = bytes([255, 0, 0, 0, 0])
+        self.__kill_msg = bytes([11, 0, 0, 0, 0])
+        self.socket.send(self.__kill_msg)
 
     def send_setting_msg(self, track_id=1, num_laps=3, start_countdown=True):
         """

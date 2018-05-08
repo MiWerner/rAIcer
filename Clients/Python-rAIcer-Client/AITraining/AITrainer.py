@@ -5,7 +5,7 @@ from AITraining.GenomeEvaluator import GenomeEvaluator
 import multiprocessing
 from Utils import PATH_TO_CONFIGS, PATH_TO_RES, make_dir, start_server
 from AITraining import visualize
-import time
+import pickle
 
 # number of generations to evolve
 N = 2
@@ -117,16 +117,21 @@ def run_training():
     # create population
     p = neat.Population(config=neat_config)
 
+    # show progess on the console
+    p.add_reporter(neat.StdOutReporter(True))
+
+    # Create Reporter saving statistics over the generations and to get the best genome
     stats = neat.StatisticsReporter()
     p.add_reporter(stats)
 
-    # TODO add reporters
+    # Create reporter to save state during the evolutoin every 5 Generations
+    p.add_reporter(neat.Checkpointer(5))
 
     # TODO population class lags of using fitness_criterion min!!
     winner = p.run(fitness_function=fitness_function, n=N)
     print("\nBest genome:\n{!s}".format(winner))
-    # TODO save winner for later use (pickle)
 
+    # save visualisation of winner and statistics
     node_names = {
         0: "up",
         1: "down",
@@ -149,5 +154,7 @@ def run_training():
     visualize.plot_stats(stats, ylog=False, view=False, filename=os.path.join(current_folder, 'avg_fitness.svg'))
     visualize.plot_species(stats, view=False, filename=os.path.join(current_folder, 'speciation.svg'))
 
-    # TODO evt Plot statistics and so on
+    # save winner for later use
+    pickle.dump(winner, open(os.path.join(current_folder, "winner.p"), "wb"))
+
     print("finished")

@@ -79,7 +79,7 @@ def get_track(img):
     finish_line_center = np.flip(np.mean(finish_line_coords, axis=0)[0], 0)
 
     # Get the contours of the track
-    _, contours, hierarchy = cv.findContours(track, cv.RETR_TREE, cv.CHAIN_APPROX_NONE)
+    _, contours, _ = cv.findContours(track, cv.RETR_TREE, cv.CHAIN_APPROX_NONE)
     image = track.copy()
 
     # Get the inner and outer contour and the indices of the points where they touch the finish line
@@ -88,44 +88,38 @@ def get_track(img):
     # Calculate the starting direction based on the center of the actual start line and center of the orange area
     direction = finish_line_center - MatrixOps.convex_combination(inner_contour[inner_start_index], outer_contour[outer_start_index], 0.5, True)
 
-    # Calculate cross sections of the track
-    # number_of_sections = 100
-    # sections = np.empty([number_of_sections, 2, 2], dtype=int)
-    # section_center = 0.5 if len(contours) > 2 else 0.2
-    # # Init the first line (start/finish line) outside the loop
-    # sections[0][0] = inner_contour[inner_start_index]
-    # sections[0][1] = outer_contour[outer_start_index]
-    # cv.line(image, tuple(sections[0][0]), tuple(sections[0][1]), (0, 0, 0))
-    # for i in range(1, number_of_sections):
-    #     prev_section_center = MatrixOps.convex_combination(sections[i-1][0], sections[i-1][1], section_center)
-    #     prev_section_direction = MatrixOps.get_perpendicular_vector(sections[i-1][0], sections[i-1][1])
-    #
-    #     step_size = 20
-    #     # Set them to the previous values so the loop is run at least once
-    #     sections[i][0] = sections[i-1][0]
-    #     sections[i][1] = sections[i-1][1]
-    #     last_index = MatrixOps.multidim_indexof(inner_contour, sections[i-1][0])
-    #     #print("Last index:", last_index)
-    #     while (MatrixOps.multidim_indexof(sections[:i-1], sections[i]) != -1 or
-    #            last_index > MatrixOps.multidim_indexof(inner_contour, sections[i][0])) and step_size < 500:
-    #         #print("New index:", MatrixOps.multidim_indexof(inner_contour, sections[i][0]))
-    #         new_point = prev_section_center + step_size*prev_section_direction
-    #         sections[i][0] = MatrixOps.find_closest_point(new_point, inner_contour)
-    #         sections[i][1] = MatrixOps.find_closest_point(new_point, other_contours)
-    #         #if step_size > 10:
-    #             #print(step_size)
-    #         step_size += 20
-    #
-    #     new_point = prev_section_center + (step_size-5)*prev_section_direction
-    #     #print(step_size)
-    #     #print(sections[i][0])
-    #     #print(sections[i][1])
-    #     #print("###############")
-    #     cv.line(image, tuple(prev_section_center.astype(int)), tuple(new_point.astype(int)), (0, 0, 0))
-    #     cv.line(image, tuple(sections[i][0].astype(int)), tuple(sections[i][1].astype(int)), (0, 0, 0))
-    #
-    #
-    # # Init and draw the racing line
+    ### Calculate cross sections of the track ###
+    # Create empty/black 3-channel image to run watershed on
+    img_empty = np.zeros(img.shape, np.uint8)
+    # Create a 1-channel image for the markers
+    markers = np.zeros(image.shape, np.int32)
+    # Mark the inner contour with label 1 and the other contours with label 2 by drawing them on the markers image
+    cv.drawContours(markers, [inner_contour], 0, 1)
+    cv.drawContours(markers, [other_contours], 0, 2)
+    # Use watershed to get the boundary between inner and outer contour
+    markers = cv.watershed(img_empty, markers)
+    # Remove '-1' markers on the border of the image
+    markers[:, 0] = markers[1, 1]
+    markers[0, :] = markers[1, 1]
+    markers[:, -1] = markers[1, 1]
+    markers[-1, :] = markers[1, 1]
+
+    # Get a sorted vector of all positions of points on the watershed border
+    _, watershed_contours, _ = cv.findContours((markers == -1).astype(np.uint8), cv.RETR_TREE, cv.CHAIN_APPROX_NONE)
+    watershed_contour = watershed_contours[0]
+
+    number_of_sections = 10
+    step_size = 10
+    sections = np.empty([number_of_sections, 2, 2], dtype=int)
+    for i in range(0, number_of_sections):
+        index1 = i * len(watershed_contour)//number_of_sections
+        index2 = (i * len(watershed_contour)//number_of_sections + step_size) % len(watershed_contour)
+        normal_vector = MatrixOps.get_perpendicular_vector(watershed_contour[index1], watershed_contour[index2])
+        print(normal_vector)
+
+    cv.imshow("color", img)
+
+    # Init and draw the racing line
     # racing_line_values = np.zeros([number_of_sections])
     # ANGLE_FACTOR = 100
     # ITERATIONS = 50
@@ -181,10 +175,10 @@ def get_track(img):
     #             if new_value < smallest_value or smallest_value < 0:
     #                 smallest_value = new_value
     #                 racing_line_values[i] = steps[j]
-    #
-    # #_draw_racing_line(image, sections, racing_line_values)
 
-    cv.imshow("track", image)
+    #_draw_racing_line(image, sections, racing_line_values)
+
+    #cv.imshow("track", image)
     return track  # Not sure what to actually return later, just return anything so this does not get called again
 
 

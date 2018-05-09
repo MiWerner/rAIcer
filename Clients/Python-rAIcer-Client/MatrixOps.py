@@ -72,7 +72,7 @@ def find_closest_point(point, points):
 
 def get_perpendicular_vector(point1, point2, direction=0, normalized=True):
     """
-    Returns one of the two perpendicular vector between the two given points and optionally normalizes it.
+    Returns one of the two perpendicular vectors to the vector between the two given points and optionally normalizes it
     :param point1: the first point
     :param point2: the second point
     :param direction: the direction of the resulting vector (either 0 or 1)

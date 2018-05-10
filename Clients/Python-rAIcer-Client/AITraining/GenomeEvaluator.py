@@ -22,6 +22,7 @@ class GenomeEvaluator(object):
         self.thread = None
         self.fc = FeatureCalculator()
         self.track = None
+        self.track_line = None
 
     def __connect_to_server(self):
         """
@@ -99,7 +100,7 @@ class GenomeEvaluator(object):
             elif status == S_COUNTDOWN:
                 # extract track during countdown
                 if self.track is None:
-                    self.track = get_track(img=image)
+                    self.track, self.track_line = get_track(img=image)
 
             elif status == S_RUNNING:
                 if self.start_timestamp is None:

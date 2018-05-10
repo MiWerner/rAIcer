@@ -55,7 +55,7 @@ while 1:
         display.blit(pygame.surfarray.make_surface(image), (0, 0))
         pygame.display.update()
         if track is None:
-            track = get_track(image)
+            track, track_line = get_track(image)
 
         time.sleep(0.1)
     elif status == S_WAIT:

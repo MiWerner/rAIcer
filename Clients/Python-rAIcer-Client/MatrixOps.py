@@ -59,6 +59,17 @@ def angle_between_vectors(vector1, vector2):
     return np.arccos(np.clip(np.dot(vector1, vector2), -1.0, 1.0))
 
 
+def find_closest_point_index(point, points):
+    """
+    Find and return the index of the point closest to the given point from a list of points
+    :param point: the point to find the closest to
+    :param points: the list of points
+    :return: the index of the point closest to the given point
+    """
+    distances = np.linalg.norm(points - point, axis=1)
+    return np.argmin(distances)
+
+
 def find_closest_point(point, points):
     """
     Find and return the point closest to the given point from a list of points
@@ -66,8 +77,7 @@ def find_closest_point(point, points):
     :param points: the list of points
     :return: the point closest to the given point
     """
-    distances = np.linalg.norm(points - point, axis=1)
-    return points[np.argmin(distances)]
+    return points[find_closest_point_index(point, points)]
 
 
 def get_perpendicular_vector(point1, point2, direction=0, normalized=True):

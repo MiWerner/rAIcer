@@ -108,15 +108,23 @@ def get_track(img):
     _, watershed_contours, _ = cv.findContours((markers == -1).astype(np.uint8), cv.RETR_TREE, cv.CHAIN_APPROX_NONE)
     watershed_contour = watershed_contours[0]
 
-    number_of_sections = 10
-    step_size = 10
+    number_of_sections = 50
+    step_size = 5
     sections = np.empty([number_of_sections, 2, 2], dtype=int)
     for i in range(0, number_of_sections):
         index1 = i * len(watershed_contour)//number_of_sections
         index2 = (i * len(watershed_contour)//number_of_sections + step_size) % len(watershed_contour)
+        center = MatrixOps.convex_combination(watershed_contour[index1], watershed_contour[index2])
+        center = center[0].astype(int)
         normal_vector = MatrixOps.get_perpendicular_vector(watershed_contour[index1], watershed_contour[index2])
-        print(normal_vector)
+        line1, intensities1 = MatrixOps.create_line_iterator(center, (center + normal_vector*500).astype(int), track)
+        line2, intensities2 = MatrixOps.create_line_iterator(center, (center - normal_vector*500).astype(int), track)
+        sections[i][0] = line1[np.min(np.argwhere(intensities1 == 0))]
+        sections[i][1] = line2[np.min(np.argwhere(intensities2 == 0))]
+        cv.line(image, tuple(sections[i][0].astype(int)), tuple(sections[i][1].astype(int)), (0, 0, 0))
+        cv.circle(image, tuple(center), 2, 0)
 
+    img[markers == -1] = [0, 0, 255]
     cv.imshow("color", img)
 
     # Init and draw the racing line
@@ -178,7 +186,7 @@ def get_track(img):
 
     #_draw_racing_line(image, sections, racing_line_values)
 
-    #cv.imshow("track", image)
+    cv.imshow("track", image)
     return track  # Not sure what to actually return later, just return anything so this does not get called again
 
 

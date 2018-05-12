@@ -34,9 +34,9 @@ S_CANCELED = 5
 DEBUG = True
 
 
-def print_debug(*args):
+def print_debug(msg):
     if DEBUG:
-        print(args)
+        print(msg)
 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#

@@ -17,12 +17,16 @@ class GenomeEvaluator(object):
 
     damage = None
 
+    thread = None
+
+    fc = None
+
+    track = None
+
+    track_line = None
+
     def __init__(self):
         self.socket = RaicerSocket.RaicerSocket()
-        self.thread = None
-        self.fc = FeatureCalculator()
-        self.track = None
-        self.track_line = None
 
     def __connect_to_server(self):
         """
@@ -62,8 +66,7 @@ class GenomeEvaluator(object):
             client_id, *_ = self.socket.receive()
             time.sleep(.1)
         if client_id == max_id:
-            # if current id is the largest possible, this client is the last one.
-            # --> start server
+            # if current id is the largest possible, this client is the last one and should start the game
             self.socket.send_setting_msg(track_id=track_id, num_laps=num_laps)
 
         # start client behavior
@@ -82,16 +85,16 @@ class GenomeEvaluator(object):
         :param net: the network used to calculate the key-strokes
         :return:
         """
+        status = -1
         while True:
-            # wait for a new message
-            while not self.socket.new_message:
-                time.sleep(.2)
+            if self.socket.new_message:
+                # receive new message
+                client_id, status, lap_id, lap_total, damage, rank, image = self.socket.receive()
+                if self.fc is not None:
+                    self.fc.update(img=image, print_features=True)
 
-            # receive new message
-            client_id, status, lap_id, lap_total, damage, rank, image = self.socket.receive()
-
-            if damage is not None:
-                self.damage = damage
+                if damage is not None:
+                    self.damage = damage
 
             if status == S_WAIT:
                 # wait for game to start
@@ -99,26 +102,19 @@ class GenomeEvaluator(object):
 
             elif status == S_COUNTDOWN:
                 # extract track during countdown
-                if self.track is None:
-                    self.track, self.track_line = get_track(img=image)
+                if self.fc is None:
+                    self.fc = FeatureCalculator(client_id=client_id, img=image)
 
             elif status == S_RUNNING:
                 if self.start_timestamp is None:
                     # set timestamp when race stated for fitness calculation
                     self.start_timestamp = time.time()
 
-                # extract features
-                ball_pos = np.asarray(get_ball_position(ID=client_id, img=image), dtype=np.int64)
-                du, dd, dl, dr, dul, dur, ddl, ddr = self.fc.calc_distance_features(ball_pos=ball_pos,
-                                                                                    track_mask=self.track)
-                vx, vy = self.fc.calc_speed_features(ball_pos=ball_pos)
                 # TODO include idle-line features
-                inputs = np.asarray([du, dur[2], dr, ddr[2], dd, ddl[2], dl, dul[2], vx, vy], dtype=np.int64)
+                inputs = np.asarray(list(self.fc.features), dtype=np.int64)
 
                 # calculate key strokes
-                output_f = net.activate(inputs=inputs)
-
-                output = np.asarray(np.asarray(output_f) + np.asarray([.5 for _ in range(len(output_f))]),
+                output = np.asarray(list(map(lambda x: x + .5, net.activate(inputs=inputs))),
                                     dtype=np.int8)
 
                 # send keys strokes to server
@@ -144,6 +140,8 @@ class GenomeEvaluator(object):
             if self.start_timestamp and time.time() > self.start_timestamp + self.time_out:
                 self.race_time = self.time_out + 1000
                 return
+
+            time.sleep(.1)
 
     def calc_fitness_value(self):
         """

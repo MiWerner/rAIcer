@@ -44,7 +44,7 @@ def get_ball_position(ID, img):
 
     # Get the mean position of all non-zero points in the mask to get the center of the ball
     center = np.flip(np.mean(cv.findNonZero(ball_mask), axis=0)[0], 0)
-    return center
+    return center, ball_mask
 
 
 def get_distance_to_center(point):

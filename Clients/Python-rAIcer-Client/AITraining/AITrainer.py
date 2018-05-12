@@ -81,22 +81,16 @@ def __eval_genomes(genomes, config):
         for e in evaluators:
             e.socket.is_active = False
             e.socket.send_kill_msg()
-            #e.socket.close()
-
 
         # Wait for server shutdown
         server.join()
 
-       # for e in evaluators:
-       #     e.socket.close()
-
-        # close the sockets and kill the server with the last client
-        #while len(evaluators) > 0:
-        #    e = evaluators[0]
-        #    evaluators.remove(e)
-        #    e.socket.send_kill_msg()
-        #    e.socket.close()
-
+        # ensure sockets are closed
+        for e in evaluators:
+            try:
+                e.socket.close()
+            except ConnectionResetError:
+                pass
 
         # store fitness-values in the genomes
         for g_id, genome in genomes:

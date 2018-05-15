@@ -1,5 +1,6 @@
 import pygame
 from ImageUtils import MIN_BALL_RADIUS, get_ball_position, get_track
+from MatrixOps import find_closest_point_index
 from math import sqrt
 import time
 import numpy as np
@@ -7,13 +8,14 @@ import numpy as np
 MIN_DISTANCE = MIN_BALL_RADIUS
 NUM_STAMPS_CALC_SPEED = 7
 COLORS = [(255, 200, 200), (200, 255, 200), (200, 200, 255)]
+NUM_SECTION_JUMP = 5
 
-DIRECTIONS =[
-    ( 0, -1),  # up
-    ( 1, -1),  # up right
-    ( 1,  0),  # right
-    ( 1,  1),  # down right
-    ( 0,  1),  # down
+DIRECTIONS = [
+    (0, -1),  # up
+    (1, -1),  # up right
+    (1,  0),  # right
+    (1,  1),  # down right
+    (0,  1),  # down
     (-1,  1),  # down left
     (-1,  0),  # left
     (-1, -1),  # up left
@@ -26,11 +28,38 @@ class FeatureCalculator(object):
     dist_features = (0, ) * 8  # distance feature vector
     speed_features = (0, 0)  # speed feature vector
     ball_mask = None  # map for detected opponents, used for distances
+    current_section_id = 0
+    last_seen_section = 0
 
     def __init__(self, client_id, img, max_clients=3):
-        self.track, _ = get_track(img=img)  # map of the track
+        self.track, checkpoints = get_track(img=img)  # map of the track
+
+        self.checkpoints, self.section_counter, self.checkpoint_map = self.create_sections(checkpoints)
+        self.num_checkpoints = len(self.checkpoints)
+
         self.client_id = client_id  # id of coresponding client
         self.max_clients = max_clients  # maximum number of clients. Used for opponent detection
+
+    def create_sections(self, checkpoints):
+        """
+        Creates reduces the number of checkpoints, creates a map with section areas and a counter for each section
+        :param checkpoints: points created by watershead algorightm
+        :return: final set of checkpoints, list of counters for each section, map of section
+        """
+        # create map for constant computing of the current sector
+        s = np.shape(self.track)
+        # reduce number of checkpoints and convert it to pygame format
+        checkpoints = checkpoints[::20]
+        checkpoint_map = np.ones(s, dtype=np.int) * len(checkpoints)
+        for i in range(s[0]):
+            for j in range(s[1]):
+                if self.track[i, j]:  # if current point is not an obstacle
+                    checkpoint_map[i, j] = int(find_closest_point_index((j, i), checkpoints))
+
+        checkpoints = np.flip(checkpoints, axis=1)
+        section_counter = [0] * len(checkpoints)
+
+        return checkpoints, section_counter, checkpoint_map
 
     @property
     def features(self):
@@ -88,6 +117,26 @@ class FeatureCalculator(object):
 
         self._calc_speed_features()
 
+        bp_section = self.checkpoint_map[bp[0], bp[1]]
+
+        if not bp_section == self.last_seen_section:
+            # new section is entered
+            r1 = range(self.current_section_id+1, self.current_section_id+NUM_SECTION_JUMP)
+            r1 = list(map(lambda x: x % self.num_checkpoints, r1))
+
+            r2 = range(self.last_seen_section + 1, self.last_seen_section + NUM_SECTION_JUMP)
+            r2 = list(map(lambda x: x % self.num_checkpoints, r2))
+            if bp_section in r1 and bp_section in r2:
+                print(bp_section)
+                self.section_counter[bp_section] += 1
+                # ensure over jumped section also increase counter
+                i = bp_section - 1
+                while i >= 0 and self.section_counter[i] < self.section_counter[bp_section]:
+                    self.section_counter[i] += 1
+                    i -= 1
+                self.current_section_id = bp_section
+        self.last_seen_section = bp_section
+
         if print_features:
             self.print_features()
 
@@ -126,6 +175,12 @@ class FeatureCalculator(object):
 
         # speed
         self.__draw_line(display, (200, 255, 200), ball_pos, self.speed_features[0], self.speed_features[1])
+
+        # checkpoints
+        for c in self.checkpoints:
+            pygame.draw.circle(display, (200, 200, 200), c, 3)
+
+        pygame.draw.circle(display, (200, 0, 200), self.checkpoints[self.current_section_id], 3)
 
     @staticmethod
     def __draw_line(display, color, ball_pos, dx, dy):

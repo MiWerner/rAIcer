@@ -117,7 +117,7 @@ def get_track(img):
     watershed_contour = np.roll(watershed_contour, -2*start_index)
 
     cv.imshow("image", image)
-    return track, watershed_contour
+    return track, np.flip(watershed_contour, 0)
 
 
 def _get_inner_and_outer_contour(contours, finish_line_coords):

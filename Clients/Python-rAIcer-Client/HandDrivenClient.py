@@ -1,10 +1,11 @@
 import RaicerSocket
 import pygame
-from Utils import S_WAIT, S_COUNTDOWN, S_RUNNING, S_FINISHED, S_CRASHED, S_CANCELED, IMG_WIDTH, IMG_HEIGHT, print_debug
-from ImageUtils import get_ball_position, get_track
+from Utils import S_WAIT, S_COUNTDOWN, S_RUNNING, S_FINISHED, S_CRASHED, S_CANCELED, IMG_WIDTH, IMG_HEIGHT, print_debug, update_feature_parameters
+
+#update_feature_parameters(diag_dist=False, num_cp_features=1, ball_pos=False)
+
 from Features import FeatureCalculator
 import time
-import numpy as np
 
 fc = None
 s = RaicerSocket.RaicerSocket()

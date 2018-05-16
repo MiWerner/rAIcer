@@ -139,32 +139,9 @@ def run_training():
         print("\nBest genome:\n{!s}".format(winner))
 
         # save visualisation of winner
-        node_names = {
-            0: "up",
-            1: "down",
-            2: "left",
-            3: "right",
-            -1: "du",
-            -2: "dur",
-            -3: "dr",
-            -4: "ddr",
-            -5: "dd",
-            -6: "ddl",
-            -7: "dl",
-            -8: "dul",
-            -9: "vx",
-            -10: "vy",
-            -11: "bpx",
-            -12: "bpy",
-            -13: "cp1x",
-            -14: "cp1y",
-            -15: "cp2x",
-            -16: "cp2y",
-            -17: "cp3x",
-            -18: "cp3y",
-        }
+        from Utils import IO_NAMES
 
-        visualize.draw_net(config=neat_config, genome=winner, node_names=node_names, view=False,
+        visualize.draw_net(config=neat_config, genome=winner, node_names=IO_NAMES, view=False,
                            filename=os.path.join(current_folder, "winner_net"), fmt="svg")
 
         # save winner for later use

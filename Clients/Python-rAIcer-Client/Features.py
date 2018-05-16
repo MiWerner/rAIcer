@@ -1,6 +1,7 @@
 import pygame
 from ImageUtils import MIN_BALL_RADIUS, get_ball_position, get_track
 from MatrixOps import find_closest_point_index
+from Utils import EN_HV_DIST, EN_DIAG_DIST, EN_SPEED, EN_BALLPOS, NUM_CP_FEATURES, feature_print_string
 from math import sqrt
 import time
 import numpy as np
@@ -86,24 +87,28 @@ class FeatureCalculator(object):
         f = ()
         # distance features
         for i, d in enumerate(self.dist_features):
-            if i % 2 == 1:
+            if i % 2 == 1 and EN_DIAG_DIST:
                 # extract total distance for diagonal features
                 try:
-                    d = d[2]
+                    f += (d[2], )
                 except TypeError:
                     pass
-            f += (d, )
+            elif i % 2 == 0 and EN_HV_DIST:
+                f += (d, )
 
         # speed features
-        f += self.speed_features
+        if EN_SPEED:
+            f += self.speed_features
 
         # current ball_position
-        f += self.ball_pos_stamps[-1][0]
+        if EN_BALLPOS:
+            f += self.ball_pos_stamps[-1][0]
 
         # checkpoints
-        for i in range(1, 4):
-            f += tuple(self.checkpoints[(self.current_section_id + 1) % self.num_checkpoints])
-        # TODO normalize
+        for i in range(1, NUM_CP_FEATURES+1):
+            dx = self.checkpoints[(self.current_section_id + i) % self.num_checkpoints][0] - self.ball_pos_stamps[-1][0][0]
+            dy = self.checkpoints[(self.current_section_id + i) % self.num_checkpoints][1] - self.ball_pos_stamps[-1][0][1]
+            f += (dx, dy)
 
         self.__features = f
         self.features_changed = False
@@ -177,10 +182,8 @@ class FeatureCalculator(object):
         Prints all feature values.
         :return:
         """
-        print("ID {}: du={} | dur={} | dr={} | ddr={} | dd={} | ddl={} | dl={} | dul={} | vx={} | vy={} | "
-              "bp=({}, {}) | cp1=({}, {}) | cp2=({}, {}) | cp3=({}, {})"
-              .format(self.client_id,
-                      *tuple(map(lambda x: str(int(x)).zfill(4), self.features))))
+        print(feature_print_string.format(self.client_id,
+                                          *tuple(map(lambda x: str(int(x)).zfill(4), self.features))))
 
     def draw_features(self, display):
         """
@@ -189,32 +192,37 @@ class FeatureCalculator(object):
         """
         ball_pos = self.ball_pos_stamps[-1][0]
         c = COLORS[self.client_id - 1]
-        # dist up
-        self.__draw_line(display, c, ball_pos, 0, -self.dist_features[0])
-        # dist up right
-        self.__draw_line(display, c, ball_pos, self.dist_features[1][0], -self.dist_features[1][1])
-        # dist right
-        self.__draw_line(display, c, ball_pos, self.dist_features[2], 0)
-        # dist down right
-        self.__draw_line(display, c, ball_pos, self.dist_features[3][0], self.dist_features[3][1])
-        # dist down
-        self.__draw_line(display, c, ball_pos, 0, self.dist_features[4])
-        # dist down left
-        self.__draw_line(display, c, ball_pos, -self.dist_features[5][0], self.dist_features[5][1])
-        # dist left
-        self.__draw_line(display, c, ball_pos, -self.dist_features[6], 0)
-        # dist up left
-        self.__draw_line(display, c, ball_pos, -self.dist_features[7][0], -self.dist_features[7][1])
 
-        # speed
-        self.__draw_line(display, (200, 255, 200), ball_pos, self.speed_features[0], self.speed_features[1])
+        if EN_HV_DIST:
+            # dist up
+            self.__draw_line(display, c, ball_pos, 0, -self.dist_features[0])
+            # dist right
+            self.__draw_line(display, c, ball_pos, self.dist_features[2], 0)
+            # dist down
+            self.__draw_line(display, c, ball_pos, 0, self.dist_features[4])
+            # dist left
+            self.__draw_line(display, c, ball_pos, -self.dist_features[6], 0)
+
+        if EN_DIAG_DIST:
+            # dist up right
+            self.__draw_line(display, c, ball_pos, self.dist_features[1][0], -self.dist_features[1][1])
+            # dist down right
+            self.__draw_line(display, c, ball_pos, self.dist_features[3][0], self.dist_features[3][1])
+            # dist down left
+            self.__draw_line(display, c, ball_pos, -self.dist_features[5][0], self.dist_features[5][1])
+            # dist up left
+            self.__draw_line(display, c, ball_pos, -self.dist_features[7][0], -self.dist_features[7][1])
+
+        if EN_SPEED:
+            # speed
+            self.__draw_line(display, (200, 255, 200), ball_pos, self.speed_features[0], self.speed_features[1])
 
         # checkpoints
         for c in self.checkpoints:
             pygame.draw.circle(display, (200, 200, 200), c, 3)
 
         pygame.draw.circle(display, (200, 200, 0), self.checkpoints[self.current_section_id], 3)
-        for i in range(1, 4):
+        for i in range(1, NUM_CP_FEATURES+1):
             pygame.draw.circle(display, (200, 0, 200),
                                self.checkpoints[(self.current_section_id + i) % self.num_checkpoints], 3)
 

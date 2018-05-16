@@ -49,12 +49,12 @@ def get_ball_position(ID, img):
 
 def get_distance_to_center(point):
     """
-    Returns the Hamming distance of the given point to the window center
+    Returns the Manhattan distance of the given point to the window center
     :param point: the point
-    :return: the Hamming distance of the given point to the window center
+    :return: the Manhattan distance of the given point to the window center
     """
     window_center = np.array([IMG_HEIGHT/2, IMG_WIDTH/2])
-    return np.sum(np.abs(np.subtract(window_center, point)))  # Hamming distance is good enough
+    return np.sum(np.abs(np.subtract(window_center, point)))  # Manhattan distance is good enough
 
 
 def get_track(img):
@@ -76,7 +76,7 @@ def get_track(img):
     finish_line = cv.dilate(cv.inRange(img, lower_bounds_finish, upper_bounds_finish), np.ones((5, 5), np.uint8),
                             iterations=1)
     finish_line_coords = cv.findNonZero(finish_line)
-    finish_line_center = np.flip(np.mean(finish_line_coords, axis=0)[0], 0)
+    finish_line_center = np.mean(finish_line_coords, axis=0)[0]
 
     # Get the contours of the track
     _, contours, _ = cv.findContours(track, cv.RETR_TREE, cv.CHAIN_APPROX_NONE)
@@ -86,7 +86,8 @@ def get_track(img):
     inner_contour, outer_contour, inner_start_index, outer_start_index, inner_contour_index = _get_inner_and_outer_contour(contours, finish_line_coords)
 
     # Calculate the starting direction based on the center of the actual start line and center of the orange area
-    direction = finish_line_center - MatrixOps.convex_combination(inner_contour[inner_start_index], outer_contour[outer_start_index], 0.5, True)
+    direction = finish_line_center - MatrixOps.convex_combination(inner_contour[inner_start_index], outer_contour[outer_start_index], 0.5)
+    direction = direction / np.linalg.norm(direction)
 
     ### Calculate cross sections of the track ###
     # Create empty/black 3-channel image to run watershed on
@@ -113,11 +114,17 @@ def get_track(img):
     # cv.imshow("color", img) TODO remove #
 
     # Circshift the contour so that the first point corresponds to the start/finishing line
-    start_index = MatrixOps.find_closest_point_index(inner_contour[inner_start_index], watershed_contour)
+    start_index = MatrixOps.find_closest_point_index(MatrixOps.convex_combination(inner_contour[inner_start_index], outer_contour[outer_start_index], 0.5), watershed_contour)
     watershed_contour = np.roll(watershed_contour, -2*start_index)
 
+    # Check if flipping the contour array is necessary based on the start direction
+    next_point = watershed_contour[0] + direction
+    closest_point_index = MatrixOps.find_closest_point_index(next_point, watershed_contour[[1, len(watershed_contour)-1]])
+    if closest_point_index == 1:
+        watershed_contour = np.flip(watershed_contour, 0)
+
     # cv.imshow("image", image) TODO remove #
-    return track, np.flip(watershed_contour, 0)
+    return track, watershed_contour
 
 
 def _get_inner_and_outer_contour(contours, finish_line_coords):

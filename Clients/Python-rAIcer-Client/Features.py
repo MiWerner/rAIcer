@@ -30,6 +30,8 @@ class FeatureCalculator(object):
     ball_mask = None  # map for detected opponents, used for distances
     current_section_id = 0
     last_seen_section = 0
+    __features = None
+    features_changed = False
 
     def __init__(self, client_id, img, max_clients=3):
         self.track, checkpoints = get_track(img=img)  # map of the track
@@ -56,6 +58,7 @@ class FeatureCalculator(object):
                 if self.track[i, j]:  # if current point is not an obstacle
                     checkpoint_map[i, j] = int(find_closest_point_index((j, i), checkpoints))
 
+        # flip x and y axis
         checkpoints = np.flip(checkpoints, axis=1)
         section_counter = [0] * len(checkpoints)
 
@@ -64,7 +67,7 @@ class FeatureCalculator(object):
     @property
     def features(self):
         """
-        Returns a feature vector in the following order
+        Returns a feature vector (tuple) in the following order
          ~ distance up
          ~ distance up right
          ~ distance right
@@ -77,15 +80,33 @@ class FeatureCalculator(object):
          ~ speed vertical
         :return: current feature vector
         """
+        if not self.features_changed:
+            return self.__features
+
         f = ()
+        # distance features
         for i, d in enumerate(self.dist_features):
             if i % 2 == 1:
+                # extract total distance for diagonal features
                 try:
                     d = d[2]
                 except TypeError:
                     pass
             f += (d, )
+
+        # speed features
         f += self.speed_features
+
+        # current ball_position
+        f += self.ball_pos_stamps[-1][0]
+
+        # checkpoints
+        for i in range(1, 4):
+            f += tuple(self.checkpoints[(self.current_section_id + 1) % self.num_checkpoints])
+        # TODO normalize
+
+        self.__features = f
+        self.features_changed = False
         return f
 
     def update(self, img, print_features=False):
@@ -95,6 +116,9 @@ class FeatureCalculator(object):
         :param print_features: if True the new feature values are printed
         :return:
         """
+        self.features_changed = True
+
+        # extract new ball position
         bp, _ = get_ball_position(ID=self.client_id, img=img)
         bp = tuple(map(int, bp))
         self.ball_pos_stamps.append((bp, time.time()))
@@ -102,6 +126,7 @@ class FeatureCalculator(object):
         if len(self.ball_pos_stamps) > NUM_STAMPS_CALC_SPEED:
             self.ball_pos_stamps.remove(self.ball_pos_stamps[0])
 
+        # extract mask for the opponents
         self.ball_mask = np.zeros(np.shape(self.track))
         for i in range(1, self.max_clients + 1):
             try:
@@ -109,25 +134,31 @@ class FeatureCalculator(object):
                     _, m = get_ball_position(i, img)
                     self.ball_mask += m
             except IndexError:
-                # if an opponent was not found
+                # if an opponent was not found the number of clients is known
                 self.max_clients = i - 1
                 break
 
+        # ~~~~~~~~~~~~~~~~~~~~~~~~ extract new features ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        # distance
         self._calc_distance_features()
 
+        # speed
         self._calc_speed_features()
 
+        # sections
         bp_section = self.checkpoint_map[bp[0], bp[1]]
 
+        # check if a new section is entered
         if not bp_section == self.last_seen_section:
-            # new section is entered
+
+            # check is a new best section is entered
+            # allow skipping of NUM_SECTION_JUMP sections
             r1 = range(self.current_section_id+1, self.current_section_id+NUM_SECTION_JUMP)
             r1 = list(map(lambda x: x % self.num_checkpoints, r1))
 
             r2 = range(self.last_seen_section + 1, self.last_seen_section + NUM_SECTION_JUMP)
             r2 = list(map(lambda x: x % self.num_checkpoints, r2))
             if bp_section in r1 and bp_section in r2:
-                print(bp_section)
                 self.section_counter[bp_section] += 1
                 # ensure over jumped section also increase counter
                 i = bp_section - 1
@@ -135,6 +166,7 @@ class FeatureCalculator(object):
                     self.section_counter[i] += 1
                     i -= 1
                 self.current_section_id = bp_section
+
         self.last_seen_section = bp_section
 
         if print_features:
@@ -145,7 +177,8 @@ class FeatureCalculator(object):
         Prints all feature values.
         :return:
         """
-        print("ID {}: du={} | dur={} | dr={} | ddr={} | dd={} | ddl={} | dl={} | dul={} | vx={} | vy={}"
+        print("ID {}: du={} | dur={} | dr={} | ddr={} | dd={} | ddl={} | dl={} | dul={} | vx={} | vy={} | "
+              "bp=({}, {}) | cp1=({}, {}) | cp2=({}, {}) | cp3=({}, {})"
               .format(self.client_id,
                       *tuple(map(lambda x: str(int(x)).zfill(4), self.features))))
 
@@ -180,7 +213,10 @@ class FeatureCalculator(object):
         for c in self.checkpoints:
             pygame.draw.circle(display, (200, 200, 200), c, 3)
 
-        pygame.draw.circle(display, (200, 0, 200), self.checkpoints[self.current_section_id], 3)
+        pygame.draw.circle(display, (200, 200, 0), self.checkpoints[self.current_section_id], 3)
+        for i in range(1, 4):
+            pygame.draw.circle(display, (200, 0, 200),
+                               self.checkpoints[(self.current_section_id + i) % self.num_checkpoints], 3)
 
     @staticmethod
     def __draw_line(display, color, ball_pos, dx, dy):

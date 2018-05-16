@@ -110,13 +110,13 @@ def get_track(img):
 
     img[markers == -1] = [0, 0, 255]
 
-    cv.imshow("color", img)
+    # cv.imshow("color", img) TODO remove #
 
     # Circshift the contour so that the first point corresponds to the start/finishing line
     start_index = MatrixOps.find_closest_point_index(inner_contour[inner_start_index], watershed_contour)
     watershed_contour = np.roll(watershed_contour, -2*start_index)
 
-    cv.imshow("image", image)
+    # cv.imshow("image", image) TODO remove #
     return track, np.flip(watershed_contour, 0)
 
 

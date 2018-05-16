@@ -9,7 +9,9 @@ import time
 
 class GenomeEvaluator(object):
 
-    time_out = 10  # 4*60  # s  (maximum time for one run)
+    time_out = 3 * 60  # 4*60  # s  (maximum time for one run)
+
+    time_out_zero_speed_counter = 100  # due time.sleep(.1) the run is over after 20 sec of zero speed
 
     start_timestamp = None
 
@@ -24,6 +26,8 @@ class GenomeEvaluator(object):
     track = None
 
     track_line = None
+
+    zero_speed_counter = 0
 
     def __init__(self):
         self.socket = RaicerSocket.RaicerSocket()
@@ -91,7 +95,7 @@ class GenomeEvaluator(object):
                 # receive new message
                 client_id, status, lap_id, lap_total, damage, rank, image = self.socket.receive()
                 if self.fc is not None:
-                    self.fc.update(img=image, print_features=True)
+                    self.fc.update(img=image, print_features=False)
 
                 if damage is not None:
                     self.damage = damage
@@ -119,6 +123,14 @@ class GenomeEvaluator(object):
 
                 # send keys strokes to server
                 self.socket.send_key_msg(output[0], output[1], output[2], output[3])
+
+                speed = self.fc.speed_features
+                if speed[0] == 0 and speed[1] == 0:
+                    self.zero_speed_counter += 1
+
+                if self.zero_speed_counter >= self.time_out_zero_speed_counter:
+                    return
+
 
                 # TODO evt. save more statistics for fitness-value
 
@@ -152,4 +164,5 @@ class GenomeEvaluator(object):
         :return: the fitness-value
         """
         # TODO evt more parameters like (total_#_checkpoints - #_passed_checkpoints)
-        return self.race_time + self.damage
+        #return self.race_time + self.damage
+        return sum(self.fc.section_counter)

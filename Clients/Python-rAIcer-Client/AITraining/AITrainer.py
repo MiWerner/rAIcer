@@ -6,9 +6,10 @@ import multiprocessing
 from Utils import PATH_TO_CONFIGS, PATH_TO_RES, make_dir, start_server
 from AITraining import visualize
 import pickle
+import sys
 
 # number of generations to evolve
-N = 2
+N = 30
 
 
 def fitness_function(genomes, config):
@@ -22,15 +23,26 @@ def fitness_function(genomes, config):
     current_genomes = []
 
     # group three genomes and evaluate them in the same game
+    min_g_id = 1
+    max_g_id = 3
     for genome_id, genome in genomes:
         current_genomes.append((genome_id, genome))
         if len(current_genomes) == 3:
+            sys.stdout.write("\rGenomes {} to {} of {} are in evaluation now ..."
+                  .format(min_g_id, max_g_id, len(genomes)))
+            sys.stdout.flush()
             __eval_genomes(current_genomes, config)
             current_genomes = []
+            min_g_id += 3
+            max_g_id += 3
 
     # if the number of genomes is not a multiple of three run an extra round for the remainge genomes
     if len(current_genomes) > 0:
+        sys.stdout.write("\rGenomes {} to {} of {} are in evaluation now ..."
+                         .format(min_g_id, len(genomes), len(genomes)))
+        sys.stdout.flush()
         __eval_genomes(current_genomes, config)
+    print("")
 
 
 def __eval_genomes(genomes, config):
@@ -118,37 +130,52 @@ def run_training():
     stats = neat.StatisticsReporter()
     p.add_reporter(stats)
 
-    # Create reporter to save state during the evolutoin every 5 Generations
-    p.add_reporter(neat.Checkpointer(5))
+    # Create reporter to save state during the evolution every 5 Generations
+    p.add_reporter(neat.Checkpointer(5, filename_prefix=os.path.join(current_folder, "checkpoint-")))
 
     # TODO population class lags of using fitness_criterion min!!
-    winner = p.run(fitness_function=fitness_function, n=N)
-    print("\nBest genome:\n{!s}".format(winner))
+    try:
+        winner = p.run(fitness_function=fitness_function, n=N)
+        print("\nBest genome:\n{!s}".format(winner))
 
-    # save visualisation of winner and statistics
-    node_names = {
-        0: "up",
-        1: "down",
-        2: "left",
-        3: "right",
-        -1: "du",
-        -2: "dur",
-        -3: "dr",
-        -4: "ddr",
-        -5: "dd",
-        -6: "ddl",
-        -7: "dl",
-        -8: "dul",
-        -9: "vx",
-        -10: "vy",
-    }
+        # save visualisation of winner
+        node_names = {
+            0: "up",
+            1: "down",
+            2: "left",
+            3: "right",
+            -1: "du",
+            -2: "dur",
+            -3: "dr",
+            -4: "ddr",
+            -5: "dd",
+            -6: "ddl",
+            -7: "dl",
+            -8: "dul",
+            -9: "vx",
+            -10: "vy",
+            -11: "bpx",
+            -12: "bpy",
+            -13: "cp1x",
+            -14: "cp1y",
+            -15: "cp2x",
+            -16: "cp2y",
+            -17: "cp3x",
+            -18: "cp3y",
+        }
 
-    visualize.draw_net(config=neat_config, genome=winner, node_names=node_names, view=False,
-                       filename=os.path.join(current_folder, "winner_net"), fmt="svg")
-    visualize.plot_stats(stats, ylog=False, view=False, filename=os.path.join(current_folder, 'avg_fitness.svg'))
-    visualize.plot_species(stats, view=False, filename=os.path.join(current_folder, 'speciation.svg'))
+        visualize.draw_net(config=neat_config, genome=winner, node_names=node_names, view=False,
+                           filename=os.path.join(current_folder, "winner_net"), fmt="svg")
 
-    # save winner for later use
-    pickle.dump(winner, open(os.path.join(current_folder, "winner.p"), "wb"))
+        # save winner for later use
+        pickle.dump(winner, open(os.path.join(current_folder, "winner.p"), "wb"))
 
-    print("finished")
+    except Exception as err:
+        print(err)
+
+    finally:
+        # save visualisation of winner and statistics
+        visualize.plot_stats(stats, ylog=False, view=False, filename=os.path.join(current_folder, 'avg_fitness.svg'))
+        visualize.plot_species(stats, view=False, filename=os.path.join(current_folder, 'speciation.svg'))
+
+        print("finished")

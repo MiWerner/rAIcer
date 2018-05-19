@@ -8,9 +8,6 @@ from AITraining import visualize
 import pickle
 import sys
 
-# number of generations to evolve
-N = 30
-
 
 def fitness_function(genomes, config):
     """
@@ -29,14 +26,14 @@ def fitness_function(genomes, config):
         current_genomes.append((genome_id, genome))
         if len(current_genomes) == 3:
             sys.stdout.write("\rGenomes {} to {} of {} are in evaluation now ..."
-                  .format(min_g_id, max_g_id, len(genomes)))
+                             .format(min_g_id, max_g_id, len(genomes)))
             sys.stdout.flush()
             __eval_genomes(current_genomes, config)
             current_genomes = []
             min_g_id += 3
             max_g_id += 3
 
-    # if the number of genomes is not a multiple of three run an extra round for the remainge genomes
+    # if the number of genomes is not a multiple of three run an extra round for the remaining genomes
     if len(current_genomes) > 0:
         sys.stdout.write("\rGenomes {} to {} of {} are in evaluation now ..."
                          .format(min_g_id, len(genomes), len(genomes)))
@@ -109,50 +106,65 @@ def __eval_genomes(genomes, config):
             genome.fitness += result_dict[g_id]
 
 
-def run_training():
-    time_stamp = datetime.datetime.now()
-    current_folder = make_dir(os.path.join(PATH_TO_RES, "NEAT-AI", str(time_stamp).replace(":", "_")))
+def run_training(N, path_to_config=None, path_to_restore=None):
+    from Utils import IO_NAMES
+
+    if path_to_config is None:
+        path_to_config = os.path.join(PATH_TO_CONFIGS, "neat_test_config")
 
     neat_config = neat.Config(neat.DefaultGenome,
                               neat.DefaultReproduction,
                               neat.DefaultSpeciesSet,
                               neat.DefaultStagnation,
-                              os.path.join(PATH_TO_CONFIGS, "neat_test_config"))
-    # TODO update config file
+                              path_to_config)
 
     # create population
-    p = neat.Population(config=neat_config)
+    if path_to_restore is None:
+        time_stamp = datetime.datetime.now()
+        current_folder = make_dir(os.path.join(PATH_TO_RES, "NEAT-AI", str(time_stamp).split(":")[0]))
 
-    # show progess on the console
+        p = neat.Population(config=neat_config)
+    else:
+        p = neat.Checkpointer.restore_checkpoint(path_to_restore)
+        current_folder = os.path.join(path_to_restore, os.pardir)
+
+    # show progress on the console
     p.add_reporter(neat.StdOutReporter(True))
 
     # Create Reporter saving statistics over the generations and to get the best genome
     stats = neat.StatisticsReporter()
     p.add_reporter(stats)
 
-    # Create reporter to save state during the evolution every 5 Generations
-    p.add_reporter(neat.Checkpointer(5, filename_prefix=os.path.join(current_folder, "checkpoint-")))
+    # Create reporter to save state during the evolution
+    p.add_reporter(neat.Checkpointer(filename_prefix=os.path.join(current_folder, "checkpoints", "checkpoint-")))
 
-    # TODO population class lags of using fitness_criterion min!!
-    try:
-        winner = p.run(fitness_function=fitness_function, n=N)
-        print("\nBest genome:\n{!s}".format(winner))
+    for gen in range(N):
+        try:
+            current_best = p.run(fitness_function=fitness_function, n=N)
 
-        # save visualisation of winner
-        from Utils import IO_NAMES
+            # save visualisation of winner
+            visualize.draw_net(config=neat_config, genome=current_best, node_names=IO_NAMES, view=False,
+                               filename=os.path.join(current_folder, "checkpoints", "checkpoint-{}-best".format(gen)),
+                               fmt="svg")
 
-        visualize.draw_net(config=neat_config, genome=winner, node_names=IO_NAMES, view=False,
-                           filename=os.path.join(current_folder, "winner_net"), fmt="svg")
+            # save winner for later use
+            pickle.dump(current_best,
+                        open(os.path.join(current_folder, "checkpoints", "checkpoint-{}-best".format(gen)), "wb"))
 
-        # save winner for later use
-        pickle.dump(winner, open(os.path.join(current_folder, "winner.p"), "wb"))
+        except Exception as err:
+            print(err)
 
-    except Exception as err:
-        print(err)
+    # save visualisation of winner and statistics
+    print("\nBest genome:\n{!s}".format(current_best))
+    visualize.draw_net(config=neat_config, genome=current_best, node_names=IO_NAMES, view=False,
+                       filename=os.path.join(current_folder, "checkpoints", "checkpint-{}-best".format(gen)),
+                       fmt="svg")
 
-    finally:
-        # save visualisation of winner and statistics
-        visualize.plot_stats(stats, ylog=False, view=False, filename=os.path.join(current_folder, 'avg_fitness.svg'))
-        visualize.plot_species(stats, view=False, filename=os.path.join(current_folder, 'speciation.svg'))
+    # save winner for later use
+    pickle.dump(current_best,
+                open(os.path.join(current_folder, "checkpoints", "checkpoint-{}-best".format(gen)), "wb"))
 
-        print("finished")
+    visualize.plot_stats(stats, ylog=False, view=False, filename=os.path.join(current_folder, 'avg_fitness.svg'))
+    visualize.plot_species(stats, view=False, filename=os.path.join(current_folder, 'speciation.svg'))
+
+    print("finished")

@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-python3 RunAITraining.py --hv_dists --speed --num_cp 1
+python3 RunAITraining.py --speed --num_cp 1

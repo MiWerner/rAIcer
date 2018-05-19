@@ -1,7 +1,7 @@
 import pygame
 from ImageUtils import MIN_BALL_RADIUS, get_ball_position, get_track
 from MatrixOps import find_closest_point_index
-from Utils import EN_HV_DIST, EN_DIAG_DIST, EN_SPEED, EN_BALLPOS, NUM_CP_FEATURES, feature_print_string
+from Utils import EN_HV_DIST, EN_DIAG_DIST, EN_SPEED, EN_BALLPOS, NUM_CP_FEATURES, feature_print_string, print_debug
 from math import sqrt
 import time
 import numpy as np
@@ -33,6 +33,7 @@ class FeatureCalculator(object):
     last_seen_section = 0
     __features = None
     features_changed = False
+    opponents_ids = []
 
     def __init__(self, client_id, img, max_clients=3):
         self.track, checkpoints = get_track(img=img)  # map of the track
@@ -42,6 +43,9 @@ class FeatureCalculator(object):
 
         self.client_id = client_id  # id of coresponding client
         self.max_clients = max_clients  # maximum number of clients. Used for opponent detection
+        for i in range(max_clients):
+            if not i+1 == client_id:
+                self.opponents_ids.append(i+1)
 
     def create_sections(self, checkpoints):
         """
@@ -124,23 +128,27 @@ class FeatureCalculator(object):
         self.features_changed = True
 
         # extract new ball position
-        bp, _ = get_ball_position(ID=self.client_id, img=img)
-        bp = tuple(map(int, bp))
-        self.ball_pos_stamps.append((bp, time.time()))
+        try:
+            bp, _ = get_ball_position(ID=self.client_id, img=img)
+            bp = tuple(map(int, bp))
+            self.ball_pos_stamps.append((bp, time.time()))
+        except IndexError:
+            print_debug("ID {} did not found it self..........".format(self.client_id))
+            pass
 
         if len(self.ball_pos_stamps) > NUM_STAMPS_CALC_SPEED:
             self.ball_pos_stamps.remove(self.ball_pos_stamps[0])
 
         # extract mask for the opponents
         self.ball_mask = np.zeros(np.shape(self.track))
-        for i in range(1, self.max_clients + 1):
+        for i in self.opponents_ids:
             try:
-                if not i == self.client_id:
-                    _, m = get_ball_position(i, img)
-                    self.ball_mask += m
+                _, m = get_ball_position(i, img)
+                self.ball_mask += m
             except IndexError:
                 # if an opponent was not found the number of clients is known
                 self.max_clients = i - 1
+                self.opponents_ids.remove(i)
                 break
 
         # ~~~~~~~~~~~~~~~~~~~~~~~~ extract new features ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

@@ -122,11 +122,11 @@ def run_training(N, path_to_config=None, path_to_restore=None):
     if path_to_restore is None:
         time_stamp = datetime.datetime.now()
         current_folder = make_dir(os.path.join(PATH_TO_RES, "NEAT-AI", str(time_stamp).split(":")[0]))
-
+        make_dir(os.path.join(current_folder, "checkpoints"))
         p = neat.Population(config=neat_config)
     else:
         p = neat.Checkpointer.restore_checkpoint(path_to_restore)
-        current_folder = os.path.join(path_to_restore, os.pardir)
+        current_folder = os.path.abspath(os.path.join(path_to_restore, os.pardir))
 
     # show progress on the console
     p.add_reporter(neat.StdOutReporter(True))
@@ -136,11 +136,11 @@ def run_training(N, path_to_config=None, path_to_restore=None):
     p.add_reporter(stats)
 
     # Create reporter to save state during the evolution
-    p.add_reporter(neat.Checkpointer(filename_prefix=os.path.join(current_folder, "checkpoints", "checkpoint-")))
+    p.add_reporter(neat.Checkpointer(generation_interval=1, filename_prefix=os.path.join(current_folder, "checkpoints", "checkpoint-")))
 
     for gen in range(N):
         try:
-            current_best = p.run(fitness_function=fitness_function, n=N)
+            current_best = p.run(fitness_function=fitness_function, n=1)
 
             # save visualisation of winner
             visualize.draw_net(config=neat_config, genome=current_best, node_names=IO_NAMES, view=False,
@@ -157,12 +157,12 @@ def run_training(N, path_to_config=None, path_to_restore=None):
     # save visualisation of winner and statistics
     print("\nBest genome:\n{!s}".format(current_best))
     visualize.draw_net(config=neat_config, genome=current_best, node_names=IO_NAMES, view=False,
-                       filename=os.path.join(current_folder, "checkpoints", "checkpint-{}-best".format(gen)),
+                       filename=os.path.join(current_folder, "winner"),
                        fmt="svg")
 
     # save winner for later use
     pickle.dump(current_best,
-                open(os.path.join(current_folder, "checkpoints", "checkpoint-{}-best".format(gen)), "wb"))
+                open(os.path.join(current_folder, "winner"), "wb"))
 
     visualize.plot_stats(stats, ylog=False, view=False, filename=os.path.join(current_folder, 'avg_fitness.svg'))
     visualize.plot_species(stats, view=False, filename=os.path.join(current_folder, 'speciation.svg'))

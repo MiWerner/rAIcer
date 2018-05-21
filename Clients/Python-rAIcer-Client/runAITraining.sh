@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-python3 RunAITraining.py --speed --num_cp 1 --num_gen 50 #--restore /home/micha/Studium/Uni\ Luebeck/Master/1.\ Semester/rAIcer/Clients/Python-rAIcer-Client/res/NEAT-AI/2018-05-18\ 21_29_11.090710/checkpoint-18
+python3 RunAITraining.py --speed --num_cp 1 --num_gen 50 --config neat_config_no_hidden --restore 2018-05-20_23-21-05/checkpoints/checkpoint-22

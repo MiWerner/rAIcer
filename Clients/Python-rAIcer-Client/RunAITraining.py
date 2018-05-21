@@ -6,7 +6,7 @@ parser.add_argument("--diag_dists", action="store_true", default=False, help="En
 parser.add_argument("--speed", action="store_true", default=False, help="Enables speed features")
 parser.add_argument("--ballpos", action="store_true", default=False, help="Enables ballpos features")
 parser.add_argument("--num_cp", type=int, default=3, help="Sets the number of Checkpoints in feature vector")
-parser.add_argument("--config", type=str, default=None, help="Path to the configfile")
+parser.add_argument("--config", type=str, default=None, help="filename of the configfile in config folder")
 parser.add_argument("--restore", type=str, default=None, help="If given the population is restored from the given file")
 parser.add_argument("--num_gen", type=int, default=100, help="The number of generations to run")
 

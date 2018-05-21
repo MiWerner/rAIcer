@@ -134,7 +134,7 @@ class FeatureCalculator(object):
             self.ball_pos_stamps.append((bp, time.time()))
         except IndexError:
             print_debug("ID {} did not found it self..........".format(self.client_id))
-            pass
+            return
 
         if len(self.ball_pos_stamps) > NUM_STAMPS_CALC_SPEED:
             self.ball_pos_stamps.remove(self.ball_pos_stamps[0])

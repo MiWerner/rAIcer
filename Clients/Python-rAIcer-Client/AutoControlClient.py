@@ -12,7 +12,7 @@ s = RaicerSocket.RaicerSocket()
 s.connect()
 display = pygame.display.set_mode((IMG_WIDTH, IMG_HEIGHT))
 display.fill((255, 64, 64))
-
+max_speed = 10
 status = -1
 try:
     while 1:
@@ -27,15 +27,18 @@ try:
             pygame.event.get()
 
             inputs = np.asarray(list(fc.features), dtype=np.int64)
-            # Get the vector to the third next checkpoint
-            vector_to_next_checkpoint = inputs[16:18]
+            speed_x = inputs[8]
+            speed_y = inputs[9]
+            # Get the vector to the second next checkpoint
+            vector_to_next_checkpoint = inputs[14:16]
             # Get the angle of the vector and transform it in a range between 0° and 360°
             angle = np.math.atan2(np.linalg.det([vector_to_next_checkpoint, np.asarray([1, 0])]), np.dot(vector_to_next_checkpoint, np.asarray([1, 0])))
             angle = np.degrees(angle) % 360
-            up = 22.5 < angle < 157.5
-            down = 202.5 < angle < 337.5
-            left = 112.5 < angle < 247.5
-            right = angle < 67.5 or angle > 292.5
+
+            up = (1 < angle < 179) and (speed_y >= -max_speed)
+            down = (181 < angle < 359) and (speed_y <= max_speed)
+            left = (91 < angle < 269) and (speed_x >= -max_speed)
+            right = (angle < 89 or angle > 271) and (speed_x <= max_speed)
 
             s.send_key_msg(up, down, left, right)
 

@@ -135,6 +135,7 @@ def print_debug(msg):
 PATH_TO_ROOT = os.path.dirname(os.path.realpath(__file__))
 PATH_TO_RES = os.path.join(PATH_TO_ROOT, "res")
 PATH_TO_CONFIGS = os.path.join(PATH_TO_RES, "configs")
+PATH_TO_SAVINGS = os.path.join(PATH_TO_RES, "NEAT-AI")
 PATH_TO_SERVERS = os.path.abspath(os.path.join(os.path.join(PATH_TO_ROOT, os.pardir), os.pardir))
 PATH_TO_WINDOWS_CUSTOM_SERVER = os.path.join(PATH_TO_SERVERS, "Custom_Server", "rAIcer.exe")
 PATH_TO_LINUX_CUSTOM_SERVER = os.path.join(PATH_TO_SERVERS, "Custom_Server_Linux", "rAIcer.x86_64")

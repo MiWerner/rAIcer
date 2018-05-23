@@ -29,6 +29,8 @@ class GenomeEvaluator(object):
 
     zero_speed_counter = 0
 
+    num_laps = 5
+
     def __init__(self):
         self.socket = RaicerSocket.RaicerSocket()
 
@@ -46,7 +48,7 @@ class GenomeEvaluator(object):
                 time.sleep(.5)
         return False
 
-    def run(self, genome_id, genome, config, out_q, max_id, track_id, num_laps=3):
+    def run(self, genome_id, genome, config, out_q, max_id, track_id):
         """
         Starts the connection to the server. Then runs the genome of this evaluator as a Client.
         When the game is over the connection is closed and the fitness-value saved in the given output-queue
@@ -71,7 +73,7 @@ class GenomeEvaluator(object):
             time.sleep(.1)
         if client_id == max_id:
             # if current id is the largest possible, this client is the last one and should start the game
-            self.socket.send_setting_msg(track_id=track_id, num_laps=num_laps)
+            self.socket.send_setting_msg(track_id=track_id, num_laps=self.num_laps)
 
         # start client behavior
         self.__client_logic(net=net)
@@ -142,15 +144,15 @@ class GenomeEvaluator(object):
             elif status == S_CRASHED:
                 # client broke
                 # TODO think about different  punishment
-                self.race_time = self.time_out + 1000
+                self.race_time = self.time_out
                 return
 
             elif status == S_CANCELED:
-                self.race_time = self.time_out + 1000
+                self.race_time = self.time_out
                 return
 
             if self.start_timestamp and time.time() > self.start_timestamp + self.time_out:
-                self.race_time = self.time_out + 1000
+                self.race_time = self.time_out
                 return
 
             time.sleep(.1)
@@ -163,6 +165,14 @@ class GenomeEvaluator(object):
             ~ damage
         :return: the fitness-value
         """
-        # TODO evt more parameters like (total_#_checkpoints - #_passed_checkpoints)
-        #return self.race_time + self.damage
-        return sum(self.fc.section_counter)
+        cp_sum = sum(self.fc.section_counter)
+        tw = 1
+        dw = .5
+        if cp_sum == len(self.fc.checkpoints) * self.num_laps:
+            # add time
+            t = self.time_out - self.race_time
+            # add damage
+            d = 255 - self.damage
+            return cp_sum + tw * t + dw * d
+        else:
+            return cp_sum

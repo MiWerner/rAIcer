@@ -1,0 +1,1090 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class=" js flexbox canvas canvastext webgl touch geolocation postmessage no-websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients no-cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers applicationcache svg inlinesvg smil svgclippaths" style="" lang="en"><!--<![endif]--><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Configuration file description — NEAT-Python 0.92 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+
+  
+    <link rel="stylesheet" href="NEAT-Python-Configfile-Documentation-Dateien/sphinx_rtd_theme.css" type="text/css">
+  
+
+  
+        <link rel="index" title="Index" href="http://neat-python.readthedocs.io/en/latest/genindex.html">
+        <link rel="search" title="Search" href="http://neat-python.readthedocs.io/en/latest/search.html">
+    <link rel="top" title="NEAT-Python 0.92 documentation" href="http://neat-python.readthedocs.io/en/latest/index.html">
+        <link rel="next" title="Overview of the basic XOR example (xor2.py)" href="http://neat-python.readthedocs.io/en/latest/xor_example.html">
+        <link rel="prev" title="Installation" href="http://neat-python.readthedocs.io/en/latest/installation.html"> 
+
+  
+  <script type="text/javascript" async="" src="NEAT-Python-Configfile-Documentation-Dateien/ga.js"></script><script src="NEAT-Python-Configfile-Documentation-Dateien/modernizr.js"></script>
+
+
+<!-- RTD Extra Head -->
+
+<!-- 
+Always link to the latest version, as canonical.
+http://docs.readthedocs.org/en/latest/canonical.html
+-->
+<link rel="canonical" href="http://neat-python.readthedocs.io/en/latest/config_file.html">
+
+<link rel="stylesheet" href="NEAT-Python-Configfile-Documentation-Dateien/readthedocs-doc-embed.css" type="text/css">
+
+<script type="text/javascript" src="NEAT-Python-Configfile-Documentation-Dateien/readthedocs-data.js"></script>
+
+<!-- Add page-specific data, which must exist in the page js, not global -->
+<script type="text/javascript">
+READTHEDOCS_DATA['page'] = 'config_file' 		
+READTHEDOCS_DATA['source_suffix'] = '.rst'
+</script>
+
+<script type="text/javascript" src="NEAT-Python-Configfile-Documentation-Dateien/readthedocs-dynamic-include.js"></script>
+
+<!-- end RTD <extrahead> --><style type="text/css">.MathJax_Hover_Frame {border-radius: .25em; -webkit-border-radius: .25em; -moz-border-radius: .25em; -khtml-border-radius: .25em; box-shadow: 0px 0px 15px #83A; -webkit-box-shadow: 0px 0px 15px #83A; -moz-box-shadow: 0px 0px 15px #83A; -khtml-box-shadow: 0px 0px 15px #83A; border: 1px solid #A6D ! important; display: inline-block; position: absolute}
+.MathJax_Menu_Button .MathJax_Hover_Arrow {position: absolute; cursor: pointer; display: inline-block; border: 2px solid #AAA; border-radius: 4px; -webkit-border-radius: 4px; -moz-border-radius: 4px; -khtml-border-radius: 4px; font-family: 'Courier New',Courier; font-size: 9px; color: #F0F0F0}
+.MathJax_Menu_Button .MathJax_Hover_Arrow span {display: block; background-color: #AAA; border: 1px solid; border-radius: 3px; line-height: 0; padding: 4px}
+.MathJax_Hover_Arrow:hover {color: white!important; border: 2px solid #CCC!important}
+.MathJax_Hover_Arrow:hover span {background-color: #CCC!important}
+</style><style type="text/css">#MathJax_About {position: fixed; left: 50%; width: auto; text-align: center; border: 3px outset; padding: 1em 2em; background-color: #DDDDDD; color: black; cursor: default; font-family: message-box; font-size: 120%; font-style: normal; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; z-index: 201; border-radius: 15px; -webkit-border-radius: 15px; -moz-border-radius: 15px; -khtml-border-radius: 15px; box-shadow: 0px 10px 20px #808080; -webkit-box-shadow: 0px 10px 20px #808080; -moz-box-shadow: 0px 10px 20px #808080; -khtml-box-shadow: 0px 10px 20px #808080; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+#MathJax_About.MathJax_MousePost {outline: none}
+.MathJax_Menu {position: absolute; background-color: white; color: black; width: auto; padding: 5px 0px; border: 1px solid #CCCCCC; margin: 0; cursor: default; font: menu; text-align: left; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; z-index: 201; border-radius: 5px; -webkit-border-radius: 5px; -moz-border-radius: 5px; -khtml-border-radius: 5px; box-shadow: 0px 10px 20px #808080; -webkit-box-shadow: 0px 10px 20px #808080; -moz-box-shadow: 0px 10px 20px #808080; -khtml-box-shadow: 0px 10px 20px #808080; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+.MathJax_MenuItem {padding: 1px 2em; background: transparent}
+.MathJax_MenuArrow {position: absolute; right: .5em; padding-top: .25em; color: #666666; font-size: .75em}
+.MathJax_MenuActive .MathJax_MenuArrow {color: white}
+.MathJax_MenuArrow.RTL {left: .5em; right: auto}
+.MathJax_MenuCheck {position: absolute; left: .7em}
+.MathJax_MenuCheck.RTL {right: .7em; left: auto}
+.MathJax_MenuRadioCheck {position: absolute; left: .7em}
+.MathJax_MenuRadioCheck.RTL {right: .7em; left: auto}
+.MathJax_MenuLabel {padding: 1px 2em 3px 1.33em; font-style: italic}
+.MathJax_MenuRule {border-top: 1px solid #DDDDDD; margin: 4px 3px}
+.MathJax_MenuDisabled {color: GrayText}
+.MathJax_MenuActive {background-color: #606872; color: white}
+.MathJax_MenuDisabled:focus, .MathJax_MenuLabel:focus {background-color: #E8E8E8}
+.MathJax_ContextMenu:focus {outline: none}
+.MathJax_ContextMenu .MathJax_MenuItem:focus {outline: none}
+#MathJax_AboutClose {top: .2em; right: .2em}
+.MathJax_Menu .MathJax_MenuClose {top: -10px; left: -10px}
+.MathJax_MenuClose {position: absolute; cursor: pointer; display: inline-block; border: 2px solid #AAA; border-radius: 18px; -webkit-border-radius: 18px; -moz-border-radius: 18px; -khtml-border-radius: 18px; font-family: 'Courier New',Courier; font-size: 24px; color: #F0F0F0}
+.MathJax_MenuClose span {display: block; background-color: #AAA; border: 1.5px solid; border-radius: 18px; -webkit-border-radius: 18px; -moz-border-radius: 18px; -khtml-border-radius: 18px; line-height: 0; padding: 8px 0 6px}
+.MathJax_MenuClose:hover {color: white!important; border: 2px solid #CCC!important}
+.MathJax_MenuClose:hover span {background-color: #CCC!important}
+.MathJax_MenuClose:hover:focus {outline: none}
+</style><style type="text/css">.MathJax_Preview .MJXf-math {color: inherit!important}
+</style><style type="text/css">.MJX_Assistive_MathML {position: absolute!important; top: 0; left: 0; clip: rect(1px, 1px, 1px, 1px); padding: 1px 0 0 0!important; border: 0!important; height: 1px!important; width: 1px!important; overflow: hidden!important; display: block!important; -webkit-touch-callout: none; -webkit-user-select: none; -khtml-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none}
+.MJX_Assistive_MathML.MJX_Assistive_MathML_Block {width: 100%!important}
+</style><style type="text/css">#MathJax_Zoom {position: absolute; background-color: #F0F0F0; overflow: auto; display: block; z-index: 301; padding: .5em; border: 1px solid black; margin: 0; font-weight: normal; font-style: normal; text-align: left; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; -webkit-box-sizing: content-box; -moz-box-sizing: content-box; box-sizing: content-box; box-shadow: 5px 5px 15px #AAAAAA; -webkit-box-shadow: 5px 5px 15px #AAAAAA; -moz-box-shadow: 5px 5px 15px #AAAAAA; -khtml-box-shadow: 5px 5px 15px #AAAAAA; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+#MathJax_ZoomOverlay {position: absolute; left: 0; top: 0; z-index: 300; display: inline-block; width: 100%; height: 100%; border: 0; padding: 0; margin: 0; background-color: white; opacity: 0; filter: alpha(opacity=0)}
+#MathJax_ZoomFrame {position: relative; display: inline-block; height: 0; width: 0}
+#MathJax_ZoomEventTrap {position: absolute; left: 0; top: 0; z-index: 302; display: inline-block; border: 0; padding: 0; margin: 0; background-color: white; opacity: 0; filter: alpha(opacity=0)}
+</style><style type="text/css">.MathJax_Preview {color: #888}
+#MathJax_Message {position: fixed; left: 1px; bottom: 2px; background-color: #E6E6E6; border: 1px solid #959595; margin: 0px; padding: 2px 8px; z-index: 102; color: black; font-size: 80%; width: auto; white-space: nowrap}
+#MathJax_MSIE_Frame {position: absolute; top: 0; left: 0; width: 0px; z-index: 101; border: 0px; margin: 0px; padding: 0px}
+.MathJax_Error {color: #CC0000; font-style: italic}
+</style><style type="text/css">.MJXp-script {font-size: .8em}
+.MJXp-right {-webkit-transform-origin: right; -moz-transform-origin: right; -ms-transform-origin: right; -o-transform-origin: right; transform-origin: right}
+.MJXp-bold {font-weight: bold}
+.MJXp-italic {font-style: italic}
+.MJXp-scr {font-family: MathJax_Script,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-frak {font-family: MathJax_Fraktur,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-sf {font-family: MathJax_SansSerif,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-cal {font-family: MathJax_Caligraphic,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-mono {font-family: MathJax_Typewriter,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-largeop {font-size: 150%}
+.MJXp-largeop.MJXp-int {vertical-align: -.2em}
+.MJXp-math {display: inline-block; line-height: 1.2; text-indent: 0; font-family: 'Times New Roman',Times,STIXGeneral,serif; white-space: nowrap; border-collapse: collapse}
+.MJXp-display {display: block; text-align: center; margin: 1em 0}
+.MJXp-math span {display: inline-block}
+.MJXp-box {display: block!important; text-align: center}
+.MJXp-box:after {content: " "}
+.MJXp-rule {display: block!important; margin-top: .1em}
+.MJXp-char {display: block!important}
+.MJXp-mo {margin: 0 .15em}
+.MJXp-mfrac {margin: 0 .125em; vertical-align: .25em}
+.MJXp-denom {display: inline-table!important; width: 100%}
+.MJXp-denom > * {display: table-row!important}
+.MJXp-surd {vertical-align: top}
+.MJXp-surd > * {display: block!important}
+.MJXp-script-box > *  {display: table!important; height: 50%}
+.MJXp-script-box > * > * {display: table-cell!important; vertical-align: top}
+.MJXp-script-box > *:last-child > * {vertical-align: bottom}
+.MJXp-script-box > * > * > * {display: block!important}
+.MJXp-mphantom {visibility: hidden}
+.MJXp-munderover {display: inline-table!important}
+.MJXp-over {display: inline-block!important; text-align: center}
+.MJXp-over > * {display: block!important}
+.MJXp-munderover > * {display: table-row!important}
+.MJXp-mtable {vertical-align: .25em; margin: 0 .125em}
+.MJXp-mtable > * {display: inline-table!important; vertical-align: middle}
+.MJXp-mtr {display: table-row!important}
+.MJXp-mtd {display: table-cell!important; text-align: center; padding: .5em 0 0 .5em}
+.MJXp-mtr > .MJXp-mtd:first-child {padding-left: 0}
+.MJXp-mtr:first-child > .MJXp-mtd {padding-top: 0}
+.MJXp-mlabeledtr {display: table-row!important}
+.MJXp-mlabeledtr > .MJXp-mtd:first-child {padding-left: 0}
+.MJXp-mlabeledtr:first-child > .MJXp-mtd {padding-top: 0}
+.MJXp-merror {background-color: #FFFF88; color: #CC0000; border: 1px solid #CC0000; padding: 1px 3px; font-style: normal; font-size: 90%}
+.MJXp-scale0 {-webkit-transform: scaleX(.0); -moz-transform: scaleX(.0); -ms-transform: scaleX(.0); -o-transform: scaleX(.0); transform: scaleX(.0)}
+.MJXp-scale1 {-webkit-transform: scaleX(.1); -moz-transform: scaleX(.1); -ms-transform: scaleX(.1); -o-transform: scaleX(.1); transform: scaleX(.1)}
+.MJXp-scale2 {-webkit-transform: scaleX(.2); -moz-transform: scaleX(.2); -ms-transform: scaleX(.2); -o-transform: scaleX(.2); transform: scaleX(.2)}
+.MJXp-scale3 {-webkit-transform: scaleX(.3); -moz-transform: scaleX(.3); -ms-transform: scaleX(.3); -o-transform: scaleX(.3); transform: scaleX(.3)}
+.MJXp-scale4 {-webkit-transform: scaleX(.4); -moz-transform: scaleX(.4); -ms-transform: scaleX(.4); -o-transform: scaleX(.4); transform: scaleX(.4)}
+.MJXp-scale5 {-webkit-transform: scaleX(.5); -moz-transform: scaleX(.5); -ms-transform: scaleX(.5); -o-transform: scaleX(.5); transform: scaleX(.5)}
+.MJXp-scale6 {-webkit-transform: scaleX(.6); -moz-transform: scaleX(.6); -ms-transform: scaleX(.6); -o-transform: scaleX(.6); transform: scaleX(.6)}
+.MJXp-scale7 {-webkit-transform: scaleX(.7); -moz-transform: scaleX(.7); -ms-transform: scaleX(.7); -o-transform: scaleX(.7); transform: scaleX(.7)}
+.MJXp-scale8 {-webkit-transform: scaleX(.8); -moz-transform: scaleX(.8); -ms-transform: scaleX(.8); -o-transform: scaleX(.8); transform: scaleX(.8)}
+.MJXp-scale9 {-webkit-transform: scaleX(.9); -moz-transform: scaleX(.9); -ms-transform: scaleX(.9); -o-transform: scaleX(.9); transform: scaleX(.9)}
+.MathJax_PHTML .noError {vertical-align: ; font-size: 90%; text-align: left; color: black; padding: 1px 3px; border: 1px solid}
+</style><style type="text/css">.MathJax_Display {text-align: center; margin: 1em 0em; position: relative; display: block!important; text-indent: 0; max-width: none; max-height: none; min-width: 0; min-height: 0; width: 100%}
+.MathJax .merror {background-color: #FFFF88; color: #CC0000; border: 1px solid #CC0000; padding: 1px 3px; font-style: normal; font-size: 90%}
+.MathJax .MJX-monospace {font-family: monospace}
+.MathJax .MJX-sans-serif {font-family: sans-serif}
+#MathJax_Tooltip {background-color: InfoBackground; color: InfoText; border: 1px solid black; box-shadow: 2px 2px 5px #AAAAAA; -webkit-box-shadow: 2px 2px 5px #AAAAAA; -moz-box-shadow: 2px 2px 5px #AAAAAA; -khtml-box-shadow: 2px 2px 5px #AAAAAA; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true'); padding: 3px 4px; z-index: 401; position: absolute; left: 0; top: 0; width: auto; height: auto; display: none}
+.MathJax {display: inline; font-style: normal; font-weight: normal; line-height: normal; font-size: 100%; font-size-adjust: none; text-indent: 0; text-align: left; text-transform: none; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; direction: ltr; max-width: none; max-height: none; min-width: 0; min-height: 0; border: 0; padding: 0; margin: 0}
+.MathJax:focus, body :focus .MathJax {display: inline-table}
+.MathJax.MathJax_FullWidth {text-align: center; display: table-cell!important; width: 10000em!important}
+.MathJax img, .MathJax nobr, .MathJax a {border: 0; padding: 0; margin: 0; max-width: none; max-height: none; min-width: 0; min-height: 0; vertical-align: 0; line-height: normal; text-decoration: none}
+img.MathJax_strut {border: 0!important; padding: 0!important; margin: 0!important; vertical-align: 0!important}
+.MathJax span {display: inline; position: static; border: 0; padding: 0; margin: 0; vertical-align: 0; line-height: normal; text-decoration: none}
+.MathJax nobr {white-space: nowrap!important}
+.MathJax img {display: inline!important; float: none!important}
+.MathJax * {transition: none; -webkit-transition: none; -moz-transition: none; -ms-transition: none; -o-transition: none}
+.MathJax_Processing {visibility: hidden; position: fixed; width: 0; height: 0; overflow: hidden}
+.MathJax_Processed {display: none!important}
+.MathJax_ExBox {display: block!important; overflow: hidden; width: 1px; height: 60ex; min-height: 0; max-height: none}
+.MathJax .MathJax_EmBox {display: block!important; overflow: hidden; width: 1px; height: 60em; min-height: 0; max-height: none}
+.MathJax_LineBox {display: table!important}
+.MathJax_LineBox span {display: table-cell!important; width: 10000em!important; min-width: 0; max-width: none; padding: 0; border: 0; margin: 0}
+.MathJax .MathJax_HitBox {cursor: text; background: white; opacity: 0; filter: alpha(opacity=0)}
+.MathJax .MathJax_HitBox * {filter: none; opacity: 1; background: transparent}
+#MathJax_Tooltip * {filter: none; opacity: 1; background: transparent}
+@font-face {font-family: MathJax_Main; src: url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/woff/MathJax_Main-Regular.woff?V=2.7.1') format('woff'), url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/otf/MathJax_Main-Regular.otf?V=2.7.1') format('opentype')}
+@font-face {font-family: MathJax_Main; src: url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/woff/MathJax_Main-Bold.woff?V=2.7.1') format('woff'), url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/otf/MathJax_Main-Bold.otf?V=2.7.1') format('opentype'); font-weight: bold}
+@font-face {font-family: MathJax_Main; src: url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/woff/MathJax_Main-Italic.woff?V=2.7.1') format('woff'), url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/otf/MathJax_Main-Italic.otf?V=2.7.1') format('opentype'); font-style: italic}
+@font-face {font-family: MathJax_Math; src: url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/woff/MathJax_Math-Italic.woff?V=2.7.1') format('woff'), url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/otf/MathJax_Math-Italic.otf?V=2.7.1') format('opentype'); font-style: italic}
+@font-face {font-family: MathJax_Caligraphic; src: url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/woff/MathJax_Caligraphic-Regular.woff?V=2.7.1') format('woff'), url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/otf/MathJax_Caligraphic-Regular.otf?V=2.7.1') format('opentype')}
+@font-face {font-family: MathJax_Size1; src: url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/woff/MathJax_Size1-Regular.woff?V=2.7.1') format('woff'), url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/otf/MathJax_Size1-Regular.otf?V=2.7.1') format('opentype')}
+@font-face {font-family: MathJax_Size2; src: url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/woff/MathJax_Size2-Regular.woff?V=2.7.1') format('woff'), url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/otf/MathJax_Size2-Regular.otf?V=2.7.1') format('opentype')}
+@font-face {font-family: MathJax_Size3; src: url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/woff/MathJax_Size3-Regular.woff?V=2.7.1') format('woff'), url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/otf/MathJax_Size3-Regular.otf?V=2.7.1') format('opentype')}
+@font-face {font-family: MathJax_Size4; src: url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/woff/MathJax_Size4-Regular.woff?V=2.7.1') format('woff'), url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/otf/MathJax_Size4-Regular.otf?V=2.7.1') format('opentype')}
+.MathJax .noError {vertical-align: ; font-size: 90%; text-align: left; color: black; padding: 1px 3px; border: 1px solid}
+</style></head>
+
+<body class="wy-body-for-nav" role="document"><div style="visibility: hidden; overflow: hidden; position: absolute; top: 0px; height: 1px; width: auto; padding: 0px; border: 0px none; margin: 0px; text-align: left; text-indent: 0px; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal;"><div id="MathJax_Hidden"></div></div><div id="MathJax_Message" style="display: none;"></div>
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="http://neat-python.readthedocs.io/en/latest/index.html" class="icon icon-home"> NEAT-Python
+          
+
+          
+          </a>
+
+          
+            
+            
+            
+              <div class="version">
+                latest
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input name="q" placeholder="Search docs" type="text">
+    <input name="check_keywords" value="yes" type="hidden">
+    <input name="area" value="default" type="hidden">
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/neat_overview.html">NEAT Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/installation.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#"><span class="toctree-expand"></span>Configuration file description</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#neat-section">[NEAT] section</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#defaultstagnation-section">[DefaultStagnation] section</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#defaultreproduction-section">[DefaultReproduction] section</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#defaultgenome-section">[DefaultGenome] section</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/xor_example.html">Overview of the basic XOR example (xor2.py)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/customization.html">Customizing Behavior</a></li>
+<li class="toctree-l1"><a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/activation.html">Overview of builtin activation functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/ctrnn.html">Continuous-time recurrent neural network implementation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/module_summaries.html">Module summaries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/genome-interface.html">Genome Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/reproduction-interface.html">Reproduction Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/glossary.html">Glossary</a></li>
+</ul>
+
+            
+          
+        </div>
+      <div id="rtd-cln8yluk" class="ethical-rtd"></div></div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="http://neat-python.readthedocs.io/en/latest/index.html">NEAT-Python</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="http://neat-python.readthedocs.io/en/latest/index.html">Docs</a> »</li>
+        
+      <li>Configuration file description</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            
+              <a href="https://github.com/CodeReclaimers/neat-python/blob/master/docs/config_file.rst" class="fa fa-github"> Edit on GitHub</a>
+            
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="configuration-file-description">
+<span id="configuration-file-description-label"></span><h1>Configuration file description<a class="headerlink" href="#configuration-file-description" title="Permalink to this headline">¶</a></h1>
+<p>The configuration file is in the format described in the Python <a class="reference external" href="https://docs.python.org/3.5/library/configparser.html#module-configparser" title="(in Python v3.5)"><code class="xref py py-mod docutils literal"><span class="pre">configparser</span></code></a>
+ documentation
+as “a basic configuration file parser language which provides a 
+structure similar to what you would find on Microsoft Windows INI 
+files.”</p>
+<p>Most settings must be explicitly enumerated in the configuration 
+file.  (This makes it less likely
+that library code changes will result in your project silently using 
+different NEAT settings. There are some defaults, as noted below, and
+insofar as possible new configuration parameters will default to the 
+existing behavior.)</p>
+<p>Note that the <a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/module_summaries.html#config.Config" title="config.Config"><code class="xref any py py-class docutils literal"><span class="pre">Config</span></code></a> constructor also requires you to explicitly specify the types that will be used
+for the NEAT simulation.  This, again, is to help avoid silent changes in behavior.</p>
+<p id="configuration-file-sections-label">The configuration file is in 
+several sections, of which at least one is required. However, there are 
+no requirements for ordering within
+these sections, or for ordering of the sections themselves.</p>
+<div class="section" id="neat-section">
+<span id="configuration-file-neat-section-label"></span><h2>[NEAT] section<a class="headerlink" href="#neat-section" title="Permalink to this headline">¶</a></h2>
+<p>The <code class="docutils literal"><span class="pre">NEAT</span></code> section specifies parameters particular to the generic NEAT algorithm or the experiment
+itself.  This section is always required, and is handled by the <a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/module_summaries.html#config.Config" title="config.Config"><code class="xref any py py-class docutils literal"><span class="pre">Config</span></code></a> class itself.</p>
+<span class="target" id="fitness-criterion-label"></span><ul class="simple" id="index-0">
+<li><dl class="first docutils">
+<dt><em>fitness_criterion</em></dt>
+<dd>The function used to compute the termination criterion from the set of genome fitnesses.  Allowable values are: <code class="docutils literal"><span class="pre">min</span></code>, <code class="docutils literal"><span class="pre">max</span></code>, and <code class="docutils literal"><span class="pre">mean</span></code></dd>
+</dl>
+</li>
+</ul>
+<span class="target" id="fitness-threshold-label"></span><span class="target" id="index-1"></span><ul class="simple" id="index-2">
+<li><dl class="first docutils">
+<dt><em>fitness_threshold</em></dt>
+<dd>When the fitness computed by <code class="docutils literal"><span class="pre">fitness_criterion</span></code> meets or exceeds this threshold, the evolution process will terminate, with a call to
+any registered reporting class’ <a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/module_summaries.html#reporting.BaseReporter.found_solution" title="reporting.BaseReporter.found_solution"><code class="xref py py-meth docutils literal"><span class="pre">found_solution</span></code></a> method.</dd>
+</dl>
+</li>
+</ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The <code class="docutils literal"><span class="pre">found_solution</span></code> method is <strong>not</strong> called if the maximum number of generations is reached without the above threshold being passed
+(if attention is being paid to fitness for termination in the first place - see <code class="docutils literal"><span class="pre">no_fitness_termination</span></code> below).</p>
+</div>
+<span class="target" id="no-fitness-termination-label"></span><span class="target" id="index-3"></span><ul id="index-4">
+<li><dl class="first docutils">
+<dt><em>no_fitness_termination</em></dt>
+<dd><p class="first">If this evaluates to <code class="docutils literal"><span class="pre">True</span></code>, then the <code class="docutils literal"><span class="pre">fitness_criterion</span></code> and <code class="docutils literal"><span class="pre">fitness_threshold</span></code> are ignored for termination; only valid if termination by a maximum
+number of generations passed to <a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/module_summaries.html#population.Population.run" title="population.Population.run"><code class="xref py py-meth docutils literal"><span class="pre">population.Population.run()</span></code></a> is enabled, and the <code class="docutils literal"><span class="pre">found_solution</span></code> method <strong>is</strong> called upon generation
+number termination. If it evaluates to <code class="docutils literal"><span class="pre">False</span></code>, then fitness is used to determine termination. <strong>This defaults to “False”.</strong></p>
+<div class="last versionadded">
+<p><span class="versionmodified">New in version 0.92.</span></p>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+<span class="target" id="pop-size-label"></span><ul class="simple" id="index-5">
+<li><dl class="first docutils">
+<dt><em>pop_size</em></dt>
+<dd>The number of individuals in each generation.</dd>
+</dl>
+</li>
+</ul>
+<span class="target" id="reset-on-extinction-label"></span><ul class="simple" id="index-6">
+<li><dl class="first docutils">
+<dt><em>reset_on_extinction</em></dt>
+<dd>If this evaluates to <code class="docutils literal"><span class="pre">True</span></code>, when all species simultaneously become extinct due to stagnation, a new random
+population will be created. If <code class="docutils literal"><span class="pre">False</span></code>, a <a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/module_summaries.html#population.CompleteExtinctionException" title="population.CompleteExtinctionException"><code class="xref any py py-exc docutils literal"><span class="pre">CompleteExtinctionException</span></code></a> will be thrown.</dd>
+</dl>
+</li>
+</ul>
+<span class="target" id="index-7"></span></div>
+<div class="section" id="defaultstagnation-section">
+<span id="index-8"></span><h2>[DefaultStagnation] section<a class="headerlink" href="#defaultstagnation-section" title="Permalink to this headline">¶</a></h2>
+<p>The <code class="docutils literal"><span class="pre">DefaultStagnation</span></code> section specifies parameters for the builtin <a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/module_summaries.html#stagnation.DefaultStagnation" title="stagnation.DefaultStagnation"><code class="xref any py py-class docutils literal"><span class="pre">DefaultStagnation</span></code></a> class.
+This section is only necessary if you specify this class as the stagnation implementation when
+creating the <a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/module_summaries.html#config.Config" title="config.Config"><code class="xref any py py-class docutils literal"><span class="pre">Config</span></code></a> instance; otherwise you need to include whatever configuration (if any) is
+required for your particular implementation.</p>
+<span class="target" id="species-fitness-func-label"></span><ul class="simple" id="index-9">
+<li><dl class="first docutils">
+<dt><em>species_fitness_func</em></dt>
+<dd>The function used to compute species fitness.  <strong>This defaults to ``mean``.</strong> Allowed values are: <code class="docutils literal"><span class="pre">max</span></code>, <code class="docutils literal"><span class="pre">min</span></code>, <code class="docutils literal"><span class="pre">mean</span></code>, and
+<a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/module_summaries.html#math_util.median" title="math_util.median"><code class="xref py py-func docutils literal"><span class="pre">median</span></code></a></dd>
+</dl>
+</li>
+</ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This is <strong>not</strong> used for calculating species fitness for apportioning reproduction (which always uses <code class="docutils literal"><span class="pre">mean</span></code>).</p>
+</div>
+<span class="target" id="max-stagnation-label"></span><ul class="simple" id="index-10">
+<li><dl class="first docutils">
+<dt><em>max_stagnation</em></dt>
+<dd>Species that have not shown improvement in more than this number of generations will be considered stagnant and removed. <strong>This defaults to 15.</strong></dd>
+</dl>
+</li>
+</ul>
+<span class="target" id="species-elitism-label"></span><ul class="simple" id="index-11">
+<li><dl class="first docutils">
+<dt><em>species_elitism</em></dt>
+<dd>The number of species that will be protected from stagnation; mainly intended to prevent
+total extinctions caused by all species becoming stagnant before new species arise.  For example,
+a <code class="docutils literal"><span class="pre">species_elitism</span></code> setting of 3 will prevent the 3 species with the highest species fitness from
+being removed for stagnation regardless of the amount of time they have not shown improvement. <strong>This defaults to 0.</strong></dd>
+</dl>
+</li>
+</ul>
+<span class="target" id="index-12"></span></div>
+<div class="section" id="defaultreproduction-section">
+<span id="reproduction-config-label"></span><span id="index-13"></span><h2>[DefaultReproduction] section<a class="headerlink" href="#defaultreproduction-section" title="Permalink to this headline">¶</a></h2>
+<p>The <code class="docutils literal"><span class="pre">DefaultReproduction</span></code> section specifies parameters for the builtin <a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/module_summaries.html#reproduction.DefaultReproduction" title="reproduction.DefaultReproduction"><code class="xref any py py-class docutils literal"><span class="pre">DefaultReproduction</span></code></a> class.
+This section is only necessary if you specify this class as the reproduction implementation when
+creating the <a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/module_summaries.html#config.Config" title="config.Config"><code class="xref any py py-class docutils literal"><span class="pre">Config</span></code></a> instance; otherwise you need to include whatever configuration (if any) is
+required for your particular implementation.</p>
+<span id="index-14"></span><ul class="simple" id="elitism-label">
+<li><dl class="first docutils">
+<dt><em>elitism</em></dt>
+<dd>The number of most-fit individuals in each species that will be preserved as-is from one generation to the next. <strong>This defaults to 0.</strong></dd>
+</dl>
+</li>
+</ul>
+<ul class="simple" id="index-15">
+<li><dl class="first docutils">
+<dt><em>survival_threshold</em></dt>
+<dd>The fraction for each species allowed to reproduce each generation. <strong>This defaults to 0.2.</strong></dd>
+</dl>
+</li>
+</ul>
+<span id="index-16"></span><ul class="simple" id="min-species-size-label">
+<li><dl class="first docutils">
+<dt><em>min_species_size</em></dt>
+<dd>The minimum number of genomes per species after reproduction. <strong>This defaults to 2.</strong></dd>
+</dl>
+</li>
+</ul>
+<span class="target" id="index-17"></span></div>
+<div class="section" id="defaultgenome-section">
+<span id="index-18"></span><h2>[DefaultGenome] section<a class="headerlink" href="#defaultgenome-section" title="Permalink to this headline">¶</a></h2>
+<p>The <code class="docutils literal"><span class="pre">DefaultGenome</span></code> section specifies parameters for the builtin <a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/module_summaries.html#genome.DefaultGenome" title="genome.DefaultGenome"><code class="xref any py py-class docutils literal"><span class="pre">DefaultGenome</span></code></a> class.
+This section is only necessary if you specify this class as the genome implementation when
+creating the <a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/module_summaries.html#config.Config" title="config.Config"><code class="xref any py py-class docutils literal"><span class="pre">Config</span></code></a> instance; otherwise you need to include whatever configuration (if any) is
+required for your particular implementation.</p>
+<span class="target" id="index-19"></span><span class="target" id="index-20"></span><span class="target" id="index-21"></span><span class="target" id="activation-function-config-label"><span id="index-22"></span></span><ul class="simple" id="index-23">
+<li><dl class="first docutils">
+<dt><em>activation_default</em></dt>
+<dd>The default <a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/glossary.html#term-activation-function"><span class="xref std std-term">activation function</span></a> <a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/glossary.html#term-attributes"><span class="xref std std-term">attribute</span></a> <a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/module_summaries.html#attributes.StringAttribute.init_value" title="attributes.StringAttribute.init_value"><code class="xref py py-meth docutils literal"><span class="pre">assigned</span></code></a> to new
+<a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/glossary.html#term-node"><span class="xref std std-term">nodes</span></a>. <strong>If none is given, or “random” is specified, one of the activation_options will be chosen at random.</strong></dd>
+</dl>
+</li>
+</ul>
+<ul class="simple" id="index-24">
+<li><dl class="first docutils">
+<dt><em>activation_mutate_rate</em></dt>
+<dd>The probability that <a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/glossary.html#term-mutation"><span class="xref std std-term">mutation</span></a> will replace the node’s activation function with a
+<a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/module_summaries.html#attributes.StringAttribute.mutate_value" title="attributes.StringAttribute.mutate_value"><code class="xref py py-meth docutils literal"><span class="pre">randomly-determined</span></code></a> member of the <code class="docutils literal"><span class="pre">activation_options</span></code>.
+Valid values are in [0.0, 1.0].</dd>
+</dl>
+</li>
+</ul>
+<ul class="simple" id="index-25">
+<li><dl class="first docutils">
+<dt><em>activation_options</em></dt>
+<dd>A space-separated list of the activation functions that may be used by nodes.  <strong>This defaults to</strong> <a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/activation.html#sigmoid-label"><span class="std std-ref">sigmoid</span></a>. The
+built-in available functions can be found in <a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/activation.html#activation-functions-label"><span class="std std-ref">Overview of builtin activation functions</span></a>; more can be added as described in <a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/customization.html#customization-label"><span class="std std-ref">Customizing Behavior</span></a>.</dd>
+</dl>
+</li>
+</ul>
+<span class="target" id="index-26"></span><span class="target" id="index-27"></span><span class="target" id="index-28"></span><span class="target" id="aggregation-function-config-label"><span id="index-29"></span></span><ul class="simple" id="index-30">
+<li><dl class="first docutils">
+<dt><em>aggregation_default</em></dt>
+<dd>The default <a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/glossary.html#term-aggregation-function"><span class="xref std std-term">aggregation function</span></a> <a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/glossary.html#term-attributes"><span class="xref std std-term">attribute</span></a> <a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/module_summaries.html#attributes.StringAttribute.init_value" title="attributes.StringAttribute.init_value"><code class="xref py py-meth docutils literal"><span class="pre">assigned</span></code></a> to new
+<a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/glossary.html#term-node"><span class="xref std std-term">nodes</span></a>. <strong>If none is given, or “random” is specified, one of the aggregation_options will be chosen at random.</strong></dd>
+</dl>
+</li>
+</ul>
+<ul class="simple" id="index-31">
+<li><dl class="first docutils">
+<dt><em>aggregation_mutate_rate</em></dt>
+<dd>The probability that <a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/glossary.html#term-mutation"><span class="xref std std-term">mutation</span></a> will replace the node’s aggregation function with a
+<a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/module_summaries.html#attributes.StringAttribute.mutate_value" title="attributes.StringAttribute.mutate_value"><code class="xref py py-meth docutils literal"><span class="pre">randomly-determined</span></code></a> member of the <code class="docutils literal"><span class="pre">aggregation_options</span></code>.
+Valid values are in [0.0, 1.0].</dd>
+</dl>
+</li>
+</ul>
+<ul id="index-32">
+<li><dl class="first docutils">
+<dt><em>aggregation_options</em></dt>
+<dd><p class="first">A space-separated list of the aggregation functions that may be used by nodes.  <strong>This defaults to “sum”.</strong> The
+available functions (defined in <a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/module_summaries.html#module-aggregations" title="aggregations: Has the built-in aggregation functions, code for using them,  and code for adding new user-defined ones."><code class="xref any py py-mod docutils literal"><span class="pre">aggregations</span></code></a>) are: <code class="docutils literal"><span class="pre">sum</span></code>, <a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/module_summaries.html#aggregations.product_aggregation" title="aggregations.product_aggregation"><code class="xref py py-func docutils literal"><span class="pre">product</span></code></a>, <code class="docutils literal"><span class="pre">min</span></code>, <code class="docutils literal"><span class="pre">max</span></code>, <code class="docutils literal"><span class="pre">mean</span></code>, <code class="docutils literal"><span class="pre">median</span></code>,
+and <a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/module_summaries.html#aggregations.maxabs_aggregation" title="aggregations.maxabs_aggregation"><code class="xref py py-func docutils literal"><span class="pre">maxabs</span></code></a> (which returns the input value with the greatest absolute value; the returned
+value may be positive or negative). New aggregation functions can be defined similarly to <a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/customization.html#customization-label"><span class="std std-ref">new activation functions</span></a>.
+(Note that the function needs to take a <a class="reference external" href="https://docs.python.org/3.5/glossary.html#term-list" title="(in Python v3.5)"><code class="xref any docutils literal"><span class="pre">list</span></code></a> or other <a class="reference external" href="https://docs.python.org/3.5/glossary.html#term-iterable" title="(in Python v3.5)"><code class="xref any docutils literal"><span class="pre">iterable</span></code></a>; the <a class="reference external" href="https://docs.python.org/3.5/library/functools.html#functools.reduce" title="(in Python v3.5)"><code class="xref any docutils literal"><span class="pre">reduce</span></code></a> function, as in <a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/module_summaries.html#module-aggregations" title="aggregations: Has the built-in aggregation functions, code for using them,  and code for adding new user-defined ones."><code class="xref any py py-mod docutils literal"><span class="pre">aggregations</span></code></a>, may be of use in this.)</p>
+<div class="last versionchanged">
+<p><span class="versionmodified">Changed in version 0.92: </span>Moved out of <a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/module_summaries.html#module-genome" title="genome: Handles genomes (individuals in the population)."><code class="xref py py-mod docutils literal"><span class="pre">genome</span></code></a> into <a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/module_summaries.html#module-aggregations" title="aggregations: Has the built-in aggregation functions, code for using them,  and code for adding new user-defined ones."><code class="xref py py-mod docutils literal"><span class="pre">aggregations</span></code></a>; maxabs, mean, and median added; method for defining new aggregation functions added.</p>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+<span class="target" id="index-33"></span><span class="target" id="index-34"></span><span class="target" id="index-35"></span><span class="target" id="index-36"></span><ul class="simple" id="index-37">
+<li><dl class="first docutils">
+<dt><em>bias_init_mean</em></dt>
+<dd>The mean of the normal/gaussian distribution, if it is used to <a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/module_summaries.html#attributes.FloatAttribute.init_value" title="attributes.FloatAttribute.init_value"><code class="xref py py-meth docutils literal"><span class="pre">select</span></code></a> <a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/glossary.html#term-bias"><span class="xref std std-term">bias</span></a>
+<a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/glossary.html#term-attributes"><span class="xref std std-term">attribute</span></a> values for new <a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/glossary.html#term-node"><span class="xref std std-term">nodes</span></a>.</dd>
+</dl>
+</li>
+</ul>
+<ul class="simple" id="index-38">
+<li><dl class="first docutils">
+<dt><em>bias_init_stdev</em></dt>
+<dd>The standard deviation of the normal/gaussian distribution, if it is used to select bias values for new nodes.</dd>
+</dl>
+</li>
+</ul>
+<ul id="index-39">
+<li><dl class="first docutils">
+<dt><em>bias_init_type</em></dt>
+<dd><p class="first">If set to <code class="docutils literal"><span class="pre">gaussian</span></code> or <code class="docutils literal"><span class="pre">normal</span></code>, then the initialization is to a normal/gaussian distribution. If set to <code class="docutils literal"><span class="pre">uniform</span></code>, a uniform distribution
+from <span class="math"><span class="MathJax_Preview" style="color: inherit; display: none;"></span><span class="MathJax" id="MathJax-Element-1-Frame" tabindex="0" style="position: relative;" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mo movablelimits=&quot;true&quot; form=&quot;prefix&quot;&gt;max&lt;/mo&gt;&lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;&lt;mi&gt;b&lt;/mi&gt;&lt;mi&gt;i&lt;/mi&gt;&lt;mi&gt;a&lt;/mi&gt;&lt;mi&gt;s&lt;/mi&gt;&lt;mi mathvariant=&quot;normal&quot;&gt;&amp;#x005F;&lt;/mi&gt;&lt;mi&gt;m&lt;/mi&gt;&lt;mi&gt;i&lt;/mi&gt;&lt;mi&gt;n&lt;/mi&gt;&lt;mi mathvariant=&quot;normal&quot;&gt;&amp;#x005F;&lt;/mi&gt;&lt;mi&gt;v&lt;/mi&gt;&lt;mi&gt;a&lt;/mi&gt;&lt;mi&gt;l&lt;/mi&gt;&lt;mi&gt;u&lt;/mi&gt;&lt;mi&gt;e&lt;/mi&gt;&lt;mo&gt;,&lt;/mo&gt;&lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;&lt;mi&gt;b&lt;/mi&gt;&lt;mi&gt;i&lt;/mi&gt;&lt;mi&gt;a&lt;/mi&gt;&lt;mi&gt;s&lt;/mi&gt;&lt;mi mathvariant=&quot;normal&quot;&gt;&amp;#x005F;&lt;/mi&gt;&lt;mi&gt;i&lt;/mi&gt;&lt;mi&gt;n&lt;/mi&gt;&lt;mi&gt;i&lt;/mi&gt;&lt;mi&gt;t&lt;/mi&gt;&lt;mi mathvariant=&quot;normal&quot;&gt;&amp;#x005F;&lt;/mi&gt;&lt;mi&gt;m&lt;/mi&gt;&lt;mi&gt;e&lt;/mi&gt;&lt;mi&gt;a&lt;/mi&gt;&lt;mi&gt;n&lt;/mi&gt;&lt;mo&gt;&amp;#x2212;&lt;/mo&gt;&lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;&lt;mi&gt;b&lt;/mi&gt;&lt;mi&gt;i&lt;/mi&gt;&lt;mi&gt;a&lt;/mi&gt;&lt;mi&gt;s&lt;/mi&gt;&lt;mi mathvariant=&quot;normal&quot;&gt;&amp;#x005F;&lt;/mi&gt;&lt;mi&gt;i&lt;/mi&gt;&lt;mi&gt;n&lt;/mi&gt;&lt;mi&gt;i&lt;/mi&gt;&lt;mi&gt;t&lt;/mi&gt;&lt;mi mathvariant=&quot;normal&quot;&gt;&amp;#x005F;&lt;/mi&gt;&lt;mi&gt;s&lt;/mi&gt;&lt;mi&gt;t&lt;/mi&gt;&lt;mi&gt;d&lt;/mi&gt;&lt;mi&gt;e&lt;/mi&gt;&lt;mi&gt;v&lt;/mi&gt;&lt;mo&gt;&amp;#x2217;&lt;/mo&gt;&lt;mn&gt;2&lt;/mn&gt;&lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;&lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;&lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;&lt;/math&gt;" role="presentation"><nobr aria-hidden="true"><span class="math" id="MathJax-Span-1" style="width: 32.169em; display: inline-block;"><span style="display: inline-block; position: relative; width: 27.694em; height: 0px; font-size: 116%;"><span style="position: absolute; clip: rect(1.405em, 1027.6em, 2.728em, -1000em); top: -2.317em; left: 0em;"><span class="mrow" id="MathJax-Span-2"><span class="mo" id="MathJax-Span-3" style="font-family: MathJax_Main;">max</span><span class="mo" id="MathJax-Span-4" style="font-family: MathJax_Main;">(</span><span class="mi" id="MathJax-Span-5" style="font-family: MathJax_Math; font-style: italic;">b</span><span class="mi" id="MathJax-Span-6" style="font-family: MathJax_Math; font-style: italic;">i</span><span class="mi" id="MathJax-Span-7" style="font-family: MathJax_Math; font-style: italic;">a</span><span class="mi" id="MathJax-Span-8" style="font-family: MathJax_Math; font-style: italic;">s</span><span class="mi" id="MathJax-Span-9" style="font-family: MathJax_Main;">_</span><span class="mi" id="MathJax-Span-10" style="font-family: MathJax_Math; font-style: italic;">m</span><span class="mi" id="MathJax-Span-11" style="font-family: MathJax_Math; font-style: italic;">i</span><span class="mi" id="MathJax-Span-12" style="font-family: MathJax_Math; font-style: italic;">n</span><span class="mi" id="MathJax-Span-13" style="font-family: MathJax_Main;">_</span><span class="mi" id="MathJax-Span-14" style="font-family: MathJax_Math; font-style: italic;">v</span><span class="mi" id="MathJax-Span-15" style="font-family: MathJax_Math; font-style: italic;">a</span><span class="mi" id="MathJax-Span-16" style="font-family: MathJax_Math; font-style: italic;">l</span><span class="mi" id="MathJax-Span-17" style="font-family: MathJax_Math; font-style: italic;">u</span><span class="mi" id="MathJax-Span-18" style="font-family: MathJax_Math; font-style: italic;">e</span><span class="mo" id="MathJax-Span-19" style="font-family: MathJax_Main;">,</span><span class="mo" id="MathJax-Span-20" style="font-family: MathJax_Main; padding-left: 0.167em;">(</span><span class="mi" id="MathJax-Span-21" style="font-family: MathJax_Math; font-style: italic;">b</span><span class="mi" id="MathJax-Span-22" style="font-family: MathJax_Math; font-style: italic;">i</span><span class="mi" id="MathJax-Span-23" style="font-family: MathJax_Math; font-style: italic;">a</span><span class="mi" id="MathJax-Span-24" style="font-family: MathJax_Math; font-style: italic;">s</span><span class="mi" id="MathJax-Span-25" style="font-family: MathJax_Main;">_</span><span class="mi" id="MathJax-Span-26" style="font-family: MathJax_Math; font-style: italic;">i</span><span class="mi" id="MathJax-Span-27" style="font-family: MathJax_Math; font-style: italic;">n</span><span class="mi" id="MathJax-Span-28" style="font-family: MathJax_Math; font-style: italic;">i</span><span class="mi" id="MathJax-Span-29" style="font-family: MathJax_Math; font-style: italic;">t</span><span class="mi" id="MathJax-Span-30" style="font-family: MathJax_Main;">_</span><span class="mi" id="MathJax-Span-31" style="font-family: MathJax_Math; font-style: italic;">m</span><span class="mi" id="MathJax-Span-32" style="font-family: MathJax_Math; font-style: italic;">e</span><span class="mi" id="MathJax-Span-33" style="font-family: MathJax_Math; font-style: italic;">a</span><span class="mi" id="MathJax-Span-34" style="font-family: MathJax_Math; font-style: italic;">n</span><span class="mo" id="MathJax-Span-35" style="font-family: MathJax_Main; padding-left: 0.222em;">−</span><span class="mo" id="MathJax-Span-36" style="font-family: MathJax_Main; padding-left: 0.222em;">(</span><span class="mi" id="MathJax-Span-37" style="font-family: MathJax_Math; font-style: italic;">b</span><span class="mi" id="MathJax-Span-38" style="font-family: MathJax_Math; font-style: italic;">i</span><span class="mi" id="MathJax-Span-39" style="font-family: MathJax_Math; font-style: italic;">a</span><span class="mi" id="MathJax-Span-40" style="font-family: MathJax_Math; font-style: italic;">s</span><span class="mi" id="MathJax-Span-41" style="font-family: MathJax_Main;">_</span><span class="mi" id="MathJax-Span-42" style="font-family: MathJax_Math; font-style: italic;">i</span><span class="mi" id="MathJax-Span-43" style="font-family: MathJax_Math; font-style: italic;">n</span><span class="mi" id="MathJax-Span-44" style="font-family: MathJax_Math; font-style: italic;">i</span><span class="mi" id="MathJax-Span-45" style="font-family: MathJax_Math; font-style: italic;">t</span><span class="mi" id="MathJax-Span-46" style="font-family: MathJax_Main;">_</span><span class="mi" id="MathJax-Span-47" style="font-family: MathJax_Math; font-style: italic;">s</span><span class="mi" id="MathJax-Span-48" style="font-family: MathJax_Math; font-style: italic;">t</span><span class="mi" id="MathJax-Span-49" style="font-family: MathJax_Math; font-style: italic;">d<span style="display: inline-block; overflow: hidden; height: 1px; width: 0.003em;"></span></span><span class="mi" id="MathJax-Span-50" style="font-family: MathJax_Math; font-style: italic;">e</span><span class="mi" id="MathJax-Span-51" style="font-family: MathJax_Math; font-style: italic;">v</span><span class="mo" id="MathJax-Span-52" style="font-family: MathJax_Main; padding-left: 0.222em;">∗</span><span class="mn" id="MathJax-Span-53" style="font-family: MathJax_Main; padding-left: 0.222em;">2</span><span class="mo" id="MathJax-Span-54" style="font-family: MathJax_Main;">)</span><span class="mo" id="MathJax-Span-55" style="font-family: MathJax_Main;">)</span><span class="mo" id="MathJax-Span-56" style="font-family: MathJax_Main;">)</span></span><span style="display: inline-block; width: 0px; height: 2.317em;"></span></span></span><span style="display: inline-block; overflow: hidden; vertical-align: -0.352em; border-left: 0px solid; width: 0px; height: 1.285em;"></span></span></nobr><span class="MJX_Assistive_MathML" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mo movablelimits="true" form="prefix">max</mo><mo stretchy="false">(</mo><mi>b</mi><mi>i</mi><mi>a</mi><mi>s</mi><mi mathvariant="normal">_</mi><mi>m</mi><mi>i</mi><mi>n</mi><mi mathvariant="normal">_</mi><mi>v</mi><mi>a</mi><mi>l</mi><mi>u</mi><mi>e</mi><mo>,</mo><mo stretchy="false">(</mo><mi>b</mi><mi>i</mi><mi>a</mi><mi>s</mi><mi mathvariant="normal">_</mi><mi>i</mi><mi>n</mi><mi>i</mi><mi>t</mi><mi mathvariant="normal">_</mi><mi>m</mi><mi>e</mi><mi>a</mi><mi>n</mi><mo>−</mo><mo stretchy="false">(</mo><mi>b</mi><mi>i</mi><mi>a</mi><mi>s</mi><mi mathvariant="normal">_</mi><mi>i</mi><mi>n</mi><mi>i</mi><mi>t</mi><mi mathvariant="normal">_</mi><mi>s</mi><mi>t</mi><mi>d</mi><mi>e</mi><mi>v</mi><mo>∗</mo><mn>2</mn><mo stretchy="false">)</mo><mo stretchy="false">)</mo><mo stretchy="false">)</mo></math></span></span><script type="math/tex" id="MathJax-Element-1">\max(bias\_min\_value, (bias\_init\_mean-(bias\_init\_stdev*2)))</script></span> to
+<span class="math"><span class="MathJax_Preview" style="color: inherit; display: none;"></span><span class="MathJax" id="MathJax-Element-2-Frame" tabindex="0" style="position: relative;" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mo movablelimits=&quot;true&quot; form=&quot;prefix&quot;&gt;min&lt;/mo&gt;&lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;&lt;mi&gt;b&lt;/mi&gt;&lt;mi&gt;i&lt;/mi&gt;&lt;mi&gt;a&lt;/mi&gt;&lt;mi&gt;s&lt;/mi&gt;&lt;mi mathvariant=&quot;normal&quot;&gt;&amp;#x005F;&lt;/mi&gt;&lt;mi&gt;m&lt;/mi&gt;&lt;mi&gt;a&lt;/mi&gt;&lt;mi&gt;x&lt;/mi&gt;&lt;mi mathvariant=&quot;normal&quot;&gt;&amp;#x005F;&lt;/mi&gt;&lt;mi&gt;v&lt;/mi&gt;&lt;mi&gt;a&lt;/mi&gt;&lt;mi&gt;l&lt;/mi&gt;&lt;mi&gt;u&lt;/mi&gt;&lt;mi&gt;e&lt;/mi&gt;&lt;mo&gt;,&lt;/mo&gt;&lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;&lt;mi&gt;b&lt;/mi&gt;&lt;mi&gt;i&lt;/mi&gt;&lt;mi&gt;a&lt;/mi&gt;&lt;mi&gt;s&lt;/mi&gt;&lt;mi mathvariant=&quot;normal&quot;&gt;&amp;#x005F;&lt;/mi&gt;&lt;mi&gt;i&lt;/mi&gt;&lt;mi&gt;n&lt;/mi&gt;&lt;mi&gt;i&lt;/mi&gt;&lt;mi&gt;t&lt;/mi&gt;&lt;mi mathvariant=&quot;normal&quot;&gt;&amp;#x005F;&lt;/mi&gt;&lt;mi&gt;m&lt;/mi&gt;&lt;mi&gt;e&lt;/mi&gt;&lt;mi&gt;a&lt;/mi&gt;&lt;mi&gt;n&lt;/mi&gt;&lt;mo&gt;+&lt;/mo&gt;&lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;&lt;mi&gt;b&lt;/mi&gt;&lt;mi&gt;i&lt;/mi&gt;&lt;mi&gt;a&lt;/mi&gt;&lt;mi&gt;s&lt;/mi&gt;&lt;mi mathvariant=&quot;normal&quot;&gt;&amp;#x005F;&lt;/mi&gt;&lt;mi&gt;i&lt;/mi&gt;&lt;mi&gt;n&lt;/mi&gt;&lt;mi&gt;i&lt;/mi&gt;&lt;mi&gt;t&lt;/mi&gt;&lt;mi mathvariant=&quot;normal&quot;&gt;&amp;#x005F;&lt;/mi&gt;&lt;mi&gt;s&lt;/mi&gt;&lt;mi&gt;t&lt;/mi&gt;&lt;mi&gt;d&lt;/mi&gt;&lt;mi&gt;e&lt;/mi&gt;&lt;mi&gt;v&lt;/mi&gt;&lt;mo&gt;&amp;#x2217;&lt;/mo&gt;&lt;mn&gt;2&lt;/mn&gt;&lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;&lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;&lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;&lt;/math&gt;" role="presentation"><nobr aria-hidden="true"><span class="math" id="MathJax-Span-57" style="width: 32.169em; display: inline-block;"><span style="display: inline-block; position: relative; width: 27.694em; height: 0px; font-size: 116%;"><span style="position: absolute; clip: rect(1.405em, 1027.6em, 2.728em, -1000em); top: -2.317em; left: 0em;"><span class="mrow" id="MathJax-Span-58"><span class="mo" id="MathJax-Span-59" style="font-family: MathJax_Main;">min</span><span class="mo" id="MathJax-Span-60" style="font-family: MathJax_Main;">(</span><span class="mi" id="MathJax-Span-61" style="font-family: MathJax_Math; font-style: italic;">b</span><span class="mi" id="MathJax-Span-62" style="font-family: MathJax_Math; font-style: italic;">i</span><span class="mi" id="MathJax-Span-63" style="font-family: MathJax_Math; font-style: italic;">a</span><span class="mi" id="MathJax-Span-64" style="font-family: MathJax_Math; font-style: italic;">s</span><span class="mi" id="MathJax-Span-65" style="font-family: MathJax_Main;">_</span><span class="mi" id="MathJax-Span-66" style="font-family: MathJax_Math; font-style: italic;">m</span><span class="mi" id="MathJax-Span-67" style="font-family: MathJax_Math; font-style: italic;">a</span><span class="mi" id="MathJax-Span-68" style="font-family: MathJax_Math; font-style: italic;">x</span><span class="mi" id="MathJax-Span-69" style="font-family: MathJax_Main;">_</span><span class="mi" id="MathJax-Span-70" style="font-family: MathJax_Math; font-style: italic;">v</span><span class="mi" id="MathJax-Span-71" style="font-family: MathJax_Math; font-style: italic;">a</span><span class="mi" id="MathJax-Span-72" style="font-family: MathJax_Math; font-style: italic;">l</span><span class="mi" id="MathJax-Span-73" style="font-family: MathJax_Math; font-style: italic;">u</span><span class="mi" id="MathJax-Span-74" style="font-family: MathJax_Math; font-style: italic;">e</span><span class="mo" id="MathJax-Span-75" style="font-family: MathJax_Main;">,</span><span class="mo" id="MathJax-Span-76" style="font-family: MathJax_Main; padding-left: 0.167em;">(</span><span class="mi" id="MathJax-Span-77" style="font-family: MathJax_Math; font-style: italic;">b</span><span class="mi" id="MathJax-Span-78" style="font-family: MathJax_Math; font-style: italic;">i</span><span class="mi" id="MathJax-Span-79" style="font-family: MathJax_Math; font-style: italic;">a</span><span class="mi" id="MathJax-Span-80" style="font-family: MathJax_Math; font-style: italic;">s</span><span class="mi" id="MathJax-Span-81" style="font-family: MathJax_Main;">_</span><span class="mi" id="MathJax-Span-82" style="font-family: MathJax_Math; font-style: italic;">i</span><span class="mi" id="MathJax-Span-83" style="font-family: MathJax_Math; font-style: italic;">n</span><span class="mi" id="MathJax-Span-84" style="font-family: MathJax_Math; font-style: italic;">i</span><span class="mi" id="MathJax-Span-85" style="font-family: MathJax_Math; font-style: italic;">t</span><span class="mi" id="MathJax-Span-86" style="font-family: MathJax_Main;">_</span><span class="mi" id="MathJax-Span-87" style="font-family: MathJax_Math; font-style: italic;">m</span><span class="mi" id="MathJax-Span-88" style="font-family: MathJax_Math; font-style: italic;">e</span><span class="mi" id="MathJax-Span-89" style="font-family: MathJax_Math; font-style: italic;">a</span><span class="mi" id="MathJax-Span-90" style="font-family: MathJax_Math; font-style: italic;">n</span><span class="mo" id="MathJax-Span-91" style="font-family: MathJax_Main; padding-left: 0.222em;">+</span><span class="mo" id="MathJax-Span-92" style="font-family: MathJax_Main; padding-left: 0.222em;">(</span><span class="mi" id="MathJax-Span-93" style="font-family: MathJax_Math; font-style: italic;">b</span><span class="mi" id="MathJax-Span-94" style="font-family: MathJax_Math; font-style: italic;">i</span><span class="mi" id="MathJax-Span-95" style="font-family: MathJax_Math; font-style: italic;">a</span><span class="mi" id="MathJax-Span-96" style="font-family: MathJax_Math; font-style: italic;">s</span><span class="mi" id="MathJax-Span-97" style="font-family: MathJax_Main;">_</span><span class="mi" id="MathJax-Span-98" style="font-family: MathJax_Math; font-style: italic;">i</span><span class="mi" id="MathJax-Span-99" style="font-family: MathJax_Math; font-style: italic;">n</span><span class="mi" id="MathJax-Span-100" style="font-family: MathJax_Math; font-style: italic;">i</span><span class="mi" id="MathJax-Span-101" style="font-family: MathJax_Math; font-style: italic;">t</span><span class="mi" id="MathJax-Span-102" style="font-family: MathJax_Main;">_</span><span class="mi" id="MathJax-Span-103" style="font-family: MathJax_Math; font-style: italic;">s</span><span class="mi" id="MathJax-Span-104" style="font-family: MathJax_Math; font-style: italic;">t</span><span class="mi" id="MathJax-Span-105" style="font-family: MathJax_Math; font-style: italic;">d<span style="display: inline-block; overflow: hidden; height: 1px; width: 0.003em;"></span></span><span class="mi" id="MathJax-Span-106" style="font-family: MathJax_Math; font-style: italic;">e</span><span class="mi" id="MathJax-Span-107" style="font-family: MathJax_Math; font-style: italic;">v</span><span class="mo" id="MathJax-Span-108" style="font-family: MathJax_Main; padding-left: 0.222em;">∗</span><span class="mn" id="MathJax-Span-109" style="font-family: MathJax_Main; padding-left: 0.222em;">2</span><span class="mo" id="MathJax-Span-110" style="font-family: MathJax_Main;">)</span><span class="mo" id="MathJax-Span-111" style="font-family: MathJax_Main;">)</span><span class="mo" id="MathJax-Span-112" style="font-family: MathJax_Main;">)</span></span><span style="display: inline-block; width: 0px; height: 2.317em;"></span></span></span><span style="display: inline-block; overflow: hidden; vertical-align: -0.352em; border-left: 0px solid; width: 0px; height: 1.285em;"></span></span></nobr><span class="MJX_Assistive_MathML" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mo movablelimits="true" form="prefix">min</mo><mo stretchy="false">(</mo><mi>b</mi><mi>i</mi><mi>a</mi><mi>s</mi><mi mathvariant="normal">_</mi><mi>m</mi><mi>a</mi><mi>x</mi><mi mathvariant="normal">_</mi><mi>v</mi><mi>a</mi><mi>l</mi><mi>u</mi><mi>e</mi><mo>,</mo><mo stretchy="false">(</mo><mi>b</mi><mi>i</mi><mi>a</mi><mi>s</mi><mi mathvariant="normal">_</mi><mi>i</mi><mi>n</mi><mi>i</mi><mi>t</mi><mi mathvariant="normal">_</mi><mi>m</mi><mi>e</mi><mi>a</mi><mi>n</mi><mo>+</mo><mo stretchy="false">(</mo><mi>b</mi><mi>i</mi><mi>a</mi><mi>s</mi><mi mathvariant="normal">_</mi><mi>i</mi><mi>n</mi><mi>i</mi><mi>t</mi><mi mathvariant="normal">_</mi><mi>s</mi><mi>t</mi><mi>d</mi><mi>e</mi><mi>v</mi><mo>∗</mo><mn>2</mn><mo stretchy="false">)</mo><mo stretchy="false">)</mo><mo stretchy="false">)</mo></math></span></span><script type="math/tex" id="MathJax-Element-2">\min(bias\_max\_value, (bias\_init\_mean+(bias\_init\_stdev*2)))</script></span>.
+ (Note that the standard deviation of a uniform distribution is not
+range/0.25, as implied by this, but the range divided by a bit over 
+0.288 (the square root of 12); however, this approximation makes setting
+the range much easier.) <strong>This defaults to “gaussian”.</strong></p>
+<div class="last versionadded">
+<p><span class="versionmodified">New in version 0.92.</span></p>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+<span class="target" id="index-40"></span><ul class="simple" id="index-41">
+<li><dl class="first docutils">
+<dt><em>bias_max_value</em></dt>
+<dd>The maximum allowed bias value.  Biases above this value will be <a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/module_summaries.html#attributes.FloatAttribute.clamp" title="attributes.FloatAttribute.clamp"><code class="xref py py-meth docutils literal"><span class="pre">clamped</span></code></a> to this value.</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><em>bias_min_value</em></dt>
+<dd>The minimum allowed bias value.  Biases below this value will be <a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/module_summaries.html#attributes.FloatAttribute.clamp" title="attributes.FloatAttribute.clamp"><code class="xref py py-meth docutils literal"><span class="pre">clamped</span></code></a> to this value.</dd>
+</dl>
+</li>
+</ul>
+<ul class="simple" id="index-42">
+<li><dl class="first docutils">
+<dt><em>bias_mutate_power</em></dt>
+<dd>The standard deviation of the zero-centered normal/gaussian distribution from which a bias value <a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/glossary.html#term-mutation"><span class="xref std std-term">mutation</span></a> is drawn.</dd>
+</dl>
+</li>
+</ul>
+<ul class="simple" id="index-43">
+<li><dl class="first docutils">
+<dt><em>bias_mutate_rate</em></dt>
+<dd>The probability that <a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/glossary.html#term-mutation"><span class="xref std std-term">mutation</span></a> will change the bias of a node by adding a random value.</dd>
+</dl>
+</li>
+</ul>
+<ul class="simple" id="index-44">
+<li><dl class="first docutils">
+<dt><em>bias_replace_rate</em></dt>
+<dd>The probability that <a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/glossary.html#term-mutation"><span class="xref std std-term">mutation</span></a> will replace the bias of a node with a newly <a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/module_summaries.html#attributes.FloatAttribute.init_value" title="attributes.FloatAttribute.init_value"><code class="xref py py-meth docutils literal"><span class="pre">chosen</span></code></a>
+random value (as if it were a new node).</dd>
+</dl>
+</li>
+</ul>
+<span class="target" id="compatibility-threshold-label"></span><span class="target" id="index-45"></span><span class="target" id="index-46"></span><ul class="simple" id="index-47">
+<li><dl class="first docutils">
+<dt><em>compatibility_threshold</em></dt>
+<dd>Individuals whose <a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/glossary.html#term-genomic-distance"><span class="xref std std-term">genomic distance</span></a> is less than this threshold are considered to be in the same <a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/glossary.html#term-species"><span class="xref std std-term">species</span></a>.</dd>
+</dl>
+</li>
+</ul>
+<span class="target" id="compatibility-disjoint-coefficient-label"></span><span class="target" id="index-48"></span><ul class="simple" id="index-49">
+<li><dl class="first docutils">
+<dt><em>compatibility_disjoint_coefficient</em></dt>
+<dd>The coefficient for the <a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/glossary.html#term-disjoint"><span class="xref std std-term">disjoint</span></a> and <a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/glossary.html#term-excess"><span class="xref std std-term">excess</span></a> <a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/glossary.html#term-gene"><span class="xref std std-term">gene</span></a> counts’ contribution to the <a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/glossary.html#term-genomic-distance"><span class="xref std std-term">genomic distance</span></a>.</dd>
+</dl>
+</li>
+</ul>
+<span class="target" id="compatibility-weight-coefficient-label"></span><span class="target" id="index-50"></span><span class="target" id="index-51"></span><ul class="simple" id="index-52">
+<li><dl class="first docutils">
+<dt><em>compatibility_weight_coefficient</em></dt>
+<dd>The coefficient for each <a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/glossary.html#term-weight"><span class="xref std std-term">weight</span></a>, <a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/glossary.html#term-bias"><span class="xref std std-term">bias</span></a>, or <a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/glossary.html#term-response"><span class="xref std std-term">response</span></a> multiplier difference’s contribution to the <a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/glossary.html#term-genomic-distance"><span class="xref std std-term">genomic distance</span></a>
+(for <a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/glossary.html#term-homologous"><span class="xref std std-term">homologous</span></a> <a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/glossary.html#term-node"><span class="xref std std-term">nodes</span></a> or <a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/glossary.html#term-connection"><span class="xref std std-term">connections</span></a>). This is also used as the value to add for differences
+in <a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/glossary.html#term-activation-function"><span class="xref std std-term">activation functions</span></a>, <a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/glossary.html#term-aggregation-function"><span class="xref std std-term">aggregation functions</span></a>, or <a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/glossary.html#term-enabled"><span class="xref std std-term">enabled</span></a>/disabled status.</dd>
+</dl>
+</li>
+</ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">It is currently possible for two <a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/glossary.html#term-homologous"><span class="xref std std-term">homologous</span></a> nodes or connections to have a higher contribution to the <a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/glossary.html#term-genomic-distance"><span class="xref std std-term">genomic distance</span></a> than a
+disjoint or excess <a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/glossary.html#term-node"><span class="xref std std-term">node</span></a> or <a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/glossary.html#term-connection"><span class="xref std std-term">connection</span></a>, depending on their <a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/glossary.html#term-attributes"><span class="xref std std-term">attributes</span></a> and the settings of the above parameters.</p>
+</div>
+<span class="target" id="index-53"></span><span class="target" id="index-54"></span><span id="index-55"></span><ul class="simple" id="conn-add-prob-label">
+<li><dl class="first docutils">
+<dt><em>conn_add_prob</em></dt>
+<dd>The probability that <a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/glossary.html#term-mutation"><span class="xref std std-term">mutation</span></a> will add a <a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/glossary.html#term-connection"><span class="xref std std-term">connection</span></a> between existing <a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/glossary.html#term-node"><span class="xref std std-term">nodes</span></a>. Valid values are in [0.0, 1.0].</dd>
+</dl>
+</li>
+</ul>
+<ul class="simple" id="index-56">
+<li><dl class="first docutils">
+<dt><em>conn_delete_prob</em></dt>
+<dd>The probability that <a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/glossary.html#term-mutation"><span class="xref std std-term">mutation</span></a> will delete an existing connection. Valid values are in [0.0, 1.0].</dd>
+</dl>
+</li>
+</ul>
+<span class="target" id="enabled-default-label"></span><span class="target" id="index-57"></span><span class="target" id="index-58"></span><span class="target" id="index-59"></span><span class="target" id="index-60"></span><span class="target" id="index-61"></span><ul class="simple" id="index-62">
+<li><dl class="first docutils">
+<dt><em>enabled_default</em></dt>
+<dd>The default <a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/glossary.html#term-enabled"><span class="xref std std-term">enabled</span></a> <a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/glossary.html#term-attributes"><span class="xref std std-term">attribute</span></a> of newly created connections.  Valid values are <code class="docutils literal"><span class="pre">True</span></code> and <code class="docutils literal"><span class="pre">False</span></code>.</dd>
+</dl>
+</li>
+</ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">“Newly created connections” include ones in newly-created genomes, if those have initial connections
+(from the setting of the <a class="reference internal" href="#initial-connection-config-label"><span class="std std-ref">initial_connection</span></a> variable).</p>
+</div>
+<span class="target" id="index-63"></span><ul class="simple" id="index-64">
+<li><dl class="first docutils">
+<dt><em>enabled_mutate_rate</em></dt>
+<dd>The probability that <a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/glossary.html#term-mutation"><span class="xref std std-term">mutation</span></a> will <a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/module_summaries.html#attributes.BoolAttribute.mutate_value" title="attributes.BoolAttribute.mutate_value"><code class="xref py py-func docutils literal"><span class="pre">replace</span></code></a> (50/50 chance of <code class="docutils literal"><span class="pre">True</span></code> or <code class="docutils literal"><span class="pre">False</span></code>)
+the enabled status of a connection. Valid values are in [0.0, 1.0].</dd>
+</dl>
+</li>
+</ul>
+<span class="target" id="index-65"></span><ul id="index-66">
+<li><dl class="first docutils">
+<dt><em>enabled_rate_to_false_add</em></dt>
+<dd><p class="first last">Adds to the <code class="docutils literal"><span class="pre">enabled_mutate_rate</span></code> if the connection is currently <a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/glossary.html#term-enabled"><span class="xref std std-term">enabled</span></a>.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><em>enabled_rate_to_true_add</em></dt>
+<dd><p class="first">Adds to the <code class="docutils literal"><span class="pre">enabled_mutate_rate</span></code> if the connection is currently not enabled.</p>
+<div class="last versionadded">
+<p><span class="versionmodified">New in version 0.92: </span><code class="docutils literal"><span class="pre">enabled_rate_to_false_add</span></code> and <code class="docutils literal"><span class="pre">enabled_rate_to_true_add</span></code></p>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+<span class="target" id="feed-forward-config-label"></span><span class="target" id="index-67"></span><ul class="simple" id="index-68">
+<li><dl class="first docutils">
+<dt><em>feed_forward</em></dt>
+<dd>If this evaluates to <code class="docutils literal"><span class="pre">True</span></code>, generated networks will not be allowed to have <a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/glossary.html#term-recurrent"><span class="xref std std-term">recurrent</span></a> <a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/glossary.html#term-connection"><span class="xref std std-term">connections</span></a>
+(they will be <a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/glossary.html#term-feedforward"><span class="xref std std-term">feedforward</span></a>). Otherwise they may be (but are not forced to be) recurrent.</dd>
+</dl>
+</li>
+</ul>
+<span class="target" id="initial-connection-config-label"></span><span class="target" id="index-69"></span><span class="target" id="index-70"></span><ul class="simple" id="index-71">
+<li><dl class="first docutils">
+<dt><em>initial_connection</em></dt>
+<dd>Specifies the initial connectivity of newly-created genomes.  (Note the effects on settings other than <code class="docutils literal"><span class="pre">unconnected</span></code> of the
+<a class="reference internal" href="#enabled-default-label"><span class="std std-ref">enabled_default</span></a> parameter.) There are seven allowed values:<ul class="last">
+<li><code class="docutils literal"><span class="pre">unconnected</span></code> - No <a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/glossary.html#term-connection"><span class="xref std std-term">connections</span></a> are initially present. <strong>This is the default.</strong></li>
+<li><code class="docutils literal"><span class="pre">fs_neat_nohidden</span></code> - One randomly-chosen <a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/glossary.html#term-input-node"><span class="xref std std-term">input node</span></a> has one connection to each <a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/glossary.html#term-output-node"><span class="xref std std-term">output node</span></a>. (This is one version of the
+FS-NEAT scheme; “FS” stands for “Feature Selection”.)</li>
+<li><code class="docutils literal"><span class="pre">fs_neat_hidden</span></code> - One randomly-chosen <a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/glossary.html#term-input-node"><span class="xref std std-term">input node</span></a> has one connection to each <a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/glossary.html#term-hidden-node"><span class="xref std std-term">hidden</span></a> and
+<a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/glossary.html#term-output-node"><span class="xref std std-term">output node</span></a>. (This is another version of the FS-NEAT scheme. If there are no hidden nodes, it is the same as <code class="docutils literal"><span class="pre">fs_neat_nohidden</span></code>.)</li>
+<li><code class="docutils literal"><span class="pre">full_nodirect</span></code> - Each <a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/glossary.html#term-input-node"><span class="xref std std-term">input node</span></a> is connected to all <a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/glossary.html#term-hidden-node"><span class="xref std std-term">hidden</span></a> nodes, if there are any, and each hidden node is
+connected to all <a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/glossary.html#term-output-node"><span class="xref std std-term">output nodes</span></a>; otherwise, each input node is connected to all <a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/glossary.html#term-output-node"><span class="xref std std-term">output nodes</span></a>.
+Genomes with <a class="reference internal" href="#feed-forward-config-label"><span class="std std-ref">feed_forward</span></a> set to <code class="docutils literal"><span class="pre">False</span></code> will also have <a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/glossary.html#term-recurrent"><span class="xref std std-term">recurrent</span></a> (loopback, in this case)
+connections from each hidden or output node to itself.</li>
+<li><code class="docutils literal"><span class="pre">full_direct</span></code> - Each <a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/glossary.html#term-input-node"><span class="xref std std-term">input node</span></a> is connected to all <a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/glossary.html#term-hidden-node"><span class="xref std std-term">hidden</span></a> and <a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/glossary.html#term-output-node"><span class="xref std std-term">output nodes</span></a>,
+and each hidden node is connected to all output nodes. Genomes with <a class="reference internal" href="#feed-forward-config-label"><span class="std std-ref">feed_forward</span></a> set to <code class="docutils literal"><span class="pre">False</span></code> will also
+have <a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/glossary.html#term-recurrent"><span class="xref std std-term">recurrent</span></a> (loopback, in this case) connections from each hidden or output node to itself.</li>
+<li><code class="docutils literal"><span class="pre">partial_nodirect</span> <span class="pre">#</span></code> - As for <code class="docutils literal"><span class="pre">full_nodirect</span></code>, but each connection has a probability of being present determined by the number
+(valid values are in [0.0, 1.0]).</li>
+<li><code class="docutils literal"><span class="pre">partial_direct</span> <span class="pre">#</span></code> - as for <code class="docutils literal"><span class="pre">full_direct</span></code>, but each connection has a probability of being present determined by the number
+(valid values are in [0.0, 1.0]).</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+<div class="versionchanged">
+<p><span class="versionmodified">Changed in version 0.92: </span>fs_neat
+ split into fs_neat_nohidden and fs_neat_hidden; full, partial split 
+into full_nodirect, full_direct, partial_nodirect, partial_direct</p>
+</div>
+<span class="target" id="index-72"></span><span class="target" id="index-73"></span><span id="index-74"></span><ul class="simple" id="node-add-prob-label">
+<li><dl class="first docutils">
+<dt><em>node_add_prob</em></dt>
+<dd>The probability that <a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/glossary.html#term-mutation"><span class="xref std std-term">mutation</span></a> will add a new <a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/glossary.html#term-node"><span class="xref std std-term">node</span></a> (essentially replacing an existing connection,
+the <a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/glossary.html#term-enabled"><span class="xref std std-term">enabled</span></a> status of which will be set to <code class="docutils literal"><span class="pre">False</span></code>). Valid values are in [0.0, 1.0].</dd>
+</dl>
+</li>
+</ul>
+<ul class="simple" id="index-75">
+<li><dl class="first docutils">
+<dt><em>node_delete_prob</em></dt>
+<dd>The probability that <a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/glossary.html#term-mutation"><span class="xref std std-term">mutation</span></a> will delete an existing node (and all connections to it). Valid values are in [0.0, 1.0].</dd>
+</dl>
+</li>
+</ul>
+<span class="target" id="num-nodes-config-label"></span><span class="target" id="index-76"></span><ul class="simple" id="index-77">
+<li><dl class="first docutils">
+<dt><em>num_hidden</em></dt>
+<dd>The number of <a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/glossary.html#term-hidden-node"><span class="xref std std-term">hidden nodes</span></a> to add to each genome in the initial population.</dd>
+</dl>
+</li>
+</ul>
+<span class="target" id="index-78"></span><ul class="simple" id="index-79">
+<li><dl class="first docutils">
+<dt><em>num_inputs</em></dt>
+<dd>The number of <a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/glossary.html#term-input-node"><span class="xref std std-term">input nodes</span></a>, through which the network receives inputs.</dd>
+</dl>
+</li>
+</ul>
+<span class="target" id="index-80"></span><ul class="simple" id="index-81">
+<li><dl class="first docutils">
+<dt><em>num_outputs</em></dt>
+<dd>The number of <a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/glossary.html#term-output-node"><span class="xref std std-term">output nodes</span></a>, to which the network delivers outputs.</dd>
+</dl>
+</li>
+</ul>
+<span class="target" id="index-82"></span><span class="target" id="index-83"></span><span class="target" id="index-84"></span><span class="target" id="index-85"></span><ul class="simple" id="index-86">
+<li><dl class="first docutils">
+<dt><em>response_init_mean</em></dt>
+<dd>The mean of the normal/gaussian distribution, if it is used to <a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/module_summaries.html#attributes.FloatAttribute.init_value" title="attributes.FloatAttribute.init_value"><code class="xref py py-meth docutils literal"><span class="pre">select</span></code></a> <a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/glossary.html#term-response"><span class="xref std std-term">response</span></a> multiplier
+<a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/glossary.html#term-attributes"><span class="xref std std-term">attribute</span></a> values for new <a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/glossary.html#term-node"><span class="xref std std-term">nodes</span></a>.</dd>
+</dl>
+</li>
+</ul>
+<ul class="simple" id="index-87">
+<li><dl class="first docutils">
+<dt><em>response_init_stdev</em></dt>
+<dd>The standard deviation of the normal/gaussian distribution, if it is used to select response multipliers for new nodes.</dd>
+</dl>
+</li>
+</ul>
+<ul id="index-88">
+<li><dl class="first docutils">
+<dt><em>response_init_type</em></dt>
+<dd><p class="first">If set to <code class="docutils literal"><span class="pre">gaussian</span></code> or <code class="docutils literal"><span class="pre">normal</span></code>, then the initialization is to a normal/gaussian distribution. If set to <code class="docutils literal"><span class="pre">uniform</span></code>, a uniform distribution
+from <span class="math"><span class="MathJax_Preview" style="color: inherit; display: none;"></span><span class="MathJax" id="MathJax-Element-3-Frame" tabindex="0" style="position: relative;" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mo movablelimits=&quot;true&quot; form=&quot;prefix&quot;&gt;max&lt;/mo&gt;&lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;&lt;mi&gt;r&lt;/mi&gt;&lt;mi&gt;e&lt;/mi&gt;&lt;mi&gt;s&lt;/mi&gt;&lt;mi&gt;p&lt;/mi&gt;&lt;mi&gt;o&lt;/mi&gt;&lt;mi&gt;n&lt;/mi&gt;&lt;mi&gt;s&lt;/mi&gt;&lt;mi&gt;e&lt;/mi&gt;&lt;mi mathvariant=&quot;normal&quot;&gt;&amp;#x005F;&lt;/mi&gt;&lt;mi&gt;m&lt;/mi&gt;&lt;mi&gt;i&lt;/mi&gt;&lt;mi&gt;n&lt;/mi&gt;&lt;mi mathvariant=&quot;normal&quot;&gt;&amp;#x005F;&lt;/mi&gt;&lt;mi&gt;v&lt;/mi&gt;&lt;mi&gt;a&lt;/mi&gt;&lt;mi&gt;l&lt;/mi&gt;&lt;mi&gt;u&lt;/mi&gt;&lt;mi&gt;e&lt;/mi&gt;&lt;mo&gt;,&lt;/mo&gt;&lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;&lt;mi&gt;r&lt;/mi&gt;&lt;mi&gt;e&lt;/mi&gt;&lt;mi&gt;s&lt;/mi&gt;&lt;mi&gt;p&lt;/mi&gt;&lt;mi&gt;o&lt;/mi&gt;&lt;mi&gt;n&lt;/mi&gt;&lt;mi&gt;s&lt;/mi&gt;&lt;mi&gt;e&lt;/mi&gt;&lt;mi mathvariant=&quot;normal&quot;&gt;&amp;#x005F;&lt;/mi&gt;&lt;mi&gt;i&lt;/mi&gt;&lt;mi&gt;n&lt;/mi&gt;&lt;mi&gt;i&lt;/mi&gt;&lt;mi&gt;t&lt;/mi&gt;&lt;mi mathvariant=&quot;normal&quot;&gt;&amp;#x005F;&lt;/mi&gt;&lt;mi&gt;m&lt;/mi&gt;&lt;mi&gt;e&lt;/mi&gt;&lt;mi&gt;a&lt;/mi&gt;&lt;mi&gt;n&lt;/mi&gt;&lt;mo&gt;&amp;#x2212;&lt;/mo&gt;&lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;&lt;mi&gt;r&lt;/mi&gt;&lt;mi&gt;e&lt;/mi&gt;&lt;mi&gt;s&lt;/mi&gt;&lt;mi&gt;p&lt;/mi&gt;&lt;mi&gt;o&lt;/mi&gt;&lt;mi&gt;n&lt;/mi&gt;&lt;mi&gt;s&lt;/mi&gt;&lt;mi&gt;e&lt;/mi&gt;&lt;mi mathvariant=&quot;normal&quot;&gt;&amp;#x005F;&lt;/mi&gt;&lt;mi&gt;i&lt;/mi&gt;&lt;mi&gt;n&lt;/mi&gt;&lt;mi&gt;i&lt;/mi&gt;&lt;mi&gt;t&lt;/mi&gt;&lt;mi mathvariant=&quot;normal&quot;&gt;&amp;#x005F;&lt;/mi&gt;&lt;mi&gt;s&lt;/mi&gt;&lt;mi&gt;t&lt;/mi&gt;&lt;mi&gt;d&lt;/mi&gt;&lt;mi&gt;e&lt;/mi&gt;&lt;mi&gt;v&lt;/mi&gt;&lt;mo&gt;&amp;#x2217;&lt;/mo&gt;&lt;mn&gt;2&lt;/mn&gt;&lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;&lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;&lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;&lt;/math&gt;" role="presentation"><nobr aria-hidden="true"><span class="math" id="MathJax-Span-113" style="width: 39.658em; display: inline-block;"><span style="display: inline-block; position: relative; width: 34.159em; height: 0px; font-size: 116%;"><span style="position: absolute; clip: rect(1.405em, 1034.06em, 2.728em, -1000em); top: -2.317em; left: 0em;"><span class="mrow" id="MathJax-Span-114"><span class="mo" id="MathJax-Span-115" style="font-family: MathJax_Main;">max</span><span class="mo" id="MathJax-Span-116" style="font-family: MathJax_Main;">(</span><span class="mi" id="MathJax-Span-117" style="font-family: MathJax_Math; font-style: italic;">r</span><span class="mi" id="MathJax-Span-118" style="font-family: MathJax_Math; font-style: italic;">e</span><span class="mi" id="MathJax-Span-119" style="font-family: MathJax_Math; font-style: italic;">s</span><span class="mi" id="MathJax-Span-120" style="font-family: MathJax_Math; font-style: italic;">p</span><span class="mi" id="MathJax-Span-121" style="font-family: MathJax_Math; font-style: italic;">o</span><span class="mi" id="MathJax-Span-122" style="font-family: MathJax_Math; font-style: italic;">n</span><span class="mi" id="MathJax-Span-123" style="font-family: MathJax_Math; font-style: italic;">s</span><span class="mi" id="MathJax-Span-124" style="font-family: MathJax_Math; font-style: italic;">e</span><span class="mi" id="MathJax-Span-125" style="font-family: MathJax_Main;">_</span><span class="mi" id="MathJax-Span-126" style="font-family: MathJax_Math; font-style: italic;">m</span><span class="mi" id="MathJax-Span-127" style="font-family: MathJax_Math; font-style: italic;">i</span><span class="mi" id="MathJax-Span-128" style="font-family: MathJax_Math; font-style: italic;">n</span><span class="mi" id="MathJax-Span-129" style="font-family: MathJax_Main;">_</span><span class="mi" id="MathJax-Span-130" style="font-family: MathJax_Math; font-style: italic;">v</span><span class="mi" id="MathJax-Span-131" style="font-family: MathJax_Math; font-style: italic;">a</span><span class="mi" id="MathJax-Span-132" style="font-family: MathJax_Math; font-style: italic;">l</span><span class="mi" id="MathJax-Span-133" style="font-family: MathJax_Math; font-style: italic;">u</span><span class="mi" id="MathJax-Span-134" style="font-family: MathJax_Math; font-style: italic;">e</span><span class="mo" id="MathJax-Span-135" style="font-family: MathJax_Main;">,</span><span class="mo" id="MathJax-Span-136" style="font-family: MathJax_Main; padding-left: 0.167em;">(</span><span class="mi" id="MathJax-Span-137" style="font-family: MathJax_Math; font-style: italic;">r</span><span class="mi" id="MathJax-Span-138" style="font-family: MathJax_Math; font-style: italic;">e</span><span class="mi" id="MathJax-Span-139" style="font-family: MathJax_Math; font-style: italic;">s</span><span class="mi" id="MathJax-Span-140" style="font-family: MathJax_Math; font-style: italic;">p</span><span class="mi" id="MathJax-Span-141" style="font-family: MathJax_Math; font-style: italic;">o</span><span class="mi" id="MathJax-Span-142" style="font-family: MathJax_Math; font-style: italic;">n</span><span class="mi" id="MathJax-Span-143" style="font-family: MathJax_Math; font-style: italic;">s</span><span class="mi" id="MathJax-Span-144" style="font-family: MathJax_Math; font-style: italic;">e</span><span class="mi" id="MathJax-Span-145" style="font-family: MathJax_Main;">_</span><span class="mi" id="MathJax-Span-146" style="font-family: MathJax_Math; font-style: italic;">i</span><span class="mi" id="MathJax-Span-147" style="font-family: MathJax_Math; font-style: italic;">n</span><span class="mi" id="MathJax-Span-148" style="font-family: MathJax_Math; font-style: italic;">i</span><span class="mi" id="MathJax-Span-149" style="font-family: MathJax_Math; font-style: italic;">t</span><span class="mi" id="MathJax-Span-150" style="font-family: MathJax_Main;">_</span><span class="mi" id="MathJax-Span-151" style="font-family: MathJax_Math; font-style: italic;">m</span><span class="mi" id="MathJax-Span-152" style="font-family: MathJax_Math; font-style: italic;">e</span><span class="mi" id="MathJax-Span-153" style="font-family: MathJax_Math; font-style: italic;">a</span><span class="mi" id="MathJax-Span-154" style="font-family: MathJax_Math; font-style: italic;">n</span><span class="mo" id="MathJax-Span-155" style="font-family: MathJax_Main; padding-left: 0.222em;">−</span><span class="mo" id="MathJax-Span-156" style="font-family: MathJax_Main; padding-left: 0.222em;">(</span><span class="mi" id="MathJax-Span-157" style="font-family: MathJax_Math; font-style: italic;">r</span><span class="mi" id="MathJax-Span-158" style="font-family: MathJax_Math; font-style: italic;">e</span><span class="mi" id="MathJax-Span-159" style="font-family: MathJax_Math; font-style: italic;">s</span><span class="mi" id="MathJax-Span-160" style="font-family: MathJax_Math; font-style: italic;">p</span><span class="mi" id="MathJax-Span-161" style="font-family: MathJax_Math; font-style: italic;">o</span><span class="mi" id="MathJax-Span-162" style="font-family: MathJax_Math; font-style: italic;">n</span><span class="mi" id="MathJax-Span-163" style="font-family: MathJax_Math; font-style: italic;">s</span><span class="mi" id="MathJax-Span-164" style="font-family: MathJax_Math; font-style: italic;">e</span><span class="mi" id="MathJax-Span-165" style="font-family: MathJax_Main;">_</span><span class="mi" id="MathJax-Span-166" style="font-family: MathJax_Math; font-style: italic;">i</span><span class="mi" id="MathJax-Span-167" style="font-family: MathJax_Math; font-style: italic;">n</span><span class="mi" id="MathJax-Span-168" style="font-family: MathJax_Math; font-style: italic;">i</span><span class="mi" id="MathJax-Span-169" style="font-family: MathJax_Math; font-style: italic;">t</span><span class="mi" id="MathJax-Span-170" style="font-family: MathJax_Main;">_</span><span class="mi" id="MathJax-Span-171" style="font-family: MathJax_Math; font-style: italic;">s</span><span class="mi" id="MathJax-Span-172" style="font-family: MathJax_Math; font-style: italic;">t</span><span class="mi" id="MathJax-Span-173" style="font-family: MathJax_Math; font-style: italic;">d<span style="display: inline-block; overflow: hidden; height: 1px; width: 0.003em;"></span></span><span class="mi" id="MathJax-Span-174" style="font-family: MathJax_Math; font-style: italic;">e</span><span class="mi" id="MathJax-Span-175" style="font-family: MathJax_Math; font-style: italic;">v</span><span class="mo" id="MathJax-Span-176" style="font-family: MathJax_Main; padding-left: 0.222em;">∗</span><span class="mn" id="MathJax-Span-177" style="font-family: MathJax_Main; padding-left: 0.222em;">2</span><span class="mo" id="MathJax-Span-178" style="font-family: MathJax_Main;">)</span><span class="mo" id="MathJax-Span-179" style="font-family: MathJax_Main;">)</span><span class="mo" id="MathJax-Span-180" style="font-family: MathJax_Main;">)</span></span><span style="display: inline-block; width: 0px; height: 2.317em;"></span></span></span><span style="display: inline-block; overflow: hidden; vertical-align: -0.352em; border-left: 0px solid; width: 0px; height: 1.285em;"></span></span></nobr><span class="MJX_Assistive_MathML" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mo movablelimits="true" form="prefix">max</mo><mo stretchy="false">(</mo><mi>r</mi><mi>e</mi><mi>s</mi><mi>p</mi><mi>o</mi><mi>n</mi><mi>s</mi><mi>e</mi><mi mathvariant="normal">_</mi><mi>m</mi><mi>i</mi><mi>n</mi><mi mathvariant="normal">_</mi><mi>v</mi><mi>a</mi><mi>l</mi><mi>u</mi><mi>e</mi><mo>,</mo><mo stretchy="false">(</mo><mi>r</mi><mi>e</mi><mi>s</mi><mi>p</mi><mi>o</mi><mi>n</mi><mi>s</mi><mi>e</mi><mi mathvariant="normal">_</mi><mi>i</mi><mi>n</mi><mi>i</mi><mi>t</mi><mi mathvariant="normal">_</mi><mi>m</mi><mi>e</mi><mi>a</mi><mi>n</mi><mo>−</mo><mo stretchy="false">(</mo><mi>r</mi><mi>e</mi><mi>s</mi><mi>p</mi><mi>o</mi><mi>n</mi><mi>s</mi><mi>e</mi><mi mathvariant="normal">_</mi><mi>i</mi><mi>n</mi><mi>i</mi><mi>t</mi><mi mathvariant="normal">_</mi><mi>s</mi><mi>t</mi><mi>d</mi><mi>e</mi><mi>v</mi><mo>∗</mo><mn>2</mn><mo stretchy="false">)</mo><mo stretchy="false">)</mo><mo stretchy="false">)</mo></math></span></span><script type="math/tex" id="MathJax-Element-3">\max(response\_min\_value, (response\_init\_mean-(response\_init\_stdev*2)))</script></span> to
+<span class="math"><span class="MathJax_Preview" style="color: inherit; display: none;"></span><span class="MathJax" id="MathJax-Element-4-Frame" tabindex="0" style="position: relative;" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mo movablelimits=&quot;true&quot; form=&quot;prefix&quot;&gt;min&lt;/mo&gt;&lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;&lt;mi&gt;r&lt;/mi&gt;&lt;mi&gt;e&lt;/mi&gt;&lt;mi&gt;s&lt;/mi&gt;&lt;mi&gt;p&lt;/mi&gt;&lt;mi&gt;o&lt;/mi&gt;&lt;mi&gt;n&lt;/mi&gt;&lt;mi&gt;s&lt;/mi&gt;&lt;mi&gt;e&lt;/mi&gt;&lt;mi mathvariant=&quot;normal&quot;&gt;&amp;#x005F;&lt;/mi&gt;&lt;mi&gt;m&lt;/mi&gt;&lt;mi&gt;a&lt;/mi&gt;&lt;mi&gt;x&lt;/mi&gt;&lt;mi mathvariant=&quot;normal&quot;&gt;&amp;#x005F;&lt;/mi&gt;&lt;mi&gt;v&lt;/mi&gt;&lt;mi&gt;a&lt;/mi&gt;&lt;mi&gt;l&lt;/mi&gt;&lt;mi&gt;u&lt;/mi&gt;&lt;mi&gt;e&lt;/mi&gt;&lt;mo&gt;,&lt;/mo&gt;&lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;&lt;mi&gt;r&lt;/mi&gt;&lt;mi&gt;e&lt;/mi&gt;&lt;mi&gt;s&lt;/mi&gt;&lt;mi&gt;p&lt;/mi&gt;&lt;mi&gt;o&lt;/mi&gt;&lt;mi&gt;n&lt;/mi&gt;&lt;mi&gt;s&lt;/mi&gt;&lt;mi&gt;e&lt;/mi&gt;&lt;mi mathvariant=&quot;normal&quot;&gt;&amp;#x005F;&lt;/mi&gt;&lt;mi&gt;i&lt;/mi&gt;&lt;mi&gt;n&lt;/mi&gt;&lt;mi&gt;i&lt;/mi&gt;&lt;mi&gt;t&lt;/mi&gt;&lt;mi mathvariant=&quot;normal&quot;&gt;&amp;#x005F;&lt;/mi&gt;&lt;mi&gt;m&lt;/mi&gt;&lt;mi&gt;e&lt;/mi&gt;&lt;mi&gt;a&lt;/mi&gt;&lt;mi&gt;n&lt;/mi&gt;&lt;mo&gt;+&lt;/mo&gt;&lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;&lt;mi&gt;r&lt;/mi&gt;&lt;mi&gt;e&lt;/mi&gt;&lt;mi&gt;s&lt;/mi&gt;&lt;mi&gt;p&lt;/mi&gt;&lt;mi&gt;o&lt;/mi&gt;&lt;mi&gt;n&lt;/mi&gt;&lt;mi&gt;s&lt;/mi&gt;&lt;mi&gt;e&lt;/mi&gt;&lt;mi mathvariant=&quot;normal&quot;&gt;&amp;#x005F;&lt;/mi&gt;&lt;mi&gt;i&lt;/mi&gt;&lt;mi&gt;n&lt;/mi&gt;&lt;mi&gt;i&lt;/mi&gt;&lt;mi&gt;t&lt;/mi&gt;&lt;mi mathvariant=&quot;normal&quot;&gt;&amp;#x005F;&lt;/mi&gt;&lt;mi&gt;s&lt;/mi&gt;&lt;mi&gt;t&lt;/mi&gt;&lt;mi&gt;d&lt;/mi&gt;&lt;mi&gt;e&lt;/mi&gt;&lt;mi&gt;v&lt;/mi&gt;&lt;mo&gt;&amp;#x2217;&lt;/mo&gt;&lt;mn&gt;2&lt;/mn&gt;&lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;&lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;&lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;&lt;/math&gt;" role="presentation"><nobr aria-hidden="true"><span class="math" id="MathJax-Span-181" style="width: 39.658em; display: inline-block;"><span style="display: inline-block; position: relative; width: 34.159em; height: 0px; font-size: 116%;"><span style="position: absolute; clip: rect(1.405em, 1034.06em, 2.728em, -1000em); top: -2.317em; left: 0em;"><span class="mrow" id="MathJax-Span-182"><span class="mo" id="MathJax-Span-183" style="font-family: MathJax_Main;">min</span><span class="mo" id="MathJax-Span-184" style="font-family: MathJax_Main;">(</span><span class="mi" id="MathJax-Span-185" style="font-family: MathJax_Math; font-style: italic;">r</span><span class="mi" id="MathJax-Span-186" style="font-family: MathJax_Math; font-style: italic;">e</span><span class="mi" id="MathJax-Span-187" style="font-family: MathJax_Math; font-style: italic;">s</span><span class="mi" id="MathJax-Span-188" style="font-family: MathJax_Math; font-style: italic;">p</span><span class="mi" id="MathJax-Span-189" style="font-family: MathJax_Math; font-style: italic;">o</span><span class="mi" id="MathJax-Span-190" style="font-family: MathJax_Math; font-style: italic;">n</span><span class="mi" id="MathJax-Span-191" style="font-family: MathJax_Math; font-style: italic;">s</span><span class="mi" id="MathJax-Span-192" style="font-family: MathJax_Math; font-style: italic;">e</span><span class="mi" id="MathJax-Span-193" style="font-family: MathJax_Main;">_</span><span class="mi" id="MathJax-Span-194" style="font-family: MathJax_Math; font-style: italic;">m</span><span class="mi" id="MathJax-Span-195" style="font-family: MathJax_Math; font-style: italic;">a</span><span class="mi" id="MathJax-Span-196" style="font-family: MathJax_Math; font-style: italic;">x</span><span class="mi" id="MathJax-Span-197" style="font-family: MathJax_Main;">_</span><span class="mi" id="MathJax-Span-198" style="font-family: MathJax_Math; font-style: italic;">v</span><span class="mi" id="MathJax-Span-199" style="font-family: MathJax_Math; font-style: italic;">a</span><span class="mi" id="MathJax-Span-200" style="font-family: MathJax_Math; font-style: italic;">l</span><span class="mi" id="MathJax-Span-201" style="font-family: MathJax_Math; font-style: italic;">u</span><span class="mi" id="MathJax-Span-202" style="font-family: MathJax_Math; font-style: italic;">e</span><span class="mo" id="MathJax-Span-203" style="font-family: MathJax_Main;">,</span><span class="mo" id="MathJax-Span-204" style="font-family: MathJax_Main; padding-left: 0.167em;">(</span><span class="mi" id="MathJax-Span-205" style="font-family: MathJax_Math; font-style: italic;">r</span><span class="mi" id="MathJax-Span-206" style="font-family: MathJax_Math; font-style: italic;">e</span><span class="mi" id="MathJax-Span-207" style="font-family: MathJax_Math; font-style: italic;">s</span><span class="mi" id="MathJax-Span-208" style="font-family: MathJax_Math; font-style: italic;">p</span><span class="mi" id="MathJax-Span-209" style="font-family: MathJax_Math; font-style: italic;">o</span><span class="mi" id="MathJax-Span-210" style="font-family: MathJax_Math; font-style: italic;">n</span><span class="mi" id="MathJax-Span-211" style="font-family: MathJax_Math; font-style: italic;">s</span><span class="mi" id="MathJax-Span-212" style="font-family: MathJax_Math; font-style: italic;">e</span><span class="mi" id="MathJax-Span-213" style="font-family: MathJax_Main;">_</span><span class="mi" id="MathJax-Span-214" style="font-family: MathJax_Math; font-style: italic;">i</span><span class="mi" id="MathJax-Span-215" style="font-family: MathJax_Math; font-style: italic;">n</span><span class="mi" id="MathJax-Span-216" style="font-family: MathJax_Math; font-style: italic;">i</span><span class="mi" id="MathJax-Span-217" style="font-family: MathJax_Math; font-style: italic;">t</span><span class="mi" id="MathJax-Span-218" style="font-family: MathJax_Main;">_</span><span class="mi" id="MathJax-Span-219" style="font-family: MathJax_Math; font-style: italic;">m</span><span class="mi" id="MathJax-Span-220" style="font-family: MathJax_Math; font-style: italic;">e</span><span class="mi" id="MathJax-Span-221" style="font-family: MathJax_Math; font-style: italic;">a</span><span class="mi" id="MathJax-Span-222" style="font-family: MathJax_Math; font-style: italic;">n</span><span class="mo" id="MathJax-Span-223" style="font-family: MathJax_Main; padding-left: 0.222em;">+</span><span class="mo" id="MathJax-Span-224" style="font-family: MathJax_Main; padding-left: 0.222em;">(</span><span class="mi" id="MathJax-Span-225" style="font-family: MathJax_Math; font-style: italic;">r</span><span class="mi" id="MathJax-Span-226" style="font-family: MathJax_Math; font-style: italic;">e</span><span class="mi" id="MathJax-Span-227" style="font-family: MathJax_Math; font-style: italic;">s</span><span class="mi" id="MathJax-Span-228" style="font-family: MathJax_Math; font-style: italic;">p</span><span class="mi" id="MathJax-Span-229" style="font-family: MathJax_Math; font-style: italic;">o</span><span class="mi" id="MathJax-Span-230" style="font-family: MathJax_Math; font-style: italic;">n</span><span class="mi" id="MathJax-Span-231" style="font-family: MathJax_Math; font-style: italic;">s</span><span class="mi" id="MathJax-Span-232" style="font-family: MathJax_Math; font-style: italic;">e</span><span class="mi" id="MathJax-Span-233" style="font-family: MathJax_Main;">_</span><span class="mi" id="MathJax-Span-234" style="font-family: MathJax_Math; font-style: italic;">i</span><span class="mi" id="MathJax-Span-235" style="font-family: MathJax_Math; font-style: italic;">n</span><span class="mi" id="MathJax-Span-236" style="font-family: MathJax_Math; font-style: italic;">i</span><span class="mi" id="MathJax-Span-237" style="font-family: MathJax_Math; font-style: italic;">t</span><span class="mi" id="MathJax-Span-238" style="font-family: MathJax_Main;">_</span><span class="mi" id="MathJax-Span-239" style="font-family: MathJax_Math; font-style: italic;">s</span><span class="mi" id="MathJax-Span-240" style="font-family: MathJax_Math; font-style: italic;">t</span><span class="mi" id="MathJax-Span-241" style="font-family: MathJax_Math; font-style: italic;">d<span style="display: inline-block; overflow: hidden; height: 1px; width: 0.003em;"></span></span><span class="mi" id="MathJax-Span-242" style="font-family: MathJax_Math; font-style: italic;">e</span><span class="mi" id="MathJax-Span-243" style="font-family: MathJax_Math; font-style: italic;">v</span><span class="mo" id="MathJax-Span-244" style="font-family: MathJax_Main; padding-left: 0.222em;">∗</span><span class="mn" id="MathJax-Span-245" style="font-family: MathJax_Main; padding-left: 0.222em;">2</span><span class="mo" id="MathJax-Span-246" style="font-family: MathJax_Main;">)</span><span class="mo" id="MathJax-Span-247" style="font-family: MathJax_Main;">)</span><span class="mo" id="MathJax-Span-248" style="font-family: MathJax_Main;">)</span></span><span style="display: inline-block; width: 0px; height: 2.317em;"></span></span></span><span style="display: inline-block; overflow: hidden; vertical-align: -0.352em; border-left: 0px solid; width: 0px; height: 1.285em;"></span></span></nobr><span class="MJX_Assistive_MathML" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mo movablelimits="true" form="prefix">min</mo><mo stretchy="false">(</mo><mi>r</mi><mi>e</mi><mi>s</mi><mi>p</mi><mi>o</mi><mi>n</mi><mi>s</mi><mi>e</mi><mi mathvariant="normal">_</mi><mi>m</mi><mi>a</mi><mi>x</mi><mi mathvariant="normal">_</mi><mi>v</mi><mi>a</mi><mi>l</mi><mi>u</mi><mi>e</mi><mo>,</mo><mo stretchy="false">(</mo><mi>r</mi><mi>e</mi><mi>s</mi><mi>p</mi><mi>o</mi><mi>n</mi><mi>s</mi><mi>e</mi><mi mathvariant="normal">_</mi><mi>i</mi><mi>n</mi><mi>i</mi><mi>t</mi><mi mathvariant="normal">_</mi><mi>m</mi><mi>e</mi><mi>a</mi><mi>n</mi><mo>+</mo><mo stretchy="false">(</mo><mi>r</mi><mi>e</mi><mi>s</mi><mi>p</mi><mi>o</mi><mi>n</mi><mi>s</mi><mi>e</mi><mi mathvariant="normal">_</mi><mi>i</mi><mi>n</mi><mi>i</mi><mi>t</mi><mi mathvariant="normal">_</mi><mi>s</mi><mi>t</mi><mi>d</mi><mi>e</mi><mi>v</mi><mo>∗</mo><mn>2</mn><mo stretchy="false">)</mo><mo stretchy="false">)</mo><mo stretchy="false">)</mo></math></span></span><script type="math/tex" id="MathJax-Element-4">\min(response\_max\_value, (response\_init\_mean+(response\_init\_stdev*2)))</script></span>.
+ (Note that the standard deviation of a uniform distribution is not
+range/0.25, as implied by this, but the range divided by a bit over 
+0.288 (the square root of 12); however, this approximation makes setting
+the range much easier.) <strong>This defaults to “gaussian”.</strong></p>
+<div class="last versionadded">
+<p><span class="versionmodified">New in version 0.92.</span></p>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+<span class="target" id="index-89"></span><ul class="simple" id="index-90">
+<li><dl class="first docutils">
+<dt><em>response_max_value</em></dt>
+<dd>The maximum allowed response multiplier. Response multipliers above this value will be <a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/module_summaries.html#attributes.FloatAttribute.clamp" title="attributes.FloatAttribute.clamp"><code class="xref py py-meth docutils literal"><span class="pre">clamped</span></code></a> to this
+value.</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><em>response_min_value</em></dt>
+<dd>The minimum allowed response multiplier. Response multipliers below this value will be <a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/module_summaries.html#attributes.FloatAttribute.clamp" title="attributes.FloatAttribute.clamp"><code class="xref py py-meth docutils literal"><span class="pre">clamped</span></code></a> to this value.</dd>
+</dl>
+</li>
+</ul>
+<ul class="simple" id="index-91">
+<li><dl class="first docutils">
+<dt><em>response_mutate_power</em></dt>
+<dd>The standard deviation of the zero-centered normal/gaussian distribution from which a response multiplier <a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/glossary.html#term-mutation"><span class="xref std std-term">mutation</span></a> is drawn.</dd>
+</dl>
+</li>
+</ul>
+<ul class="simple" id="index-92">
+<li><dl class="first docutils">
+<dt><em>response_mutate_rate</em></dt>
+<dd>The probability that <a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/glossary.html#term-mutation"><span class="xref std std-term">mutation</span></a> will change the response multiplier of a node by adding a random value.</dd>
+</dl>
+</li>
+</ul>
+<ul class="simple" id="index-93">
+<li><dl class="first docutils">
+<dt><em>response_replace_rate</em></dt>
+<dd>The probability that <a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/glossary.html#term-mutation"><span class="xref std std-term">mutation</span></a> will replace the response multiplier of a node with a newly <a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/module_summaries.html#attributes.FloatAttribute.init_value" title="attributes.FloatAttribute.init_value"><code class="xref py py-meth docutils literal"><span class="pre">chosen</span></code></a>
+random value (as if it were a new node).</dd>
+</dl>
+</li>
+</ul>
+<span class="target" id="index-94"></span><span class="target" id="index-95"></span><span class="target" id="index-96"></span><span class="target" id="index-97"></span><span id="index-98"></span><ul id="structural-mutation-surer-label">
+<li><dl class="first docutils">
+<dt><em>single_structural_mutation</em></dt>
+<dd><p class="first">If this evaluates to <code class="docutils literal"><span class="pre">True</span></code>, only one structural mutation (the addition or removal of a <a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/glossary.html#term-node"><span class="xref std std-term">node</span></a> or <a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/glossary.html#term-connection"><span class="xref std std-term">connection</span></a>) will be allowed per genome
+per generation. (If the probabilities for <a class="reference internal" href="#conn-add-prob-label"><span class="std std-ref">conn_add_prob</span></a>, conn_delete_prob, <a class="reference internal" href="#node-add-prob-label"><span class="std std-ref">node_add_prob</span></a>,
+and node_delete_prob add up to over 1, the chances of each are proportional to the appropriate configuration value.) <strong>This defaults to “False”.</strong></p>
+<div class="last versionadded">
+<p><span class="versionmodified">New in version 0.92.</span></p>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><em>structural_mutation_surer</em></dt>
+<dd><p class="first">If this evaluates to <code class="docutils literal"><span class="pre">True</span></code>, then an attempt to add a <a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/glossary.html#term-node"><span class="xref std std-term">node</span></a> to a genome lacking <a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/glossary.html#term-connection"><span class="xref std std-term">connections</span></a>
+ will result in adding
+a connection instead; furthermore, if an attempt to add a connection 
+tries to add a connection that already exists, that connection will be
+<a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/glossary.html#term-enabled"><span class="xref std std-term">enabled</span></a>. If this is set to <code class="docutils literal"><span class="pre">default</span></code>, then it acts as if it had the same value as <code class="docutils literal"><span class="pre">single_structural_mutation</span></code> (above). <strong>This defaults to “default”.</strong></p>
+<div class="last versionadded">
+<p><span class="versionmodified">New in version 0.92.</span></p>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+<span class="target" id="index-99"></span><span class="target" id="index-100"></span><span class="target" id="index-101"></span><span class="target" id="index-102"></span><ul class="simple" id="index-103">
+<li><dl class="first docutils">
+<dt><em>weight_init_mean</em></dt>
+<dd>The mean of the normal/gaussian distribution used to <a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/module_summaries.html#attributes.FloatAttribute.init_value" title="attributes.FloatAttribute.init_value"><code class="xref py py-meth docutils literal"><span class="pre">select</span></code></a> <a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/glossary.html#term-weight"><span class="xref std std-term">weight</span></a>
+<a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/glossary.html#term-attributes"><span class="xref std std-term">attribute</span></a> values for new <a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/glossary.html#term-connection"><span class="xref std std-term">connections</span></a>.</dd>
+</dl>
+</li>
+</ul>
+<ul class="simple" id="index-104">
+<li><dl class="first docutils">
+<dt><em>weight_init_stdev</em></dt>
+<dd>The standard deviation of the normal/gaussian distribution used to select weight values for new connections.</dd>
+</dl>
+</li>
+</ul>
+<ul id="index-105">
+<li><dl class="first docutils">
+<dt><em>weight_init_type</em></dt>
+<dd><p class="first">If set to <code class="docutils literal"><span class="pre">gaussian</span></code> or <code class="docutils literal"><span class="pre">normal</span></code>, then the initialization is to a normal/gaussian distribution. If set to <code class="docutils literal"><span class="pre">uniform</span></code>, a uniform distribution
+from <span class="math"><span class="MathJax_Preview" style="color: inherit; display: none;"></span><span class="MathJax" id="MathJax-Element-5-Frame" tabindex="0" style="position: relative;" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mo movablelimits=&quot;true&quot; form=&quot;prefix&quot;&gt;max&lt;/mo&gt;&lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;&lt;mi&gt;w&lt;/mi&gt;&lt;mi&gt;e&lt;/mi&gt;&lt;mi&gt;i&lt;/mi&gt;&lt;mi&gt;g&lt;/mi&gt;&lt;mi&gt;h&lt;/mi&gt;&lt;mi&gt;t&lt;/mi&gt;&lt;mi mathvariant=&quot;normal&quot;&gt;&amp;#x005F;&lt;/mi&gt;&lt;mi&gt;m&lt;/mi&gt;&lt;mi&gt;i&lt;/mi&gt;&lt;mi&gt;n&lt;/mi&gt;&lt;mi mathvariant=&quot;normal&quot;&gt;&amp;#x005F;&lt;/mi&gt;&lt;mi&gt;v&lt;/mi&gt;&lt;mi&gt;a&lt;/mi&gt;&lt;mi&gt;l&lt;/mi&gt;&lt;mi&gt;u&lt;/mi&gt;&lt;mi&gt;e&lt;/mi&gt;&lt;mo&gt;,&lt;/mo&gt;&lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;&lt;mi&gt;w&lt;/mi&gt;&lt;mi&gt;e&lt;/mi&gt;&lt;mi&gt;i&lt;/mi&gt;&lt;mi&gt;g&lt;/mi&gt;&lt;mi&gt;h&lt;/mi&gt;&lt;mi&gt;t&lt;/mi&gt;&lt;mi mathvariant=&quot;normal&quot;&gt;&amp;#x005F;&lt;/mi&gt;&lt;mi&gt;i&lt;/mi&gt;&lt;mi&gt;n&lt;/mi&gt;&lt;mi&gt;i&lt;/mi&gt;&lt;mi&gt;t&lt;/mi&gt;&lt;mi mathvariant=&quot;normal&quot;&gt;&amp;#x005F;&lt;/mi&gt;&lt;mi&gt;m&lt;/mi&gt;&lt;mi&gt;e&lt;/mi&gt;&lt;mi&gt;a&lt;/mi&gt;&lt;mi&gt;n&lt;/mi&gt;&lt;mo&gt;&amp;#x2212;&lt;/mo&gt;&lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;&lt;mi&gt;w&lt;/mi&gt;&lt;mi&gt;e&lt;/mi&gt;&lt;mi&gt;i&lt;/mi&gt;&lt;mi&gt;g&lt;/mi&gt;&lt;mi&gt;h&lt;/mi&gt;&lt;mi&gt;t&lt;/mi&gt;&lt;mi mathvariant=&quot;normal&quot;&gt;&amp;#x005F;&lt;/mi&gt;&lt;mi&gt;i&lt;/mi&gt;&lt;mi&gt;n&lt;/mi&gt;&lt;mi&gt;i&lt;/mi&gt;&lt;mi&gt;t&lt;/mi&gt;&lt;mi mathvariant=&quot;normal&quot;&gt;&amp;#x005F;&lt;/mi&gt;&lt;mi&gt;s&lt;/mi&gt;&lt;mi&gt;t&lt;/mi&gt;&lt;mi&gt;d&lt;/mi&gt;&lt;mi&gt;e&lt;/mi&gt;&lt;mi&gt;v&lt;/mi&gt;&lt;mo&gt;&amp;#x2217;&lt;/mo&gt;&lt;mn&gt;2&lt;/mn&gt;&lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;&lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;&lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;&lt;/math&gt;" role="presentation"><nobr aria-hidden="true"><span class="math" id="MathJax-Span-249" style="width: 36.263em; display: inline-block;"><span style="display: inline-block; position: relative; width: 31.25em; height: 0px; font-size: 116%;"><span style="position: absolute; clip: rect(1.405em, 1031.16em, 2.728em, -1000em); top: -2.317em; left: 0em;"><span class="mrow" id="MathJax-Span-250"><span class="mo" id="MathJax-Span-251" style="font-family: MathJax_Main;">max</span><span class="mo" id="MathJax-Span-252" style="font-family: MathJax_Main;">(</span><span class="mi" id="MathJax-Span-253" style="font-family: MathJax_Math; font-style: italic;">w</span><span class="mi" id="MathJax-Span-254" style="font-family: MathJax_Math; font-style: italic;">e</span><span class="mi" id="MathJax-Span-255" style="font-family: MathJax_Math; font-style: italic;">i</span><span class="mi" id="MathJax-Span-256" style="font-family: MathJax_Math; font-style: italic;">g<span style="display: inline-block; overflow: hidden; height: 1px; width: 0.003em;"></span></span><span class="mi" id="MathJax-Span-257" style="font-family: MathJax_Math; font-style: italic;">h</span><span class="mi" id="MathJax-Span-258" style="font-family: MathJax_Math; font-style: italic;">t</span><span class="mi" id="MathJax-Span-259" style="font-family: MathJax_Main;">_</span><span class="mi" id="MathJax-Span-260" style="font-family: MathJax_Math; font-style: italic;">m</span><span class="mi" id="MathJax-Span-261" style="font-family: MathJax_Math; font-style: italic;">i</span><span class="mi" id="MathJax-Span-262" style="font-family: MathJax_Math; font-style: italic;">n</span><span class="mi" id="MathJax-Span-263" style="font-family: MathJax_Main;">_</span><span class="mi" id="MathJax-Span-264" style="font-family: MathJax_Math; font-style: italic;">v</span><span class="mi" id="MathJax-Span-265" style="font-family: MathJax_Math; font-style: italic;">a</span><span class="mi" id="MathJax-Span-266" style="font-family: MathJax_Math; font-style: italic;">l</span><span class="mi" id="MathJax-Span-267" style="font-family: MathJax_Math; font-style: italic;">u</span><span class="mi" id="MathJax-Span-268" style="font-family: MathJax_Math; font-style: italic;">e</span><span class="mo" id="MathJax-Span-269" style="font-family: MathJax_Main;">,</span><span class="mo" id="MathJax-Span-270" style="font-family: MathJax_Main; padding-left: 0.167em;">(</span><span class="mi" id="MathJax-Span-271" style="font-family: MathJax_Math; font-style: italic;">w</span><span class="mi" id="MathJax-Span-272" style="font-family: MathJax_Math; font-style: italic;">e</span><span class="mi" id="MathJax-Span-273" style="font-family: MathJax_Math; font-style: italic;">i</span><span class="mi" id="MathJax-Span-274" style="font-family: MathJax_Math; font-style: italic;">g<span style="display: inline-block; overflow: hidden; height: 1px; width: 0.003em;"></span></span><span class="mi" id="MathJax-Span-275" style="font-family: MathJax_Math; font-style: italic;">h</span><span class="mi" id="MathJax-Span-276" style="font-family: MathJax_Math; font-style: italic;">t</span><span class="mi" id="MathJax-Span-277" style="font-family: MathJax_Main;">_</span><span class="mi" id="MathJax-Span-278" style="font-family: MathJax_Math; font-style: italic;">i</span><span class="mi" id="MathJax-Span-279" style="font-family: MathJax_Math; font-style: italic;">n</span><span class="mi" id="MathJax-Span-280" style="font-family: MathJax_Math; font-style: italic;">i</span><span class="mi" id="MathJax-Span-281" style="font-family: MathJax_Math; font-style: italic;">t</span><span class="mi" id="MathJax-Span-282" style="font-family: MathJax_Main;">_</span><span class="mi" id="MathJax-Span-283" style="font-family: MathJax_Math; font-style: italic;">m</span><span class="mi" id="MathJax-Span-284" style="font-family: MathJax_Math; font-style: italic;">e</span><span class="mi" id="MathJax-Span-285" style="font-family: MathJax_Math; font-style: italic;">a</span><span class="mi" id="MathJax-Span-286" style="font-family: MathJax_Math; font-style: italic;">n</span><span class="mo" id="MathJax-Span-287" style="font-family: MathJax_Main; padding-left: 0.222em;">−</span><span class="mo" id="MathJax-Span-288" style="font-family: MathJax_Main; padding-left: 0.222em;">(</span><span class="mi" id="MathJax-Span-289" style="font-family: MathJax_Math; font-style: italic;">w</span><span class="mi" id="MathJax-Span-290" style="font-family: MathJax_Math; font-style: italic;">e</span><span class="mi" id="MathJax-Span-291" style="font-family: MathJax_Math; font-style: italic;">i</span><span class="mi" id="MathJax-Span-292" style="font-family: MathJax_Math; font-style: italic;">g<span style="display: inline-block; overflow: hidden; height: 1px; width: 0.003em;"></span></span><span class="mi" id="MathJax-Span-293" style="font-family: MathJax_Math; font-style: italic;">h</span><span class="mi" id="MathJax-Span-294" style="font-family: MathJax_Math; font-style: italic;">t</span><span class="mi" id="MathJax-Span-295" style="font-family: MathJax_Main;">_</span><span class="mi" id="MathJax-Span-296" style="font-family: MathJax_Math; font-style: italic;">i</span><span class="mi" id="MathJax-Span-297" style="font-family: MathJax_Math; font-style: italic;">n</span><span class="mi" id="MathJax-Span-298" style="font-family: MathJax_Math; font-style: italic;">i</span><span class="mi" id="MathJax-Span-299" style="font-family: MathJax_Math; font-style: italic;">t</span><span class="mi" id="MathJax-Span-300" style="font-family: MathJax_Main;">_</span><span class="mi" id="MathJax-Span-301" style="font-family: MathJax_Math; font-style: italic;">s</span><span class="mi" id="MathJax-Span-302" style="font-family: MathJax_Math; font-style: italic;">t</span><span class="mi" id="MathJax-Span-303" style="font-family: MathJax_Math; font-style: italic;">d<span style="display: inline-block; overflow: hidden; height: 1px; width: 0.003em;"></span></span><span class="mi" id="MathJax-Span-304" style="font-family: MathJax_Math; font-style: italic;">e</span><span class="mi" id="MathJax-Span-305" style="font-family: MathJax_Math; font-style: italic;">v</span><span class="mo" id="MathJax-Span-306" style="font-family: MathJax_Main; padding-left: 0.222em;">∗</span><span class="mn" id="MathJax-Span-307" style="font-family: MathJax_Main; padding-left: 0.222em;">2</span><span class="mo" id="MathJax-Span-308" style="font-family: MathJax_Main;">)</span><span class="mo" id="MathJax-Span-309" style="font-family: MathJax_Main;">)</span><span class="mo" id="MathJax-Span-310" style="font-family: MathJax_Main;">)</span></span><span style="display: inline-block; width: 0px; height: 2.317em;"></span></span></span><span style="display: inline-block; overflow: hidden; vertical-align: -0.352em; border-left: 0px solid; width: 0px; height: 1.285em;"></span></span></nobr><span class="MJX_Assistive_MathML" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mo movablelimits="true" form="prefix">max</mo><mo stretchy="false">(</mo><mi>w</mi><mi>e</mi><mi>i</mi><mi>g</mi><mi>h</mi><mi>t</mi><mi mathvariant="normal">_</mi><mi>m</mi><mi>i</mi><mi>n</mi><mi mathvariant="normal">_</mi><mi>v</mi><mi>a</mi><mi>l</mi><mi>u</mi><mi>e</mi><mo>,</mo><mo stretchy="false">(</mo><mi>w</mi><mi>e</mi><mi>i</mi><mi>g</mi><mi>h</mi><mi>t</mi><mi mathvariant="normal">_</mi><mi>i</mi><mi>n</mi><mi>i</mi><mi>t</mi><mi mathvariant="normal">_</mi><mi>m</mi><mi>e</mi><mi>a</mi><mi>n</mi><mo>−</mo><mo stretchy="false">(</mo><mi>w</mi><mi>e</mi><mi>i</mi><mi>g</mi><mi>h</mi><mi>t</mi><mi mathvariant="normal">_</mi><mi>i</mi><mi>n</mi><mi>i</mi><mi>t</mi><mi mathvariant="normal">_</mi><mi>s</mi><mi>t</mi><mi>d</mi><mi>e</mi><mi>v</mi><mo>∗</mo><mn>2</mn><mo stretchy="false">)</mo><mo stretchy="false">)</mo><mo stretchy="false">)</mo></math></span></span><script type="math/tex" id="MathJax-Element-5">\max(weight\_min\_value, (weight\_init\_mean-(weight\_init\_stdev*2)))</script></span> to
+<span class="math"><span class="MathJax_Preview" style="color: inherit; display: none;"></span><span class="MathJax" id="MathJax-Element-6-Frame" tabindex="0" style="position: relative;" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mo movablelimits=&quot;true&quot; form=&quot;prefix&quot;&gt;min&lt;/mo&gt;&lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;&lt;mi&gt;w&lt;/mi&gt;&lt;mi&gt;e&lt;/mi&gt;&lt;mi&gt;i&lt;/mi&gt;&lt;mi&gt;g&lt;/mi&gt;&lt;mi&gt;h&lt;/mi&gt;&lt;mi&gt;t&lt;/mi&gt;&lt;mi mathvariant=&quot;normal&quot;&gt;&amp;#x005F;&lt;/mi&gt;&lt;mi&gt;m&lt;/mi&gt;&lt;mi&gt;a&lt;/mi&gt;&lt;mi&gt;x&lt;/mi&gt;&lt;mi mathvariant=&quot;normal&quot;&gt;&amp;#x005F;&lt;/mi&gt;&lt;mi&gt;v&lt;/mi&gt;&lt;mi&gt;a&lt;/mi&gt;&lt;mi&gt;l&lt;/mi&gt;&lt;mi&gt;u&lt;/mi&gt;&lt;mi&gt;e&lt;/mi&gt;&lt;mo&gt;,&lt;/mo&gt;&lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;&lt;mi&gt;w&lt;/mi&gt;&lt;mi&gt;e&lt;/mi&gt;&lt;mi&gt;i&lt;/mi&gt;&lt;mi&gt;g&lt;/mi&gt;&lt;mi&gt;h&lt;/mi&gt;&lt;mi&gt;t&lt;/mi&gt;&lt;mi mathvariant=&quot;normal&quot;&gt;&amp;#x005F;&lt;/mi&gt;&lt;mi&gt;i&lt;/mi&gt;&lt;mi&gt;n&lt;/mi&gt;&lt;mi&gt;i&lt;/mi&gt;&lt;mi&gt;t&lt;/mi&gt;&lt;mi mathvariant=&quot;normal&quot;&gt;&amp;#x005F;&lt;/mi&gt;&lt;mi&gt;m&lt;/mi&gt;&lt;mi&gt;e&lt;/mi&gt;&lt;mi&gt;a&lt;/mi&gt;&lt;mi&gt;n&lt;/mi&gt;&lt;mo&gt;+&lt;/mo&gt;&lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;&lt;mi&gt;w&lt;/mi&gt;&lt;mi&gt;e&lt;/mi&gt;&lt;mi&gt;i&lt;/mi&gt;&lt;mi&gt;g&lt;/mi&gt;&lt;mi&gt;h&lt;/mi&gt;&lt;mi&gt;t&lt;/mi&gt;&lt;mi mathvariant=&quot;normal&quot;&gt;&amp;#x005F;&lt;/mi&gt;&lt;mi&gt;i&lt;/mi&gt;&lt;mi&gt;n&lt;/mi&gt;&lt;mi&gt;i&lt;/mi&gt;&lt;mi&gt;t&lt;/mi&gt;&lt;mi mathvariant=&quot;normal&quot;&gt;&amp;#x005F;&lt;/mi&gt;&lt;mi&gt;s&lt;/mi&gt;&lt;mi&gt;t&lt;/mi&gt;&lt;mi&gt;d&lt;/mi&gt;&lt;mi&gt;e&lt;/mi&gt;&lt;mi&gt;v&lt;/mi&gt;&lt;mo&gt;&amp;#x2217;&lt;/mo&gt;&lt;mn&gt;2&lt;/mn&gt;&lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;&lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;&lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;&lt;/math&gt;" role="presentation"><nobr aria-hidden="true"><span class="math" id="MathJax-Span-311" style="width: 36.263em; display: inline-block;"><span style="display: inline-block; position: relative; width: 31.25em; height: 0px; font-size: 116%;"><span style="position: absolute; clip: rect(1.405em, 1031.16em, 2.728em, -1000em); top: -2.317em; left: 0em;"><span class="mrow" id="MathJax-Span-312"><span class="mo" id="MathJax-Span-313" style="font-family: MathJax_Main;">min</span><span class="mo" id="MathJax-Span-314" style="font-family: MathJax_Main;">(</span><span class="mi" id="MathJax-Span-315" style="font-family: MathJax_Math; font-style: italic;">w</span><span class="mi" id="MathJax-Span-316" style="font-family: MathJax_Math; font-style: italic;">e</span><span class="mi" id="MathJax-Span-317" style="font-family: MathJax_Math; font-style: italic;">i</span><span class="mi" id="MathJax-Span-318" style="font-family: MathJax_Math; font-style: italic;">g<span style="display: inline-block; overflow: hidden; height: 1px; width: 0.003em;"></span></span><span class="mi" id="MathJax-Span-319" style="font-family: MathJax_Math; font-style: italic;">h</span><span class="mi" id="MathJax-Span-320" style="font-family: MathJax_Math; font-style: italic;">t</span><span class="mi" id="MathJax-Span-321" style="font-family: MathJax_Main;">_</span><span class="mi" id="MathJax-Span-322" style="font-family: MathJax_Math; font-style: italic;">m</span><span class="mi" id="MathJax-Span-323" style="font-family: MathJax_Math; font-style: italic;">a</span><span class="mi" id="MathJax-Span-324" style="font-family: MathJax_Math; font-style: italic;">x</span><span class="mi" id="MathJax-Span-325" style="font-family: MathJax_Main;">_</span><span class="mi" id="MathJax-Span-326" style="font-family: MathJax_Math; font-style: italic;">v</span><span class="mi" id="MathJax-Span-327" style="font-family: MathJax_Math; font-style: italic;">a</span><span class="mi" id="MathJax-Span-328" style="font-family: MathJax_Math; font-style: italic;">l</span><span class="mi" id="MathJax-Span-329" style="font-family: MathJax_Math; font-style: italic;">u</span><span class="mi" id="MathJax-Span-330" style="font-family: MathJax_Math; font-style: italic;">e</span><span class="mo" id="MathJax-Span-331" style="font-family: MathJax_Main;">,</span><span class="mo" id="MathJax-Span-332" style="font-family: MathJax_Main; padding-left: 0.167em;">(</span><span class="mi" id="MathJax-Span-333" style="font-family: MathJax_Math; font-style: italic;">w</span><span class="mi" id="MathJax-Span-334" style="font-family: MathJax_Math; font-style: italic;">e</span><span class="mi" id="MathJax-Span-335" style="font-family: MathJax_Math; font-style: italic;">i</span><span class="mi" id="MathJax-Span-336" style="font-family: MathJax_Math; font-style: italic;">g<span style="display: inline-block; overflow: hidden; height: 1px; width: 0.003em;"></span></span><span class="mi" id="MathJax-Span-337" style="font-family: MathJax_Math; font-style: italic;">h</span><span class="mi" id="MathJax-Span-338" style="font-family: MathJax_Math; font-style: italic;">t</span><span class="mi" id="MathJax-Span-339" style="font-family: MathJax_Main;">_</span><span class="mi" id="MathJax-Span-340" style="font-family: MathJax_Math; font-style: italic;">i</span><span class="mi" id="MathJax-Span-341" style="font-family: MathJax_Math; font-style: italic;">n</span><span class="mi" id="MathJax-Span-342" style="font-family: MathJax_Math; font-style: italic;">i</span><span class="mi" id="MathJax-Span-343" style="font-family: MathJax_Math; font-style: italic;">t</span><span class="mi" id="MathJax-Span-344" style="font-family: MathJax_Main;">_</span><span class="mi" id="MathJax-Span-345" style="font-family: MathJax_Math; font-style: italic;">m</span><span class="mi" id="MathJax-Span-346" style="font-family: MathJax_Math; font-style: italic;">e</span><span class="mi" id="MathJax-Span-347" style="font-family: MathJax_Math; font-style: italic;">a</span><span class="mi" id="MathJax-Span-348" style="font-family: MathJax_Math; font-style: italic;">n</span><span class="mo" id="MathJax-Span-349" style="font-family: MathJax_Main; padding-left: 0.222em;">+</span><span class="mo" id="MathJax-Span-350" style="font-family: MathJax_Main; padding-left: 0.222em;">(</span><span class="mi" id="MathJax-Span-351" style="font-family: MathJax_Math; font-style: italic;">w</span><span class="mi" id="MathJax-Span-352" style="font-family: MathJax_Math; font-style: italic;">e</span><span class="mi" id="MathJax-Span-353" style="font-family: MathJax_Math; font-style: italic;">i</span><span class="mi" id="MathJax-Span-354" style="font-family: MathJax_Math; font-style: italic;">g<span style="display: inline-block; overflow: hidden; height: 1px; width: 0.003em;"></span></span><span class="mi" id="MathJax-Span-355" style="font-family: MathJax_Math; font-style: italic;">h</span><span class="mi" id="MathJax-Span-356" style="font-family: MathJax_Math; font-style: italic;">t</span><span class="mi" id="MathJax-Span-357" style="font-family: MathJax_Main;">_</span><span class="mi" id="MathJax-Span-358" style="font-family: MathJax_Math; font-style: italic;">i</span><span class="mi" id="MathJax-Span-359" style="font-family: MathJax_Math; font-style: italic;">n</span><span class="mi" id="MathJax-Span-360" style="font-family: MathJax_Math; font-style: italic;">i</span><span class="mi" id="MathJax-Span-361" style="font-family: MathJax_Math; font-style: italic;">t</span><span class="mi" id="MathJax-Span-362" style="font-family: MathJax_Main;">_</span><span class="mi" id="MathJax-Span-363" style="font-family: MathJax_Math; font-style: italic;">s</span><span class="mi" id="MathJax-Span-364" style="font-family: MathJax_Math; font-style: italic;">t</span><span class="mi" id="MathJax-Span-365" style="font-family: MathJax_Math; font-style: italic;">d<span style="display: inline-block; overflow: hidden; height: 1px; width: 0.003em;"></span></span><span class="mi" id="MathJax-Span-366" style="font-family: MathJax_Math; font-style: italic;">e</span><span class="mi" id="MathJax-Span-367" style="font-family: MathJax_Math; font-style: italic;">v</span><span class="mo" id="MathJax-Span-368" style="font-family: MathJax_Main; padding-left: 0.222em;">∗</span><span class="mn" id="MathJax-Span-369" style="font-family: MathJax_Main; padding-left: 0.222em;">2</span><span class="mo" id="MathJax-Span-370" style="font-family: MathJax_Main;">)</span><span class="mo" id="MathJax-Span-371" style="font-family: MathJax_Main;">)</span><span class="mo" id="MathJax-Span-372" style="font-family: MathJax_Main;">)</span></span><span style="display: inline-block; width: 0px; height: 2.317em;"></span></span></span><span style="display: inline-block; overflow: hidden; vertical-align: -0.352em; border-left: 0px solid; width: 0px; height: 1.285em;"></span></span></nobr><span class="MJX_Assistive_MathML" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mo movablelimits="true" form="prefix">min</mo><mo stretchy="false">(</mo><mi>w</mi><mi>e</mi><mi>i</mi><mi>g</mi><mi>h</mi><mi>t</mi><mi mathvariant="normal">_</mi><mi>m</mi><mi>a</mi><mi>x</mi><mi mathvariant="normal">_</mi><mi>v</mi><mi>a</mi><mi>l</mi><mi>u</mi><mi>e</mi><mo>,</mo><mo stretchy="false">(</mo><mi>w</mi><mi>e</mi><mi>i</mi><mi>g</mi><mi>h</mi><mi>t</mi><mi mathvariant="normal">_</mi><mi>i</mi><mi>n</mi><mi>i</mi><mi>t</mi><mi mathvariant="normal">_</mi><mi>m</mi><mi>e</mi><mi>a</mi><mi>n</mi><mo>+</mo><mo stretchy="false">(</mo><mi>w</mi><mi>e</mi><mi>i</mi><mi>g</mi><mi>h</mi><mi>t</mi><mi mathvariant="normal">_</mi><mi>i</mi><mi>n</mi><mi>i</mi><mi>t</mi><mi mathvariant="normal">_</mi><mi>s</mi><mi>t</mi><mi>d</mi><mi>e</mi><mi>v</mi><mo>∗</mo><mn>2</mn><mo stretchy="false">)</mo><mo stretchy="false">)</mo><mo stretchy="false">)</mo></math></span></span><script type="math/tex" id="MathJax-Element-6">\min(weight\_max\_value, (weight\_init\_mean+(weight\_init\_stdev*2)))</script></span>.
+ (Note that the standard deviation of a uniform distribution is not
+range/0.25, as implied by this, but the range divided by a bit over 
+0.288 (the square root of 12); however, this approximation makes setting
+the range much easier.) <strong>This defaults to “gaussian”.</strong></p>
+<div class="last versionadded">
+<p><span class="versionmodified">New in version 0.92.</span></p>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+<span class="target" id="index-106"></span><ul class="simple" id="index-107">
+<li><dl class="first docutils">
+<dt><em>weight_max_value</em></dt>
+<dd>The maximum allowed weight value. Weights above this value will be <a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/module_summaries.html#attributes.FloatAttribute.clamp" title="attributes.FloatAttribute.clamp"><code class="xref py py-meth docutils literal"><span class="pre">clamped</span></code></a> to this value.</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><em>weight_min_value</em></dt>
+<dd>The minimum allowed weight value. Weights below this value will be <a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/module_summaries.html#attributes.FloatAttribute.clamp" title="attributes.FloatAttribute.clamp"><code class="xref py py-meth docutils literal"><span class="pre">clamped</span></code></a> to this value.</dd>
+</dl>
+</li>
+</ul>
+<ul class="simple" id="index-108">
+<li><dl class="first docutils">
+<dt><em>weight_mutate_power</em></dt>
+<dd>The standard deviation of the zero-centered normal/gaussian distribution from which a weight value <a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/glossary.html#term-mutation"><span class="xref std std-term">mutation</span></a> is drawn.</dd>
+</dl>
+</li>
+</ul>
+<ul class="simple" id="index-109">
+<li><dl class="first docutils">
+<dt><em>weight_mutate_rate</em></dt>
+<dd>The probability that <a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/glossary.html#term-mutation"><span class="xref std std-term">mutation</span></a> will change the weight of a connection by adding a random value.</dd>
+</dl>
+</li>
+</ul>
+<ul class="simple" id="index-110">
+<li><dl class="first docutils">
+<dt><em>weight_replace_rate</em></dt>
+<dd>The probability that <a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/glossary.html#term-mutation"><span class="xref std std-term">mutation</span></a> will replace the weight of a connection with a newly <a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/module_summaries.html#attributes.FloatAttribute.init_value" title="attributes.FloatAttribute.init_value"><code class="xref py py-meth docutils literal"><span class="pre">chosen</span></code></a>
+random value (as if it were a new connection).</dd>
+</dl>
+</li>
+</ul>
+<p><a class="reference internal" href="http://neat-python.readthedocs.io/en/latest/index.html#toc-label"><span class="std std-ref">Table of Contents</span></a></p>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="http://neat-python.readthedocs.io/en/latest/xor_example.html" class="btn btn-neutral float-right" title="Overview of the basic XOR example (xor2.py)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="http://neat-python.readthedocs.io/en/latest/installation.html" class="btn btn-neutral" title="Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr><div><div id="rtd-ymfgya53" class="ethical-rtd"></div></div>
+
+  <div role="contentinfo">
+    <p>
+        © Copyright 2015-2017, CodeReclaimers, LLC.
+      
+        <span class="commit">
+          Revision <code>15e910ce</code>.
+        </span>
+      
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org/">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      <span class="fa fa-book"> Read the Docs</span>
+      v: latest
+      <span class="fa fa-caret-down"></span>
+    </span>
+    <div class="rst-other-versions"><!-- Inserted RTD Footer -->
+<div class="injected">
+
+  
+
+      
+      
+      
+      <dl>
+        <dt>Versions</dt>
+        
+         <strong> 
+        <dd><a href="https://neat-python.readthedocs.io/en/latest/config_file.html">latest</a></dd>
+         </strong> 
+        
+        
+        <dd><a href="https://neat-python.readthedocs.io/en/stable/config_file.html">stable</a></dd>
+        
+        
+      </dl>
+      
+      
+
+      
+      
+      <dl>
+        <dt>Downloads</dt>
+        
+        <dd><a href="http://readthedocs.org/projects/neat-python/downloads/pdf/latest/">PDF</a></dd>
+        
+        <dd><a href="http://readthedocs.org/projects/neat-python/downloads/htmlzip/latest/">HTML</a></dd>
+        
+        <dd><a href="http://readthedocs.org/projects/neat-python/downloads/epub/latest/">Epub</a></dd>
+        
+      </dl>
+      
+      
+
+      
+      <dl>
+        <!-- These are kept as relative links for internal installs that are http -->
+        <dt>On Read the Docs</dt>
+        <dd>
+          <a href="http://readthedocs.org/projects/neat-python/">Project Home</a>
+        </dd>
+        <dd>
+          <a href="http://readthedocs.org/projects/neat-python/builds/">Builds</a>
+        </dd>
+        <dd>
+          <a href="http://readthedocs.org/projects/neat-python/downloads/">Downloads</a>
+        </dd>
+      </dl>
+      
+
+      
+
+      
+      <dl>
+        <dt>On GitHub</dt>
+        <dd>
+          <a href="https://github.com/CodeReclaimers/neat-python/blob/master/docs/config_file.rst">View</a>
+        </dd>
+        <dd>
+          <a href="https://github.com/CodeReclaimers/neat-python/edit/master/docs/config_file.rst">Edit</a>
+        </dd>
+      </dl>
+      
+      
+
+      
+      <dl>
+        <dt>Search</dt>
+        <dd>
+          <div style="padding: 6px;">
+            <form id="flyout-search-form" class="wy-form" target="_blank" action="//readthedocs.org/projects/neat-python/search/" method="get">
+              <input name="q" placeholder="Search docs" type="text">
+              </form>
+          </div>
+        </dd>
+      </dl>
+      
+
+
+
+      <hr>
+      
+        <small>
+          <span>Hosted by <a href="https://readthedocs.org/">Read the Docs</a></span>
+          <span> · </span>
+          <a href="https://docs.readthedocs.io/en/latest/privacy-policy.html">Privacy Policy</a>
+        </small>
+      
+
+      
+
+</div>
+</div>
+  </div>
+
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.92',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="NEAT-Python-Configfile-Documentation-Dateien/jquery-2.js"></script>
+      <script type="text/javascript" src="NEAT-Python-Configfile-Documentation-Dateien/jquery-migrate-1.js"></script>
+      <script type="text/javascript" src="NEAT-Python-Configfile-Documentation-Dateien/underscore.js"></script>
+      <script type="text/javascript" src="NEAT-Python-Configfile-Documentation-Dateien/doctools.js"></script>
+      <script src="NEAT-Python-Configfile-Documentation-Dateien/MathJax.js" id=""></script>
+      <script type="text/javascript" src="NEAT-Python-Configfile-Documentation-Dateien/readthedocs-doc-embed.js"></script>
+
+  
+
+  
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+
+<div style="position: absolute; width: 0px; height: 0px; overflow: hidden; padding: 0px; border: 0px none; margin: 0px;"><div id="MathJax_Font_Test" style="position: absolute; visibility: hidden; top: 0px; left: 0px; width: auto; padding: 0px; border: 0px none; margin: 0px; white-space: nowrap; text-align: left; text-indent: 0px; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; font-size: 40px; font-weight: normal; font-style: italic; font-size-adjust: none; font-family: MathJax_Math, sans-serif;"></div></div></body></html>

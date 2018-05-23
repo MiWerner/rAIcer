@@ -2,8 +2,8 @@ import RaicerSocket
 import pygame
 import numpy as np
 import MatrixOps
-from Utils import S_WAIT, S_COUNTDOWN, S_RUNNING, S_FINISHED, S_CRASHED, S_CANCELED, IMG_WIDTH, IMG_HEIGHT, print_debug
-
+from Utils import S_WAIT, S_COUNTDOWN, S_RUNNING, S_FINISHED, S_CRASHED, S_CANCELED, IMG_WIDTH, IMG_HEIGHT, print_debug, update_feature_parameters
+update_feature_parameters(hv_dist=False, diag_dist=False, speed=True, num_cp_features=2)
 from Features import FeatureCalculator
 import time
 
@@ -27,10 +27,10 @@ try:
             pygame.event.get()
 
             inputs = np.asarray(list(fc.features), dtype=np.int64)
-            speed_x = inputs[8]
-            speed_y = inputs[9]
+            speed_x = inputs[0]
+            speed_y = inputs[1]
             # Get the vector to the second next checkpoint
-            vector_to_next_checkpoint = inputs[14:16]
+            vector_to_next_checkpoint = [inputs[-2], inputs[-1]];
             # Get the angle of the vector and transform it in a range between 0° and 360°
             angle = np.math.atan2(np.linalg.det([vector_to_next_checkpoint, np.asarray([1, 0])]), np.dot(vector_to_next_checkpoint, np.asarray([1, 0])))
             angle = np.degrees(angle) % 360

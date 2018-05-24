@@ -1,9 +1,9 @@
 [NEAT]
-fitness_criterion   = max
+fitness_criterion = max
 fitness_threshold = 100
 no_fitness_termination = True
 pop_size              = 45
-reset_on_extinction   = False
+reset_on_extinction   = True
 
 [DefaultGenome]
 # node activation options
@@ -30,8 +30,8 @@ compatibility_disjoint_coefficient = 1.0
 compatibility_weight_coefficient   = 0.5
 
 # connection add/remove rates
-conn_add_prob           = 0.5
-conn_delete_prob        = 0.2
+conn_add_prob           = 0.75
+conn_delete_prob        = 0.3
 
 # connection enable options
 enabled_default         = True

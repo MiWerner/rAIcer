@@ -2,6 +2,26 @@ import os
 import multiprocessing
 import subprocess
 import platform
+import argparse
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+#                       Parser                          #
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+parser = argparse.ArgumentParser()
+
+parser.add_argument("--hv_dists", action="store_true", default=False, help="Enables hv distances features")
+parser.add_argument("--diag_dists", action="store_true", default=False, help="Enables diagonal distances features")
+parser.add_argument("--speed", action="store_true", default=False, help="Enables speed features")
+parser.add_argument("--ballpos", action="store_true", default=False, help="Enables ballpos features")
+parser.add_argument("--num_cp", type=int, default=3, help="Sets the number of Checkpoints in feature vector")
+parser.add_argument("--config", type=str, default=None, help="filename of the configfile in config folder")
+parser.add_argument("--restore", action="store_true", default=None,
+                    help="If set the population is restored from the file defined by restore_folder and checkpoint_id")
+parser.add_argument("--restore_folder", type=str, default=None, help="folder name of the run to restore")
+parser.add_argument("--checkpoint_id", type=int, default=None, help="id of the checkpoint used to restore run")
+parser.add_argument("--num_gen", type=int, default=100, help="The number of generations to run")
+
+ARGS = parser.parse_args()
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 #                Server Parameter                       #
@@ -27,97 +47,69 @@ S_FINISHED = 3
 S_CRASHED = 4
 S_CANCELED = 5
 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+#                   IO_NAMES                            #
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
-#                Feature Parameters                      #
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
-EN_HV_DIST = True
-EN_DIAG_DIST = True
-EN_SPEED = True
-EN_BALLPOS = True
-NUM_CP_FEATURES = 3
 IO_NAMES = {
     0: "up",
     1: "down",
     2: "left",
     3: "right",
-    -1: "du",
-    -2: "dur",
-    -3: "dr",
-    -4: "ddr",
-    -5: "dd",
-    -6: "ddl",
-    -7: "dl",
-    -8: "dul",
-    -9: "vx",
-    -10: "vy",
-    -11: "bpx",
-    -12: "bpy",
-    -13: "cp1x",
-    -14: "cp1y",
-    -15: "cp2x",
-    -16: "cp2y",
-    -17: "cp3x",
-    -18: "cp3y",
 }
+counter = -1
 
-feature_print_string = "ID {}: du={} | dur={} | dr={} | ddr={} | dd={} | ddl={} | dl={} | dul={} | vx={} | vy={} | " \
-                       "bp=({}, {}) | cp1=({}, {}) | cp2=({}, {}) | cp3=({}, {})"
-
-
-def update_feature_parameters(hv_dist=True, diag_dist=True, speed=True, ball_pos=True, num_cp_features=3):
-    global EN_HV_DIST, EN_DIAG_DIST, EN_SPEED, EN_BALLPOS, NUM_CP_FEATURES, IO_NAMES, feature_print_string
-    EN_HV_DIST = hv_dist
-    EN_DIAG_DIST = diag_dist
-    EN_SPEED = speed
-    EN_BALLPOS = ball_pos
-    NUM_CP_FEATURES = num_cp_features
-
-    counter = -1
-    IO_NAMES = {
-        0: "up",
-        1: "down",
-        2: "left",
-        3: "right",
-    }
-
-    feature_print_string = "ID {}: "
-
-    hv_dist = ["du", "dr", "du", "dl"]
-    diag_dist = ["dur", "ddr", "ddl", "dul"]
-    for i in range(4):
-        if EN_HV_DIST:
-            IO_NAMES.update({counter: hv_dist[i]})
-            feature_print_string += hv_dist[i]+"={} | "
-            counter -= 1
-        if EN_DIAG_DIST:
-            IO_NAMES.update({counter: diag_dist[i]})
-            feature_print_string += diag_dist[i] + "={} | "
-            counter -= 1
-
-    if EN_SPEED:
-        IO_NAMES.update({counter: "vx"})
-        feature_print_string += "vx={} | "
+hv_dist = ["du", "dr", "du", "dl"]
+diag_dist = ["dur", "ddr", "ddl", "dul"]
+for i in range(4):
+    if ARGS.hv_dists:
+        IO_NAMES.update({counter: hv_dist[i]})
         counter -= 1
-        IO_NAMES.update({counter: "vy"})
-        feature_print_string += "vy={} | "
+    if ARGS.diag_dists:
+        IO_NAMES.update({counter: diag_dist[i]})
         counter -= 1
 
-    # TODO add bp and cps to print string
+if ARGS.speed:
+    IO_NAMES.update({counter: "vx"})
+    counter -= 1
+    IO_NAMES.update({counter: "vy"})
+    counter -= 1
 
-    if EN_BALLPOS:
-        IO_NAMES.update({counter: "bpx"})
-        counter -= 1
-        IO_NAMES.update({counter: "bpy"})
-        counter -= 1
-        feature_print_string += "bp=({}, {}) | "
+if ARGS.ballpos:
+    IO_NAMES.update({counter: "bpx"})
+    counter -= 1
+    IO_NAMES.update({counter: "bpy"})
+    counter -= 1
 
-    for i in range(1, NUM_CP_FEATURES+1):
-        IO_NAMES.update({counter: "cp{}x".format(i)})
-        counter -= 1
-        IO_NAMES.update({counter: "cp{}y".format(i)})
-        counter -= 1
-        feature_print_string += "cp" + str(i) + "=({}, {}) | "
+for i in range(1, ARGS.num_cp + 1):
+    IO_NAMES.update({counter: "cp{}x".format(i)})
+    counter -= 1
+    IO_NAMES.update({counter: "cp{}y".format(i)})
+    counter -= 1
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+#                   feature print string                #
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+feature_print_string = "ID {}: "
+
+hv_dist = ["du", "dr", "du", "dl"]
+diag_dist = ["dur", "ddr", "ddl", "dul"]
+for i in range(4):
+    if ARGS.hv_dists:
+        feature_print_string += hv_dist[i]+"={} | "
+    if ARGS.diag_dists:
+        feature_print_string += diag_dist[i] + "={} | "
+
+if ARGS.speed:
+    feature_print_string += "vx={} | vy={} | "
+
+if ARGS.ballpos:
+    feature_print_string += "bp=({}, {}) | "
+
+for i in range(1, ARGS.num_cp+1):
+    feature_print_string += "cp" + str(i) + "=({}, {}) | "
+
+
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 #                   Debug Messages                      #
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
@@ -178,4 +170,3 @@ def make_dir(path):
     if not os.path.exists(path):
         os.makedirs(path)
     return path
-

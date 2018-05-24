@@ -3,7 +3,7 @@ import datetime
 import os
 from AITraining.GenomeEvaluator import GenomeEvaluator
 import multiprocessing
-from Utils import PATH_TO_CONFIGS, PATH_TO_RES,PATH_TO_SAVINGS, make_dir, start_server
+from Utils import PATH_TO_CONFIGS, PATH_TO_RES, PATH_TO_SAVINGS, make_dir, start_server, IO_NAMES
 from AITraining import visualize
 import pickle
 import sys
@@ -106,8 +106,7 @@ def __eval_genomes(genomes, config):
             genome.fitness += result_dict[g_id]
 
 
-def run_training(N, path_to_config=None, restore=False, restore_folder=None, restore_checkpoint=None):
-    from Utils import IO_NAMES
+def run_training(num_generations, path_to_config=None, restore=False, restore_folder=None, restore_checkpoint=None):
 
     if path_to_config is None:
         path_to_config = os.path.join(PATH_TO_CONFIGS, "neat_test_config")
@@ -124,11 +123,14 @@ def run_training(N, path_to_config=None, restore=False, restore_folder=None, res
     if not restore:
         time_stamp = datetime.datetime.now()
         current_folder = make_dir(os.path.join(PATH_TO_RES,
-                                               "NEAT-AI", str(time_stamp).split(".")[0].replace(":", "-").replace(" ", "_")))
+                                               "NEAT-AI",
+                                               str(time_stamp).split(".")[0].replace(":", "-").replace(" ", "_")))
+
         make_dir(os.path.join(current_folder, "checkpoints"))
         p = neat.Population(config=neat_config)
     else:
-        path_to_restore = os.path.join(PATH_TO_SAVINGS, restore_folder, "checkpoints", "checkpoint-" + str(restore_checkpoint))
+        path_to_restore = os.path.join(PATH_TO_SAVINGS,
+                                       restore_folder, "checkpoints", "checkpoint-" + str(restore_checkpoint))
         p = neat.Checkpointer.restore_checkpoint(path_to_restore)
         current_folder = os.path.abspath(os.path.join(path_to_restore, os.pardir, os.pardir))
 
@@ -140,10 +142,11 @@ def run_training(N, path_to_config=None, restore=False, restore_folder=None, res
     p.add_reporter(stats)
 
     # Create reporter to save state during the evolution
-    p.add_reporter(neat.Checkpointer(generation_interval=1, filename_prefix=os.path.join(current_folder, "checkpoints", "checkpoint-")))
+    p.add_reporter(neat.Checkpointer(generation_interval=1,
+                                     filename_prefix=os.path.join(current_folder, "checkpoints", "checkpoint-")))
 
     try:
-        for gen in range(N):
+        for gen in range(num_generations):
             current_best = p.run(fitness_function=fitness_function, n=1)
 
             # save visualisation of winner

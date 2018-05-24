@@ -1,7 +1,7 @@
 import pygame
 from ImageUtils import MIN_BALL_RADIUS, get_ball_position, get_track
 from MatrixOps import find_closest_point_index
-from Utils import EN_HV_DIST, EN_DIAG_DIST, EN_SPEED, EN_BALLPOS, NUM_CP_FEATURES, feature_print_string, print_debug
+from Utils import feature_print_string, print_debug, ARGS
 from math import sqrt
 import time
 import numpy as np
@@ -39,7 +39,7 @@ class FeatureCalculator(object):
         self.track, checkpoints = get_track(img=img)  # map of the track
 
         self.checkpoints, self.section_counter, self.checkpoint_map = self.create_sections(checkpoints)
-        self.num_checkpoints = len(self.checkpoints)
+        self.num_cps = len(self.checkpoints)
 
         self.client_id = client_id  # id of coresponding client
         self.max_clients = max_clients  # maximum number of clients. Used for opponent detection
@@ -91,27 +91,27 @@ class FeatureCalculator(object):
         f = ()
         # distance features
         for i, d in enumerate(self.dist_features):
-            if i % 2 == 1 and EN_DIAG_DIST:
+            if i % 2 == 1 and ARGS.diag_dists:
                 # extract total distance for diagonal features
                 try:
                     f += (d[2], )
                 except TypeError:
                     pass
-            elif i % 2 == 0 and EN_HV_DIST:
+            elif i % 2 == 0 and ARGS.hv_dists:
                 f += (d, )
 
         # speed features
-        if EN_SPEED:
+        if ARGS.speed:
             f += self.speed_features
 
         # current ball_position
-        if EN_BALLPOS:
+        if ARGS.ballpos:
             f += self.ball_pos_stamps[-1][0]
 
         # checkpoints
-        for i in range(1, NUM_CP_FEATURES+1):
-            dx = self.checkpoints[(self.current_section_id + i) % self.num_checkpoints][0] - self.ball_pos_stamps[-1][0][0]
-            dy = self.checkpoints[(self.current_section_id + i) % self.num_checkpoints][1] - self.ball_pos_stamps[-1][0][1]
+        for i in range(1, ARGS.num_cp + 1):
+            dx = self.checkpoints[(self.current_section_id + i) % self.num_cps][0] - self.ball_pos_stamps[-1][0][0]
+            dy = self.checkpoints[(self.current_section_id + i) % self.num_cps][1] - self.ball_pos_stamps[-1][0][1]
             f += (dx, dy)
 
         self.__features = f
@@ -167,10 +167,10 @@ class FeatureCalculator(object):
             # check is a new best section is entered
             # allow skipping of NUM_SECTION_JUMP sections
             r1 = range(self.current_section_id+1, self.current_section_id+NUM_SECTION_JUMP)
-            r1 = list(map(lambda x: x % self.num_checkpoints, r1))
+            r1 = list(map(lambda x: x % self.num_cps, r1))
 
             r2 = range(self.last_seen_section + 1, self.last_seen_section + NUM_SECTION_JUMP)
-            r2 = list(map(lambda x: x % self.num_checkpoints, r2))
+            r2 = list(map(lambda x: x % self.num_cps, r2))
             if bp_section in r1 and bp_section in r2:
                 self.section_counter[bp_section] += 1
                 # ensure over jumped section also increase counter
@@ -201,7 +201,7 @@ class FeatureCalculator(object):
         ball_pos = self.ball_pos_stamps[-1][0]
         c = COLORS[self.client_id - 1]
 
-        if EN_HV_DIST:
+        if ARGS.hv_dists:
             # dist up
             self.__draw_line(display, c, ball_pos, 0, -self.dist_features[0])
             # dist right
@@ -211,7 +211,7 @@ class FeatureCalculator(object):
             # dist left
             self.__draw_line(display, c, ball_pos, -self.dist_features[6], 0)
 
-        if EN_DIAG_DIST:
+        if ARGS.diag_dists:
             # dist up right
             self.__draw_line(display, c, ball_pos, self.dist_features[1][0], -self.dist_features[1][1])
             # dist down right
@@ -221,7 +221,7 @@ class FeatureCalculator(object):
             # dist up left
             self.__draw_line(display, c, ball_pos, -self.dist_features[7][0], -self.dist_features[7][1])
 
-        if EN_SPEED:
+        if ARGS.speed:
             # speed
             self.__draw_line(display, (200, 255, 200), ball_pos, self.speed_features[0], self.speed_features[1])
 
@@ -230,9 +230,9 @@ class FeatureCalculator(object):
             pygame.draw.circle(display, (200, 200, 200), c, 3)
 
         pygame.draw.circle(display, (200, 200, 0), self.checkpoints[self.current_section_id], 3)
-        for i in range(1, NUM_CP_FEATURES+1):
+        for i in range(1, ARGS.num_cp + 1):
             pygame.draw.circle(display, (200, 0, 200),
-                               self.checkpoints[(self.current_section_id + i) % self.num_checkpoints], 3)
+                               self.checkpoints[(self.current_section_id + i) % self.num_cps], 3)
 
     @staticmethod
     def __draw_line(display, color, ball_pos, dx, dy):

@@ -7,6 +7,7 @@ from Utils import PATH_TO_CONFIGS, PATH_TO_RES, PATH_TO_SAVINGS, make_dir, start
 from AITraining import visualize
 import pickle
 import sys
+import shutil
 
 
 def fitness_function(genomes, config):
@@ -106,32 +107,48 @@ def __eval_genomes(genomes, config):
             genome.fitness += result_dict[g_id]
 
 
-def run_training(num_generations, path_to_config=None, restore=False, restore_folder=None, restore_checkpoint=None):
-
-    if path_to_config is None:
-        path_to_config = os.path.join(PATH_TO_CONFIGS, "neat_test_config")
-    else:
-        path_to_config = os.path.join(PATH_TO_CONFIGS, path_to_config)
-
-    neat_config = neat.Config(neat.DefaultGenome,
-                              neat.DefaultReproduction,
-                              neat.DefaultSpeciesSet,
-                              neat.DefaultStagnation,
-                              path_to_config)
+def run_training(num_generations, config_filename=None, restore=False, restore_folder=None, restore_checkpoint=None):
 
     # create population
     if not restore:
+        # create new folder fur current run
         time_stamp = datetime.datetime.now()
         current_folder = make_dir(os.path.join(PATH_TO_RES,
                                                "NEAT-AI",
                                                str(time_stamp).split(".")[0].replace(":", "-").replace(" ", "_")))
 
+        if config_filename is None:
+            path_to_config = os.path.join(PATH_TO_CONFIGS, "neat_test_config")
+        else:
+            path_to_config = os.path.join(PATH_TO_CONFIGS, config_filename)
+
+        # copy config file for later use
+        shutil.copy(path_to_config, os.path.join(current_folder, "configfile"))
+
+        neat_config = neat.Config(neat.DefaultGenome,
+                                  neat.DefaultReproduction,
+                                  neat.DefaultSpeciesSet,
+                                  neat.DefaultStagnation,
+                                  path_to_config)
+
         make_dir(os.path.join(current_folder, "checkpoints"))
         p = neat.Population(config=neat_config)
     else:
+        # load saved config file
+        path_to_config = os.path.join(PATH_TO_SAVINGS, restore_folder, "configfile")
+
+        neat_config = neat.Config(neat.DefaultGenome,
+                                  neat.DefaultReproduction,
+                                  neat.DefaultSpeciesSet,
+                                  neat.DefaultStagnation,
+                                  path_to_config)
+
+        # restore from checkpoint
         path_to_restore = os.path.join(PATH_TO_SAVINGS,
                                        restore_folder, "checkpoints", "checkpoint-" + str(restore_checkpoint))
+
         p = neat.Checkpointer.restore_checkpoint(path_to_restore)
+
         current_folder = os.path.abspath(os.path.join(path_to_restore, os.pardir, os.pardir))
 
     # show progress on the console

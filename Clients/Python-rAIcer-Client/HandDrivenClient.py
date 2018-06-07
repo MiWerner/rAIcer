@@ -1,9 +1,14 @@
+import sys
+sys.argv.append("--speed")
+sys.argv.append("--hv_dist")
+sys.argv.append("--diag_dist")
+sys.argv.append("--ballpos")
+sys.argv.append("--num_cp")
+sys.argv.append("3")
+
 import RaicerSocket
 import pygame
-from Utils import S_WAIT, S_COUNTDOWN, S_RUNNING, S_FINISHED, S_CRASHED, S_CANCELED, IMG_WIDTH, IMG_HEIGHT, print_debug, update_feature_parameters
-
-#update_feature_parameters(diag_dist=False, num_cp_features=1, ball_pos=False)
-
+from Utils import S_WAIT, S_COUNTDOWN, S_RUNNING, S_FINISHED, S_CRASHED, S_CANCELED, IMG_WIDTH, IMG_HEIGHT, print_debug
 from Features import FeatureCalculator
 import time
 

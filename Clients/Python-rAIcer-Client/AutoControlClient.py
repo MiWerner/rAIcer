@@ -1,9 +1,12 @@
+import sys
+sys.argv.append("--speed")
+sys.argv.append("--num_cp")
+sys.argv.append("2")
+
 import RaicerSocket
 import pygame
 import numpy as np
-import MatrixOps
-from Utils import S_WAIT, S_COUNTDOWN, S_RUNNING, S_FINISHED, S_CRASHED, S_CANCELED, IMG_WIDTH, IMG_HEIGHT, print_debug, update_feature_parameters
-update_feature_parameters(hv_dist=False, diag_dist=False, speed=True, num_cp_features=2)
+from Utils import S_WAIT, S_COUNTDOWN, S_RUNNING, S_FINISHED, S_CRASHED, S_CANCELED, IMG_WIDTH, IMG_HEIGHT, print_debug
 from Features import FeatureCalculator
 import time
 

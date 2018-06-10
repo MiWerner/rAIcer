@@ -3,8 +3,11 @@ sys.argv.append("--speed")
 sys.argv.append("--hv_dist")
 sys.argv.append("--diag_dist")
 sys.argv.append("--ballpos")
-sys.argv.append("--num_cp")
-sys.argv.append("3")
+sys.argv.append("--cp_ids")
+sys.argv.append("1")
+sys.argv.append("2")
+sys.argv.append("4")
+sys.argv.append("7")
 
 import RaicerSocket
 import pygame

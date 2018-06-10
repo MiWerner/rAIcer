@@ -1,6 +1,6 @@
 import sys
 sys.argv.append("--speed")
-sys.argv.append("--num_cp")
+sys.argv.append("--cp_ids")
 sys.argv.append("1")
 sys.argv.append("--restore_folder")
 sys.argv.append("2018-05-20_23-21-05")

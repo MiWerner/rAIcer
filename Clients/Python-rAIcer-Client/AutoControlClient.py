@@ -1,6 +1,7 @@
 import sys
 sys.argv.append("--speed")
-sys.argv.append("--num_cp")
+sys.argv.append("--cp_ids")
+sys.argv.append("1")
 sys.argv.append("2")
 
 import RaicerSocket

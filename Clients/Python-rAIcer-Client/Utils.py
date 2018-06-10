@@ -13,7 +13,7 @@ parser.add_argument("--hv_dists", action="store_true", default=False, help="Enab
 parser.add_argument("--diag_dists", action="store_true", default=False, help="Enables diagonal distances features")
 parser.add_argument("--speed", action="store_true", default=False, help="Enables speed features")
 parser.add_argument("--ballpos", action="store_true", default=False, help="Enables ballpos features")
-parser.add_argument("--num_cp", type=int, default=3, help="Sets the number of Checkpoints in feature vector")
+parser.add_argument("--cp_ids", nargs='*', type=int, default=[1, 2, 3], help="Sets the IDs of requested Checkpoints in feature vector as a list")
 parser.add_argument("--config", type=str, default=None, help="filename of the configfile in config folder")
 parser.add_argument("--restore", action="store_true", default=None,
                     help="If set the population is restored from the file defined by restore_folder and checkpoint_id")
@@ -81,7 +81,7 @@ if ARGS.ballpos:
     IO_NAMES.update({counter: "bpy"})
     counter -= 1
 
-for i in range(1, ARGS.num_cp + 1):
+for i in ARGS.cp_ids:
     IO_NAMES.update({counter: "cp{}x".format(i)})
     counter -= 1
     IO_NAMES.update({counter: "cp{}y".format(i)})
@@ -106,7 +106,7 @@ if ARGS.speed:
 if ARGS.ballpos:
     feature_print_string += "bp=({}, {}) | "
 
-for i in range(1, ARGS.num_cp+1):
+for i in ARGS.cp_ids:
     feature_print_string += "cp" + str(i) + "=({}, {}) | "
 
 

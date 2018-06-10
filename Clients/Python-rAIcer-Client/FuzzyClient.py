@@ -1,11 +1,14 @@
+import sys
+
+sys.argv.append("--speed")
+sys.argv.append("--cp_ids")
+sys.argv.append("1")
+
 import RaicerSocket
-from Utils import S_WAIT, S_COUNTDOWN, S_RUNNING, S_FINISHED, S_CRASHED, S_CANCELED, print_debug, update_feature_parameters
+from Utils import S_WAIT, S_COUNTDOWN, S_RUNNING, S_FINISHED, S_CRASHED, S_CANCELED, print_debug
 import numpy as np
 import skfuzzy as fuzz
 from skfuzzy import control as ctrl
-
-update_feature_parameters(diag_dist=False, hv_dist=False, num_cp_features=1, ball_pos=False)
-
 from Features import FeatureCalculator
 import time
 

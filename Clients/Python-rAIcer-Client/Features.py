@@ -109,7 +109,7 @@ class FeatureCalculator(object):
             f += self.ball_pos_stamps[-1][0]
 
         # checkpoints
-        for i in range(1, ARGS.num_cp + 1):
+        for i in ARGS.cp_ids:
             dx = self.checkpoints[(self.current_section_id + i) % self.num_cps][0] - self.ball_pos_stamps[-1][0][0]
             dy = self.checkpoints[(self.current_section_id + i) % self.num_cps][1] - self.ball_pos_stamps[-1][0][1]
             f += (dx, dy)
@@ -230,7 +230,7 @@ class FeatureCalculator(object):
             pygame.draw.circle(display, (200, 200, 200), c, 3)
 
         pygame.draw.circle(display, (200, 200, 0), self.checkpoints[self.current_section_id], 3)
-        for i in range(1, ARGS.num_cp + 1):
+        for i in ARGS.cp_ids:
             pygame.draw.circle(display, (200, 0, 200),
                                self.checkpoints[(self.current_section_id + i) % self.num_cps], 3)
 

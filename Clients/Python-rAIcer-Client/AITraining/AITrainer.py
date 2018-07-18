@@ -3,7 +3,7 @@ import datetime
 import os
 from AITraining.GenomeEvaluator import GenomeEvaluator
 import multiprocessing
-from Utils import PATH_TO_CONFIGS, PATH_TO_RES, PATH_TO_SAVINGS, make_dir, start_server, IO_NAMES
+from Utils import PATH_TO_CONFIGS, PATH_TO_RES, PATH_TO_SAVINGS, make_dir, start_server, IO_NAMES, is_windows
 from AITraining import visualize
 import pickle
 import sys
@@ -60,8 +60,9 @@ def __eval_genomes(genomes, config):
 
         # start server
         server = start_server()
-        server.daemon = True
-        server.start()
+        if not is_windows:
+            server.daemon = True
+            server.start()
 
         # create Queue for storing the fitness-values of each genome, to get them from the created processes
         out_q = multiprocessing.Queue()
@@ -90,10 +91,14 @@ def __eval_genomes(genomes, config):
 
         for e in evaluators:
             e.socket.is_active = False
-            e.socket.send_kill_msg()
+            if not is_windows:
+                e.socket.send_kill_msg()
 
         # Wait for server shutdown
-        server.join()
+        if is_windows:
+            server.terminate()
+        else:
+            server.join()
 
         # ensure sockets are closed
         for e in evaluators:

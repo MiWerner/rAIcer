@@ -152,15 +152,15 @@ def _start_server_windows():
     Starts the Windows-version of the rAIcer-server as a new process
     :return: the process of the server
     """
-    return multiprocessing.Process(target=subprocess.check_output,
-                                   args=([PATH_TO_WINDOWS_CUSTOM_SERVER]),
-                                   kwargs={'stderr': subprocess.STDOUT})
+    return subprocess.Popen([PATH_TO_WINDOWS_CUSTOM_SERVER])
 
 
 pf = platform.platform()
+is_windows = False
 if 'Linux' in pf:
     start_server = _start_server_linux
 elif 'Windows' in pf:
+    is_windows = True
     start_server = _start_server_windows
 else:
     raise ValueError("Unkown Operation-System")

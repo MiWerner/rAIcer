@@ -31,6 +31,8 @@ class GenomeEvaluator(object):
 
     num_laps = 5
 
+    client_id = 0
+
     def __init__(self):
         self.socket = RaicerSocket.RaicerSocket()
 
@@ -71,6 +73,9 @@ class GenomeEvaluator(object):
         while client_id in [None, -1]:
             client_id, *_ = self.socket.receive()
             time.sleep(.1)
+        self.client_id = client_id
+        print(client_id)
+        print(self.client_id)
         if client_id == max_id:
             # if current id is the largest possible, this client is the last one and should start the game
             self.socket.send_setting_msg(track_id=track_id, num_laps=self.num_laps)
@@ -122,6 +127,8 @@ class GenomeEvaluator(object):
                 # calculate key strokes
                 output = np.asarray(list(map(lambda x: x + .5, net.activate(inputs=inputs))),
                                     dtype=np.int8)
+
+                print(str(self.client_id) + ": " + str(output))
 
                 # send keys strokes to server
                 self.socket.send_key_msg(output[0], output[1], output[2], output[3])

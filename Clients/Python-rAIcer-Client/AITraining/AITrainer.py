@@ -88,12 +88,20 @@ def __eval_genomes(genomes, config):
         for job in jobs:
             job.join()
 
+        print("init server shutdown")
+        kill_msg_send = False
         for e in evaluators:
             e.socket.is_active = False
-            e.socket.send_kill_msg()
-
+            print(e.client_id)
+            if not kill_msg_send:
+                print("send")
+                e.socket.send_kill_msg()
+                print("sended")
+                server.join()
+                print("server down")
         # Wait for server shutdown
-        server.join()
+        #server.join()
+        #print("server down")
 
         # ensure sockets are closed
         for e in evaluators:

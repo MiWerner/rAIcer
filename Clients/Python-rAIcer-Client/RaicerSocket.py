@@ -116,7 +116,9 @@ class RaicerSocket(object):
         :return:
         """
         self.__kill_msg = bytes([11, 0, 0, 0, 0])
+        print("alpha")
         self.socket.send(self.__kill_msg)
+        print("omega")
 
     def send_setting_msg(self, track_id=1, num_laps=3, start_countdown=True):
         """

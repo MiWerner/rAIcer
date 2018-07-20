@@ -11,6 +11,7 @@ parser = argparse.ArgumentParser()
 
 parser.add_argument("--hv_dists", action="store_true", default=False, help="Enables hv distances features")
 parser.add_argument("--diag_dists", action="store_true", default=False, help="Enables diagonal distances features")
+parser.add_argument("--direc_dist", action="store_true", default=False, help="Enables distances feature anlong the current ball orientation")
 parser.add_argument("--speed", action="store_true", default=False, help="Enables speed features")
 parser.add_argument("--ballpos", action="store_true", default=False, help="Enables ballpos features")
 parser.add_argument("--cp_ids", nargs='*', type=int, default=[1, 2, 3], help="Sets the IDs of requested Checkpoints in feature vector as a list")
@@ -69,6 +70,10 @@ for i in range(4):
         IO_NAMES.update({counter: diag_dist[i]})
         counter -= 1
 
+if ARGS.direc_dist:
+    IO_NAMES.update({counter: "direc_dist"})
+    counter -= 1
+
 if ARGS.speed:
     IO_NAMES.update({counter: "vx"})
     counter -= 1
@@ -99,6 +104,9 @@ for i in range(4):
         feature_print_string += hv_dist[i]+"={} | "
     if ARGS.diag_dists:
         feature_print_string += diag_dist[i] + "={} | "
+
+if ARGS.direc_dist:
+    feature_print_string += "direc_dist={} | "
 
 if ARGS.speed:
     feature_print_string += "vx={} | vy={} | "

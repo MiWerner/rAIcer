@@ -1,6 +1,6 @@
 import pygame
 from ImageUtils import MIN_BALL_RADIUS, get_ball_position, get_track
-from MatrixOps import find_closest_point_index
+from MatrixOps import find_closest_point_index, create_line_iterator
 from Utils import feature_print_string, print_debug, ARGS
 from math import sqrt
 import time
@@ -41,7 +41,7 @@ class FeatureCalculator(object):
         self.checkpoints, self.section_counter, self.checkpoint_map = self.create_sections(checkpoints)
         self.num_cps = len(self.checkpoints)
 
-        self.client_id = client_id  # id of coresponding client
+        self.client_id = client_id  # id of corresponding client
         self.max_clients = max_clients  # maximum number of clients. Used for opponent detection
         for i in range(max_clients):
             if not i+1 == client_id:
@@ -100,6 +100,9 @@ class FeatureCalculator(object):
             elif i % 2 == 0 and ARGS.hv_dists:
                 f += (d, )
 
+        if ARGS.direc_dist:
+            f += (np.linalg.norm(self.direc_dist), )
+
         # speed features
         if ARGS.speed:
             f += self.speed_features
@@ -152,11 +155,11 @@ class FeatureCalculator(object):
                 break
 
         # ~~~~~~~~~~~~~~~~~~~~~~~~ extract new features ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        # distance
-        self._calc_distance_features()
-
         # speed
         self._calc_speed_features()
+
+        # distance
+        self._calc_distance_features()
 
         # sections
         bp_section = self.checkpoint_map[bp[0], bp[1]]
@@ -221,6 +224,9 @@ class FeatureCalculator(object):
             # dist up left
             self.__draw_line(display, c, ball_pos, -self.dist_features[7][0], -self.dist_features[7][1])
 
+        if ARGS.direc_dist:
+            self.__draw_line(display, (100, 100, 255), ball_pos, self.direc_dist[0], self.direc_dist[1])
+
         if ARGS.speed:
             # speed
             self.__draw_line(display, (200, 255, 200), ball_pos, self.speed_features[0], self.speed_features[1])
@@ -284,7 +290,10 @@ class FeatureCalculator(object):
             elif dy:
                 _, tmp, _ = self.__calc_distance(direction_x=dx, direction_y=dy)
                 d += (tmp, )
+
         self.dist_features = d
+
+        self.direc_dist = self.__calc_direc_distance()
 
     def __calc_distance(self, direction_x, direction_y):
         """
@@ -305,3 +314,21 @@ class FeatureCalculator(object):
         dy = abs(ball_pos[1] - current_y) - 1
 
         return dx, dy, sqrt(dx ** 2 + dy ** 2)
+
+    def __calc_direc_distance(self):
+        ball_pos = self.ball_pos_stamps[-1][0]
+        if self.speed_features[0] == 0 and self.speed_features[1] == 0:
+            return np.array([0, 0])
+
+        speed = np.array([self.speed_features[0], self.speed_features[1]])
+        target_pos = ball_pos + np.asarray(512*speed/np.linalg.norm(speed), dtype=np.int)
+        itbuffer, intensities = create_line_iterator(ball_pos, target_pos, self.track)
+        if len(intensities) == 0:
+            return np.array([0, 0])
+        for i in range(len(intensities)):
+            if intensities[i] == 0:
+                return itbuffer[i] - ball_pos
+        return itbuffer[-1] - ball_pos
+
+
+

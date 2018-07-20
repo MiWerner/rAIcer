@@ -2,6 +2,7 @@ import sys
 sys.argv.append("--speed")
 sys.argv.append("--hv_dist")
 sys.argv.append("--diag_dist")
+sys.argv.append("--direc_dist")
 sys.argv.append("--ballpos")
 sys.argv.append("--cp_ids")
 sys.argv.append("1")

@@ -107,8 +107,8 @@ def create_line_iterator(point1, point2, img):
     (shape: [numPixels, 3], row = [x,y,intensity])
     """
     # Define local variables for readability
-    imageH = img.shape[0]
-    imageW = img.shape[1]
+    imageH = img.shape[1]
+    imageW = img.shape[0]
     P1X = point1[0]
     P1Y = point1[1]
     P2X = point2[0]
@@ -162,5 +162,5 @@ def create_line_iterator(point1, point2, img):
     itbuffer = itbuffer[(colX >= 0) & (colY >= 0) & (colX < imageW) & (colY < imageH)]
 
     # Get intensities from img ndarray
-    intensities = img[itbuffer[:, 1].astype(np.uint), itbuffer[:, 0].astype(np.uint)]
+    intensities = img[itbuffer[:, 0].astype(np.uint), itbuffer[:, 1].astype(np.uint)]
     return itbuffer, intensities

@@ -115,6 +115,10 @@ class FeatureCalculator(object):
         for i in ARGS.cp_ids:
             dx = self.checkpoints[(self.current_section_id + i) % self.num_cps][0] - self.ball_pos_stamps[-1][0][0]
             dy = self.checkpoints[(self.current_section_id + i) % self.num_cps][1] - self.ball_pos_stamps[-1][0][1]
+            if True:  # maybe add a variable later
+                norm = sqrt(dx ** 2 + dy ** 2)
+                dx = dx / norm
+                dy = dy / norm
             f += (dx, dy)
 
         self.__features = f

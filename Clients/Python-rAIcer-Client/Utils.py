@@ -15,6 +15,7 @@ parser.add_argument("--direc_dist", action="store_true", default=False, help="En
 parser.add_argument("--speed", action="store_true", default=False, help="Enables speed features")
 parser.add_argument("--ballpos", action="store_true", default=False, help="Enables ballpos features")
 parser.add_argument("--cp_ids", nargs='*', type=int, default=[1, 2, 3], help="Sets the IDs of requested Checkpoints in feature vector as a list")
+parser.add_argument("--output_mode_2", action="store_true", default=False, help="If true the nets will have 2 ouput neurons, else 4")
 parser.add_argument("--config", type=str, default=None, help="filename of the configfile in config folder")
 parser.add_argument("--restore", action="store_true", default=None,
                     help="If set the population is restored from the file defined by restore_folder and checkpoint_id")
@@ -52,12 +53,18 @@ S_CANCELED = 5
 #                   IO_NAMES                            #
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
-IO_NAMES = {
-    0: "up",
-    1: "down",
-    2: "left",
-    3: "right",
-}
+if ARGS.output_mode_2:
+    IO_NAMES = {
+        0: "vertical",
+        1: "horizontal",
+    }
+else:
+    IO_NAMES = {
+        0: "up",
+        1: "down",
+        2: "left",
+        3: "right",
+    }
 counter = -1
 
 hv_dist = ["du", "dr", "du", "dl"]

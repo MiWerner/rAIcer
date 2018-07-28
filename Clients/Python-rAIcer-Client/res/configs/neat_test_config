@@ -38,7 +38,8 @@ conn_delete_prob        = 0.3
 enabled_default         = True
 enabled_mutate_rate     = 0.05
 feed_forward            = True
-initial_connection      = partial_direct .33
+initial_connection      = full_nodirect
+#partial_direct .33
 
 # node add/remove rates
 node_add_prob           = 0.40
@@ -46,7 +47,7 @@ node_delete_prob        = 0.30
 
 # network parameters
 num_inputs = 5
-num_outputs = 4
+num_outputs = 2
 num_hidden = 4
 
 # node response options

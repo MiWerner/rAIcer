@@ -3,7 +3,7 @@ import neat
 from ImageUtils import get_ball_position, get_track
 from Features import FeatureCalculator
 import numpy as np
-from Utils import S_WAIT, S_COUNTDOWN, S_RUNNING, S_FINISHED, S_CANCELED, S_CRASHED
+from Utils import S_WAIT, S_COUNTDOWN, S_RUNNING, S_FINISHED, S_CANCELED, S_CRASHED, ARGS
 import time
 
 
@@ -116,15 +116,32 @@ class GenomeEvaluator(object):
                     # set timestamp when race stated for fitness calculation
                     self.start_timestamp = time.time()
 
-                # TODO include idle-line features
                 inputs = np.asarray(list(self.fc.features), dtype=np.int64)
 
                 # calculate key strokes
-                output = np.asarray(list(map(lambda x: x + .5, net.activate(inputs=inputs))),
+                output = net.activate(inputs=inputs)
+
+
+                if ARGS.output_mode_2:
+                    keys = np.zeros(4)
+                    # vertical control
+                    if output[0] <= .25: # down
+                        keys[1] = 1
+                    elif output[0] >= .75: # up
+                        keys[0] = 1
+                    # horizontal control
+                    if output[1] <= .25: # right
+                        keys[3] = 1
+                    elif output[1] >= .75: # left
+                        keys[2] = 1
+
+
+                else:
+                    keys = np.asarray(list(map(lambda x: x + .5, output)),
                                     dtype=np.int8)
 
                 # send keys strokes to server
-                self.socket.send_key_msg(output[0], output[1], output[2], output[3])
+                self.socket.send_key_msg(keys[0], keys[1], keys[2], keys[3])
 
                 speed = self.fc.speed_features
                 if speed[0] == 0 and speed[1] == 0:
@@ -133,9 +150,6 @@ class GenomeEvaluator(object):
                 if self.zero_speed_counter >= self.time_out_zero_speed_counter:
                     return
 
-
-                # TODO evt. save more statistics for fitness-value
-
             elif status == S_FINISHED:
                 # save time of racing
                 self.race_time = time.time() - self.start_timestamp
@@ -143,7 +157,6 @@ class GenomeEvaluator(object):
 
             elif status == S_CRASHED:
                 # client broke
-                # TODO think about different  punishment
                 self.race_time = self.time_out
                 return
 

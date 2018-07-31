@@ -50,13 +50,13 @@ class FeatureCalculator(object):
     def create_sections(self, checkpoints):
         """
         Creates reduces the number of checkpoints, creates a map with section areas and a counter for each section
-        :param checkpoints: points created by watershead algorightm
+        :param checkpoints: points created by watershed algorithm
         :return: final set of checkpoints, list of counters for each section, map of section
         """
         # create map for constant computing of the current sector
         s = np.shape(self.track)
         # reduce number of checkpoints and convert it to pygame format
-        checkpoints = checkpoints[::20]
+        #checkpoints = checkpoints[::20]  <- this is now done immediately after the watershed algorithm
         checkpoint_map = np.ones(s, dtype=np.int) * len(checkpoints)
         for i in range(s[0]):
             for j in range(s[1]):

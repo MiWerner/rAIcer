@@ -2,6 +2,7 @@ from Utils import IMG_HEIGHT, IMG_WIDTH, print_debug
 import MatrixOps
 import cv2 as cv
 import numpy as np
+import time
 
 MIN_BALL_RADIUS = 5
 MIN_PRIMARY_COLOR_VALUE_BALL = 100
@@ -87,7 +88,7 @@ def get_track(img):
 
     # Calculate the starting direction based on the center of the actual start line and center of the orange area
     direction = finish_line_center - MatrixOps.convex_combination(inner_contour[inner_start_index], outer_contour[outer_start_index], 0.5)
-    direction = direction / np.linalg.norm(direction)
+    direction = direction / MatrixOps.fast_norm(direction)
 
     ### Calculate cross sections of the track ###
     # Create empty/black 3-channel image to run watershed on
@@ -123,8 +124,46 @@ def get_track(img):
     if closest_point_index == 1:
         watershed_contour = np.flip(watershed_contour, 0)
 
-    # cv.imshow("image", image) TODO remove #
-    return track, watershed_contour
+    # Reduce the number of points on the contour to get the checkpoints needed for smoothing and for the features
+    checkpoints = watershed_contour[::20]
+
+    #cv.imshow("image", image) TODO remove #
+
+    # Erode the track/dilate the track border by the radius of the ball
+    kernel = np.ones((5, 5), np.uint8)
+    eroded_track = cv.erode(image, kernel, iterations=4)  # Kernel increases border by 2 pixel each iteration, ball seems to have a radius of about 8 pixels
+    #cv.imshow("eroded_track", eroded_track) TODO remove #
+
+    smoothened_checkpoints = _smoothen_checkpoints_contour(checkpoints, eroded_track)
+
+    return track, smoothened_checkpoints
+
+
+def _smoothen_checkpoints_contour(checkpoints, track):
+    n = len(checkpoints)
+    for i in range(0, 10):
+        start = time.time()
+        for j in range(0, n):
+            checkpoints[j] = _minimize_energy(checkpoints[j], checkpoints[(j-1) % n], checkpoints[(j+1) % n], 3, 1, 1, track)
+        print("Finished iteration", i + 1, "in", (time.time() - start), "s")
+
+    return checkpoints
+
+
+def _minimize_energy(p, p_minus, p_plus, neighborhood, alpha, beta, track):
+    min_energy = -1
+    min_point = p
+    for x in range(-neighborhood, neighborhood+1):
+        for y in range(-neighborhood, neighborhood+1):
+            point = np.asarray([p[0]+x, p[1]+y])
+            if track[point[1], point[0]]:  # only check points on the track
+                E_cont = ((MatrixOps.fast_norm(point - p_minus) - MatrixOps.fast_norm(point - p_plus))/2) ** 2
+                E_curv = MatrixOps.fast_norm(p_minus - 2*point + p_plus) ** 2
+                energy = alpha*E_cont + beta*E_curv
+                if energy < min_energy or min_energy < 0:
+                    min_energy = energy
+                    min_point = point
+    return min_point
 
 
 def _get_inner_and_outer_contour(contours, finish_line_coords):

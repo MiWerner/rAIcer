@@ -4,12 +4,11 @@ sys.argv.append("--cp_ids")
 sys.argv.append("1")
 sys.argv.append("--restore_folder")
 sys.argv.append("2018-05-20_23-21-05")
-sys.argv.append("--config")
-sys.argv.append("neat_config_no_hidden")
+
 import RaicerSocket
 import pygame
 from Utils import S_WAIT, S_COUNTDOWN, S_RUNNING, S_FINISHED, S_CRASHED, S_CANCELED, IMG_WIDTH, IMG_HEIGHT, print_debug
-from Utils import PATH_TO_SAVINGS, PATH_TO_CONFIGS, ARGS
+from Utils import PATH_TO_SAVINGS, ARGS
 import pickle
 import numpy as np
 import os
@@ -27,7 +26,7 @@ neat_config = neat.Config(neat.DefaultGenome,
                           neat.DefaultReproduction,
                           neat.DefaultSpeciesSet,
                           neat.DefaultStagnation,
-                          os.path.join(PATH_TO_CONFIGS, ARGS.config))
+                          os.path.join(PATH_TO_SAVINGS, ARGS.restore_folder, "configfile"))
 
 net = neat.nn.FeedForwardNetwork.create(genome=genome, config=neat_config)
 

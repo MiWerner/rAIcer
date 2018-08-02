@@ -1,4 +1,5 @@
 import numpy as np
+import math
 
 
 def multidim_intersect(arr1, arr2):
@@ -47,6 +48,23 @@ def convex_combination(point1, point2, factor=0.5, flip=False):
     return np.flip(result, axis=0) if flip else result
 
 
+def fast_norm(vector):
+    """
+    Calculates the norm of the given (numpy) vector(s) using standard math library instead of numpy because it is faster
+    on single vectors
+    :param vector: the vector
+    :return: the norm(s) of the vector(s)
+    """
+    if hasattr(vector, "ndim") and vector.ndim == 2:
+        n = len(vector)
+        norms = np.zeros(n)
+        for i in range(n):
+            norms[i] = math.sqrt(vector[i][0]**2 + vector[i][1]**2)
+        return norms
+
+    return math.sqrt(vector[0]**2 + vector[1]**2)
+
+
 def angle_between_vectors(vector1, vector2):
     """
     Calculates the angle in radians between two vectors by taking the dot product of their unit vectors
@@ -54,8 +72,8 @@ def angle_between_vectors(vector1, vector2):
     :param vector2: the second vector
     :return: the angle in radians between both vectors
     """
-    vector1 = vector1 / np.linalg.norm(vector1)
-    vector2 = vector2 / np.linalg.norm(vector2)
+    vector1 = vector1 / fast_norm(vector1)
+    vector2 = vector2 / fast_norm(vector2)
     return np.arccos(np.clip(np.dot(vector1, vector2), -1.0, 1.0))
 
 
@@ -93,7 +111,7 @@ def get_perpendicular_vector(point1, point2, direction=0, normalized=True):
     point2 = point2.reshape(2)
     result = np.flip(point2 - point1, axis=0)
     result[direction] = -result[direction]
-    return result / np.linalg.norm(result) if normalized else result
+    return result / fast_norm(result) if normalized else result
 
 
 def create_line_iterator(point1, point2, img):

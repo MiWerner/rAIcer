@@ -30,11 +30,11 @@ try:
             # Just so the display updates
             pygame.event.get()
 
-            inputs = np.asarray(list(fc.features), dtype=np.int64)
+            inputs = np.asarray(list(fc.features))
             speed_x = inputs[0]
             speed_y = inputs[1]
             # Get the vector to the second next checkpoint
-            vector_to_next_checkpoint = [inputs[-2], inputs[-1]];
+            vector_to_next_checkpoint = [inputs[-2], inputs[-1]]
             # Get the angle of the vector and transform it in a range between 0° and 360°
             angle = np.math.atan2(np.linalg.det([vector_to_next_checkpoint, np.asarray([1, 0])]), np.dot(vector_to_next_checkpoint, np.asarray([1, 0])))
             angle = np.degrees(angle) % 360

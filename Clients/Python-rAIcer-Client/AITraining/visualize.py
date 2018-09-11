@@ -113,7 +113,7 @@ def plot_species(statistics, view=False, filename='speciation.svg'):
     plt.close()
 
 
-def draw_net(config, genome, view=False, filename=None, node_names=None, show_disabled=True, prune_unused=False,
+def draw_net(config, genome, show_bias=False, show_weights=False, view=False, filename=None, node_names=None, show_disabled=True, prune_unused=False,
              node_colors=None, fmt='svg'):
     """ Receives a genome and draws a neural network with arbitrary topology. """
     # Attributes for network nodes.
@@ -161,7 +161,7 @@ def draw_net(config, genome, view=False, filename=None, node_names=None, show_di
         connections = set()
         for cg in genome.connections.values():
             if cg.enabled or show_disabled:
-                connections.add((cg.in_node_id, cg.out_node_id))
+                connections.add((cg.key[0], cg.key[1]))
 
         used_nodes = copy.copy(outputs)
         pending = copy.copy(outputs)
@@ -181,19 +181,23 @@ def draw_net(config, genome, view=False, filename=None, node_names=None, show_di
 
         attrs = {'style': 'filled',
                  'fillcolor': node_colors.get(n, 'white')}
-        dot.node(str(n), _attributes=attrs)
+        label = "{0:.2f}".format(genome.nodes[n].bias) if show_bias else str(n)
+        dot.node(str(n), label=label, _attributes=attrs)
 
     for cg in genome.connections.values():
         if cg.enabled or show_disabled:
             #if cg.input not in used_nodes or cg.output not in used_nodes:
             #    continue
             input, output = cg.key
+            if prune_unused and not(input in used_nodes and output in used_nodes):
+                continue
             a = node_names.get(input, str(input))
             b = node_names.get(output, str(output))
             style = 'solid' if cg.enabled else 'dotted'
             color = 'green' if cg.weight > 0 else 'red'
             width = str(0.1 + abs(cg.weight / 5.0))
-            dot.edge(a, b, _attributes={'style': style, 'color': color, 'penwidth': width})
+            label = "{0:.2f}".format(cg.weight) if show_weights else ""
+            dot.edge(a, b, _attributes={'style': style, 'color': color, 'penwidth': width}, label=label)
 
     dot.render(filename, view=view)
 

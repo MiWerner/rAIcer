@@ -1,9 +1,11 @@
 import sys
+sys.argv.append("--direc_dist")
 sys.argv.append("--speed")
 sys.argv.append("--cp_ids")
-sys.argv.append("1")
+sys.argv.append("2")
+sys.argv.append("--output_mode_2")
 sys.argv.append("--restore_folder")
-sys.argv.append("2018-05-20_23-21-05")
+sys.argv.append("2018-08-28_10-57-12")
 
 import RaicerSocket
 import pygame
@@ -50,8 +52,28 @@ try:
             output = np.asarray(list(map(lambda x: x + .5, net.activate(inputs=inputs))),
                                 dtype=np.int8)
 
+            if ARGS.output_mode_2:
+                keys = np.zeros(4)
+                # vertical control
+                if output[0] <= .25:  # down
+                    keys[1] = 1
+                elif output[0] >= .75:  # up
+                    keys[0] = 1
+                # horizontal control
+                if output[1] <= .25:  # right
+                    keys[3] = 1
+                elif output[1] >= .75:  # left
+                    keys[2] = 1
+            else:
+                keys = output
+
+            # if not power_up_used:
+            #    power_up_used = True
+            #    if keys[0] == 0 and keys[1] == 0 and keys[2] == 0 and keys[3] == 0:
+            #        keys[3] = 1
+
             # send keys strokes to server
-            socket.send_key_msg(output[0], output[1], output[2], output[3])
+            socket.send_key_msg(keys[0], keys[1], keys[2], keys[3])
 
             display.blit(pygame.surfarray.make_surface(image), (0, 0))
             fc.draw_features(display)

@@ -39,6 +39,7 @@ class FeatureCalculator(object):
         self.track, checkpoints = get_track(img=img)  # map of the track
 
         self.checkpoints, self.section_counter, self.checkpoint_map = self.create_sections(checkpoints)
+
         self.num_cps = len(self.checkpoints)
 
         self.client_id = client_id  # id of corresponding client
@@ -115,10 +116,11 @@ class FeatureCalculator(object):
         for i in ARGS.cp_ids:
             dx = self.checkpoints[(self.current_section_id + i) % self.num_cps][0] - self.ball_pos_stamps[-1][0][0]
             dy = self.checkpoints[(self.current_section_id + i) % self.num_cps][1] - self.ball_pos_stamps[-1][0][1]
-            if True:  # maybe add a variable later
+            if False:  # maybe add a variable later
                 norm = sqrt(dx ** 2 + dy ** 2)
-                dx = dx / norm
-                dy = dy / norm
+                if norm > 0:
+                    dx = dx / norm
+                    dy = dy / norm
             f += (dx, dy)
 
         self.__features = f

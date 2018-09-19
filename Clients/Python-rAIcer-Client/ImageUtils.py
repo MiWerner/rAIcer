@@ -145,7 +145,7 @@ def _smoothen_checkpoints_contour(checkpoints, track):
         start = time.time()
         for j in range(0, n):
             checkpoints[j] = _minimize_energy(checkpoints[j], checkpoints[(j-1) % n], checkpoints[(j+1) % n], 3, 1, 1, track)
-        print("Finished iteration", i + 1, "in", (time.time() - start), "s")
+        #print("Finished iteration", i + 1, "in", (time.time() - start), "s")
 
     return checkpoints
 

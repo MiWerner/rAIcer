@@ -56,7 +56,7 @@ def __eval_genomes(genomes, config):
     for g_id, genome in genomes:
         genome.fitness = 0
 
-    for track_id in [1]:  # , 2, 3]:
+    for track_id in [3]:  # 1 , 2, 3]:
 
         # start server
         server = start_server()

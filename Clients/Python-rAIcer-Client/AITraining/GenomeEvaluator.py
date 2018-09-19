@@ -29,7 +29,7 @@ class GenomeEvaluator(object):
 
     zero_speed_counter = 0
 
-    num_laps = 5
+    num_laps = 4
 
     def __init__(self):
         self.socket = RaicerSocket.RaicerSocket()
@@ -179,9 +179,9 @@ class GenomeEvaluator(object):
         :return: the fitness-value
         """
         cp_sum = sum(self.fc.section_counter)
-        tw = 1
-        dw = .5
-        if cp_sum == len(self.fc.checkpoints) * self.num_laps:
+        if cp_sum >= len(self.fc.checkpoints) * self.num_laps:
+            tw = 1
+            dw = .25
             # add time
             t = self.time_out - self.race_time
             # add damage

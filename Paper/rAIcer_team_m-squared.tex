@@ -2,11 +2,14 @@
 \usepackage{cite}
 \usepackage{graphicx}
 \usepackage[utf8]{inputenc}
-%set headings
-%\markboth{Werner \MakeLowercase{Inverse kinematics for high redundant robots with 7 DOF}{Werner \MakeLowercase{Inverse kinematics for high redundant robots with 7 DOF}
+\usepackage[nolist]{acronym}
 
 \begin{document}
-%Set title and author
+\begin{acronym}
+	\acro{NEAT}{NeuroEvolution of Augmenting Topologies}
+	\acro{KI}{Künstliche Intelligenz}
+\end{acronym}
+	
 \title{Abschlussbericht des Team $m^2$ zu dem \\Projektpraktikum Robotik und Automation:\\Künstliche Intelligenz}
 \author{Marius Krusen und F. J. Michael Werner}
 \maketitle
@@ -16,16 +19,15 @@ Brauchen wir ein Abstrakt?
 \end{abstract}
 
 \section{Aufgabenstellung}
-\IEEEPARstart{A}{t} erster Buchstabe muss fett und seeeehr groß sein.
-\\
+\IEEEPARstart{Z}{iel} des Projektpraktikums ist es, eine funktionsfähige  \ac{KI} für das Spiel rAIcer zu entwickeln. In dem Spiel können bis zu drei Spieler jeweils eine Figur über mehrere Runden auf einer Rundstrecke steuern. Die Figuren werden nur durch "Kraftimpulse" in den Richtungen oben, unten, links und rechts gesteuert.
 
 \section{Lösungsansatz}
-
+Das Team $m^2$ verwendet für die Entwicklung der \ac{KI} den \ac{NEAT}-Algorithmus. Weiterhin wird das gegebene Problem darauf reduziert, dass die \ac{KI} eine Folge von Kontrollpunkten auf der Strecke abfahren muss. Für die Berechnung der Kontrollpunkte ist eine Streckenerkennung notwendig. Für die Eingabe, der durch den \ac{NEAT}-Algorithmus generierten neuronalen Netze, werden Merkmale berechnet, die unter anderem auf den Kontrollpunkten und der Position der Figur basieren. Die einzelnen Elemente des Lösungsansatzes werden nachfolgen im Detail vorgestellt.
 \subsection{NEAT}
 NEAT wurde in \cite{stanley:gecco02-efficient} vorgestellt
-\subsection{Streckenerkennung}
+\subsection{Streckenerkennung und Kontrollpunkte}
 
-\subsection{Featureberechnung}
+\subsection{Merkmalsberechnung}
 
 \section{Ergebnisse}
 

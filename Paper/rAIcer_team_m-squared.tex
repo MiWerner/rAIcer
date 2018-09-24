@@ -24,7 +24,23 @@ Brauchen wir ein Abstrakt?
 \section{Lösungsansatz}
 Das Team $m^2$ verwendet für die Entwicklung der \ac{KI} den \ac{NEAT}-Algorithmus. Weiterhin wird das gegebene Problem darauf reduziert, dass die \ac{KI} eine Folge von Kontrollpunkten auf der Strecke abfahren muss. Für die Berechnung der Kontrollpunkte ist eine Streckenerkennung notwendig. Für die Eingabe, der durch den \ac{NEAT}-Algorithmus generierten neuronalen Netze, werden Merkmale berechnet, die unter anderem auf den Kontrollpunkten und der Position der Figur basieren. Die einzelnen Elemente des Lösungsansatzes werden nachfolgen im Detail vorgestellt.
 \subsection{NEAT}
-NEAT wurde in \cite{stanley:gecco02-efficient} vorgestellt
+In Neuroevolution werden Neuronale Netze mit Hilfe von genetischen Algorithmen generiert. In \cite{stanley:gecco02-efficient} stellen Stanley et al. \ac{NEAT} vor, der die Besonderheit hat, dass neben den Kantengewichten und Schwellenwerten, auch die Topologie des Netzes entwickelt wird.
+Die zentralen Bausteine des Algorithmus sind:
+\begin{itemize}
+\item Darstellung eines Netzes als Genom	
+\item Verwendung von Historie-Markern
+\item Verwendung von Spezies
+\item Minimierung der Dimensionalität
+\end{itemize}
+In jeder Generation liegt eine Menge von Genomen (Population) vor. Durch eine Fitnessfunktion, wird die Performance der einzelnen Genome bestimmt. Anschließend wird basierend auf den stärkeren Genomen mithilfe von Mutation neue Genome für die nächste Generation erzeugt.
+\subsubsection{Genetische Darstellung und Mutation}
+
+\subsubsection{Historie-Marker}
+
+\subsubsection{Spezies}
+
+\subsubsection{Minimierung der Dimensionalität}
+
 \subsection{Streckenerkennung und Kontrollpunkte}
 
 \subsection{Merkmalsberechnung}

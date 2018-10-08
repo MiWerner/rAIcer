@@ -70,6 +70,62 @@ class FeatureCalculator(object):
 
         return checkpoints, section_counter, checkpoint_map
 
+    def feature_m(self, diag_dists=False, hv_dists=False, direc_dist=False, speed=False, ballpos=False, cp_ids=[2]):
+        """
+        Returns a feature vector (tuple) in the following order
+         ~ distance up
+         ~ distance up right
+         ~ distance right
+         ~ distance down right
+         ~ distance down
+         ~ distance down left
+         ~ distance left
+         ~ distance up left
+         ~ speed horizontal
+         ~ speed vertical
+        :return: current feature vector
+        """
+        if not self.features_changed:
+            return self.__features
+
+        f = ()
+        # distance features
+        for i, d in enumerate(self.dist_features):
+            if i % 2 == 1 and diag_dists:
+                # extract total distance for diagonal features
+                try:
+                    f += (d[2], )
+                except TypeError:
+                    pass
+            elif i % 2 == 0 and hv_dists:
+                f += (d, )
+
+        if direc_dist:
+            f += (np.linalg.norm(self.direc_dist), )
+
+        # speed features
+        if speed:
+            f += self.speed_features
+
+        # current ball_position
+        if ballpos:
+            f += self.ball_pos_stamps[-1][0]
+
+        # checkpoints
+        for i in cp_ids:
+            dx = self.checkpoints[(self.current_section_id + i) % self.num_cps][0] - self.ball_pos_stamps[-1][0][0]
+            dy = self.checkpoints[(self.current_section_id + i) % self.num_cps][1] - self.ball_pos_stamps[-1][0][1]
+            if False:  # maybe add a variable later
+                norm = sqrt(dx ** 2 + dy ** 2)
+                if norm > 0:
+                    dx = dx / norm
+                    dy = dy / norm
+            f += (dx, dy)
+
+        self.__features = f
+        self.features_changed = False
+        return f
+
     @property
     def features(self):
         """

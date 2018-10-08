@@ -14,7 +14,7 @@ parser.add_argument("--diag_dists", action="store_true", default=False, help="En
 parser.add_argument("--direc_dist", action="store_true", default=False, help="Enables distances feature anlong the current ball orientation")
 parser.add_argument("--speed", action="store_true", default=False, help="Enables speed features")
 parser.add_argument("--ballpos", action="store_true", default=False, help="Enables ballpos features")
-parser.add_argument("--cp_ids", nargs='*', type=int, default=[1, 2, 3], help="Sets the IDs of requested Checkpoints in feature vector as a list")
+parser.add_argument("--cp_ids", nargs='*', type=int, default=[2, 4], help="Sets the IDs of requested Checkpoints in feature vector as a list")
 parser.add_argument("--output_mode_2", action="store_true", default=False, help="If true the nets will have 2 ouput neurons, else 4")
 parser.add_argument("--config", type=str, default=None, help="filename of the configfile in config folder")
 parser.add_argument("--restore", action="store_true", default=None,

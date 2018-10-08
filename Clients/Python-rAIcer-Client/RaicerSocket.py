@@ -48,29 +48,34 @@ class RaicerSocket(object):
         After receiving a message the flag new_message will be set
         :return:
         """
-        while self.is_active:
-            # send the latest message if it exists
-            if self.__keys_msg is not None:
-                self.socket.send(self.__keys_msg)
-                self.__keys_msg = None
-            if self.__setting_msg is not None:
-                self.socket.send(self.__setting_msg)
-                self.__setting_msg = None
-            if self.__kill_msg is not None:
-                self.socket.send(self.__kill_msg)
-                self.__kill_msg = None
+        try:
+            while self.is_active:
+                # send the latest message if it exists
+                if self.__keys_msg is not None:
+                    self.socket.send(self.__keys_msg)
+                    self.__keys_msg = None
+                if self.__setting_msg is not None:
+                    self.socket.send(self.__setting_msg)
+                    self.__setting_msg = None
+                if self.__kill_msg is not None:
+                    self.socket.send(self.__kill_msg)
+                    self.__kill_msg = None
 
-            # receive message
-            b_msg = self.__receive()
-            # save data
-            self.id = b_msg[0]
-            self.status = b_msg[1]
-            self.lap_id = b_msg[2]
-            self.lap_max = b_msg[3]
-            self.damage = b_msg[4]
-            self.rank = b_msg[5]
-            self.image = byte_array_to_image(b_msg[6:])
-            self.new_message = True
+                # receive message
+                b_msg = self.__receive()
+                # save data
+                self.id = b_msg[0]
+                self.status = b_msg[1]
+                self.lap_id = b_msg[2]
+                self.lap_max = b_msg[3]
+                self.damage = b_msg[4]
+                self.rank = b_msg[5]
+                self.image = byte_array_to_image(b_msg[6:])
+                self.new_message = True
+        except RuntimeError or ConnectionResetError as e:
+            self.is_active = False
+            print(e)
+
 
     def __receive(self):
         """

@@ -84,6 +84,16 @@ Um diese Energie zu minimieren wird iterativ vorgegangen. Jeder aus dem Watershe
 \end{figure}
 
 \subsection{Merkmalsberechnung}
+Um die Trainingsdauer kurz zu halten und eine möglichst streckenunabhängige KI zu erhalten, wird eine kleine Anzahl aussagekräftiger Merkmale verwendet. Dazu gehören die Geschwindigkeit der Figur, ihre Entfernung zum nächsten Hindernis in verschiedenen Richtungen, sowie ihre Entfernungen zu den nächsten Kontrollpunkten. Im Gegensatz zu der Streckenberechnung, die nur einmalig zu Beginn des Spiels durchgeführt werden muss, müssen diese Merkmale für jeden Frame neu berechnet werden, um sie dem neuronalen Netz als Eingabe zu übergeben und eine Ausgabe zu erhalten.
+
+Da jedes Merkmal auf der aktuellen Position der Figur basiert, ist es wichtig zunächst diese möglichst genau und zuverlässig zu bestimmen. Dazu werden mit einem Schwellenwertverfahren alle Pixel bestimmt, die annähernd die Farbe der gesuchten Figur haben und der Mittelwert über die Positionen aller dieser Pixel gebildet.
+
+Die aktuelle Geschwindigkeit der Figur lässt sich aus der Differenz der aktuellen und der letzten Position berechnen. Dabei wird die Geschwindigkeit in x- und y-Richtung aufgeteilt, stellt also zwei Merkmale dar. Um aber kleinen Störungen und starken Schwankungen der Geschwindigkeit entgegenzuwirken, werden die letzten sieben Positionen der Figur gemerkt und die durchschnittliche Geschwindigkeit in diesem Zeitraum gebildet.
+
+Für die Entfernung zum nächsten Hindernis in verschiedenen Richtungen wird ausgehend von der aktuellen Position berechnet, wie weit das nächste Hindernis nach oben, unten, links, rechts und in den vier diagonalen Richtungen, sowie der aktuellen Bewegungsrichtung entfernt ist. Als Hindernisse gelten dabei sowohl die Wände der Strecke als auch gegnerische Figuren.
+
+Um die Entfernungen zu den nächsten Kontrollpunkten zu berechnen, ist es zuerst nötig zu bestimmen, welchem Kontrollpunkt die Figur zur Zeit am nächsten ist. Um dies möglichst schnell herauszufinden, wird bereits zu Beginn des Spiels nach der Streckenerkennung eine Karte angelegt, die jedem Pixel der Strecke ihren nächsten Kontrollpunkt zuordnet. Ist der aktuelle Kontrollpunkt bestimmt, kann durch die Differenz der Position des nächsten Kontrollpunktes und der aktuellen Ballposition die Entfernung in jeweils x- und y-Richtung berechnet werden. Gleiches kann auch für den übernächsten oder weitere Kontrollpunkte unternommen werden, um der KI eine größere Vorausplanung zu ermöglichen.
+
 
 \section{Ergebnisse}
 

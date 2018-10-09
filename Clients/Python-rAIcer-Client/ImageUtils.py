@@ -127,7 +127,9 @@ def get_track(img):
     # Reduce the number of points on the contour to get the checkpoints needed for smoothing and for the features
     checkpoints = watershed_contour[::20]
 
-    #cv.imshow("image", image) TODO remove #
+    #for c in checkpoints:
+    #    cv.circle(image, tuple(c), 3, (192, 192, 192), -1)
+    #cv.imshow("image", image)
 
     # Erode the track/dilate the track border by the radius of the ball
     kernel = np.ones((5, 5), np.uint8)
@@ -135,6 +137,10 @@ def get_track(img):
     #cv.imshow("eroded_track", eroded_track) TODO remove #
 
     smoothened_checkpoints = _smoothen_checkpoints_contour(checkpoints, eroded_track)
+
+    #for c in smoothened_checkpoints:
+    #    cv.circle(image, tuple(c), 3, (192, 192, 192), -1)
+    #cv.imshow("image", image)
 
     return track, smoothened_checkpoints
 

@@ -3,6 +3,8 @@
 \usepackage{graphicx}
 \usepackage[utf8]{inputenc}
 \usepackage[nolist]{acronym}
+\usepackage{multirow}
+\usepackage[table,xcdraw]{xcolor}
 
 \begin{document}
 \begin{acronym}
@@ -49,15 +51,90 @@ Durch das Hinzufügen einer neuen Struktur wird die Fitness anfänglich reduzier
 mit der Anzahl überflüssiger Gene $E$, die Anzahl verschiedener Gene $D$ und der durchschnittlichen Differenz der Kantengewichte übereinstimmender Gene $\overline{W}$. Die Koeffizienten $c_1, c_2, c_3$ dienen zur Gewichtung der Faktoren und $N$, die Anzahl an Genen in dem größeren Genom, dient zu Normalisierung der Distanz. Jedes Genome wird mit einem zufällig ausgewählten Genome einer Spezies verglichen. Wird ein Schwellenwert $\delta_t$ unterschritten, wird das Genome der Spezies hinzugefügt.
 \subsubsection{Minimierung der Dimensionalität}
 \ac{NEAT} sieht vor, dass die anfängliche Population aus Netzen besteht, die keine verdeckten Knoten hat. Dadurch das Innovationen geschützt werden, können somit möglichst kleine Netze generiert werden, da nur neue Strukturen hinzugefügt werden, wenn sie im Sinne der Fitnessfunktion Verbesserungen einbringen.
-
-A
+Allerdings ermöglicht die \ac{NEAT}-Implementierung aus \cite{python-neat}, dass auch mit nicht leeren Neuronalen Netzen begonnen werden kann. Diese Funktion wurde auch in unseren Experimenten verwendet.
 
 \subsection{Streckenerkennung und Kontrollpunkte}
 
 \subsection{Merkmalsberechnung}
 
-\section{Ergebnisse}
+\section{Experimente und Ergebnisse}
 
+Für die Entwicklung unserer \ac{KI} haben wir verschiedene Parameter unseres Aufbau ausprobiert. Diese Parameter werden nachfolgend vorgestellt. Anschließend werden die ausgewählte Versuche mit ihren Ergebnissen vorgestellt, die zu guten Ergebnissen geführt haben.
+Für alle Experimente gilt, das zum Abfahren der geforderten Runden jeweils 3 Minuten Zeit gewesen sind. Die verwendeten \ac{NEAT}-Parameter sind in der Tabelle \ref{tab:NEAT} zu finden.
+Zu dem wurden den initialen Population jeweils Kanten mit einer Wahrscheinlichkeit von 0,2 hinzugefügt.
+\begin{table}
+	\centering
+	\begin{tabular}{|r|c|}
+		\hline
+		Parameter & Wert \\\hline\hline
+		Populationsgröße & 45 \\\hline
+		$P\left(\textrm{Knoten hinzufügen}\right)$ & 0,3 \\\hline
+		$P\left(\textrm{Knoten entfernen}\right)$ & 0,1 \\\hline
+		$P\left(\textrm{Schwellwert-Mutation}\right)$ & 0,8 \\\hline
+		$P\left(\textrm{Kante hinzufügen}\right)$ & 0,75 \\\hline
+		$P\left(\textrm{Kante entfernen}\right)$ & 0,3 \\\hline
+		$P\left(\textrm{Kantengewicht-Mutation}\right)$ & 0,8 \\\hline
+		Minimale Anzahl an Spezies & 2 \\\hline
+	\end{tabular}
+	\label{tab:NEAT}
+	\caption{}{Übersicht der verwendeten \ac{NEAT}-Parameter.}
+\end{table}
+\subsection{Parameter}
+\subsubsection{Anzahl Ausgangsknoten}
+Wir haben die \ac{NEAT}-Algorithmus auf zwei verschiedene Ansätze angewendet, wie die Ausgangsneuronen für die Steuerung der Figur interpretiert werden können. 
+In dem ersten Ansatz gibt es 4 Ausgangsneuronen, wobei je ein Neuron für eine der Richtungen oben, unten, links oder rechts steht. Da für die Aktivierungsfunktion der Neurone die Sigmoid-Funktion verwendet wurde, kann für ein Ausgangsneuron $o_r$ folgende Interpretation angewendet werden:
+\begin{itemize}
+	\item $o_r < 0.5:$ Taste $r$ nicht gedrückt
+	\item $o_r \geq 0.5:$ Taste $r$ gedrückt.
+\end{itemize}
+Dabei stet $r$ für die vier verschiedenen möglichen Richtungen.
+
+Für den zweiten Ansatz werden nur zwei Ausgangsneurone $o_h$ und $o_v$ benötigt. Für $o_h$ gilt dabei folgende Interpretation:
+\begin{itemize}
+	\item $o_h\leq 0.25$: Taste rechts gedrückt
+	\item $0.25 < o_h <0.75$: weder Taste links noch Taste rechts gedrückt
+	\item $o_h\geq 0.75$: Taste links gedrückt.
+\end{itemize}
+Für $o_v$ ist die Interpretation analog mit den Richtungen Unten und Oben.
+
+\subsubsection{Strecke}
+Die \acp{KI} wurden entweder ausschließlich auf der ersten Strecke des Spiels oder auf der dritten trainiert.
+
+\subsubsection{Fitnessfunktion}
+Wir haben zwei Arten von Fitnessfunktionen entwickelt. Beide basieren auf den Kontrollpunkten die bei der Streckenerkennung berechnet werden.
+Die erste Fitnessfunktion $f_1$ wird über die Anzahl der abgefahrenen Kontrollpunkte definiert:
+\begin{equation}
+f_1 = \#KP,
+\end{equation}
+mit $\#KP$ als die Anzahl der abgefahrenen Kontrollpunkte. Die verwendeten Strecken 1 und 3 bestehen aus 48 beziehungsweise 52 Kontrollpunkten.
+Die zweite Fitnessfunktion $f_2$ erweitert $f_1$ wie folgt:
+\begin{equation}
+f_2=\#KP + (180s-t) + (255 - s),
+\end{equation}
+mit $t$ als die benötigte Zeit in Sekunden und $s$ als der erlittene Schaden. Dabei sind 180s und 255 die jeweils maximal möglichen Werte.
+
+\subsection{Experimente}
+
+
+
+\begin{table}
+	\centering
+	\begin{tabular}{|c|c|c|c|c|c|c|}
+		\hline
+		& 0                                                   & 1                            & 2                            & 3                            & 4                            & Durchschnitt \\ \hline
+		& \cellcolor[HTML]{C0C0C0} 3:17 & \cellcolor[HTML]{C0C0C0}3:24 & \cellcolor[HTML]{FFCCC9}3:29 & \cellcolor[HTML]{FFCCC9}2:47 & \cellcolor[HTML]{FFCCC9}3:05 & \cellcolor[HTML]{C0C0C0}-       \\ \cline{2-7} 
+		\multirow{-2}{*}{0} & \cellcolor[HTML]{C0C0C0}255 & \cellcolor[HTML]{C0C0C0}255  & \cellcolor[HTML]{FFCCC9}255  & \cellcolor[HTML]{FFCCC9}255  & \cellcolor[HTML]{FFCCC9}255  & \cellcolor[HTML]{C0C0C0}255     \\ \hline
+		& \cellcolor[HTML]{C0C0C0}2:02                        & \cellcolor[HTML]{C0C0C0}2:23 & \cellcolor[HTML]{FFCCC9}2:31 & \cellcolor[HTML]{FFCCC9}2:17 & \cellcolor[HTML]{FFCCC9}2:18 & \cellcolor[HTML]{C0C0C0}-       \\ \cline{2-7} 
+		\multirow{-2}{*}{1} & \cellcolor[HTML]{C0C0C0}255                         & \cellcolor[HTML]{C0C0C0}255  & \cellcolor[HTML]{FFCCC9}255  & \cellcolor[HTML]{FFCCC9}255  & \cellcolor[HTML]{FFCCC9}255  & \cellcolor[HTML]{C0C0C0}255     \\ \hline
+		& \cellcolor[HTML]{9AFF99}3:23                        & \cellcolor[HTML]{9AFF99}3:22 & \cellcolor[HTML]{C0C0C0}3:10 & \cellcolor[HTML]{FFCCC9}3:20 & \cellcolor[HTML]{FFCCC9}3:30 & \cellcolor[HTML]{C0C0C0}3:24    \\ \cline{2-7} 
+		\multirow{-2}{*}{2} & \cellcolor[HTML]{9AFF99}160                         & \cellcolor[HTML]{9AFF99}76   & \cellcolor[HTML]{C0C0C0}56   & \cellcolor[HTML]{FFCCC9}146  & \cellcolor[HTML]{FFCCC9}162  & \cellcolor[HTML]{C0C0C0}136     \\ \hline
+		& \cellcolor[HTML]{9AFF99}3:11                        & \cellcolor[HTML]{9AFF99}3:20 & \cellcolor[HTML]{9AFF99}3:19 & \cellcolor[HTML]{C0C0C0}3:13 & \cellcolor[HTML]{9AFF99}3:16 & \cellcolor[HTML]{9AFF99}3:17    \\ \cline{2-7} 
+		\multirow{-2}{*}{3} & \cellcolor[HTML]{9AFF99}92                          & \cellcolor[HTML]{9AFF99}120  & \cellcolor[HTML]{9AFF99}129  & \cellcolor[HTML]{C0C0C0}70   & \cellcolor[HTML]{9AFF99}102  & \cellcolor[HTML]{9AFF99}110,75  \\ \hline
+		& \cellcolor[HTML]{9AFF99}3:16                        & \cellcolor[HTML]{9AFF99}3:19 & \cellcolor[HTML]{9AFF99}3:18 & \cellcolor[HTML]{FFCCC9}3:19 & \cellcolor[HTML]{C0C0C0}3:17 & \cellcolor[HTML]{C0C0C0}3:18    \\ \cline{2-7} 
+		\multirow{-2}{*}{4} & \cellcolor[HTML]{9AFF99}116                         & \cellcolor[HTML]{9AFF99}131  & \cellcolor[HTML]{9AFF99}144  & \cellcolor[HTML]{FFCCC9}174  & \cellcolor[HTML]{C0C0C0}117  & \cellcolor[HTML]{C0C0C0}141,25  \\ \hline 
+	\end{tabular}
+\caption{}{Vergleich der Performanz der durch die verschiedenen Experimente generierten Netze. Die Zelle in Zeile $n$ und Spalte $m$ enthält die gefahrene Zeit und den erhaltenen Schaden des Netzes $n$ aus dem direkten Vergleich zu Netz $m$. Die letzte Spalte enthält die Durchschnittswerte aus den Duell mit den anderen Netzen, sofern das Duell überlebt wurde. Mit rot, grün und grau, sind jeweils die Niederlagen, Siege oder Unentschieden gekennzeichnet.}
+\end{table}
 \section{Zusammenfassung}
 
 \bibliography{Quellen}{}

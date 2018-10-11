@@ -12,8 +12,9 @@
 	\acro{KI}{Künstliche Intelligenz}
 \end{acronym}
 	
-\title{Abschlussbericht des Team $m^2$ zu dem \\Projektpraktikum Robotik und Automation:\\Künstliche Intelligenz}
-\author{Marius Krusen und F. J. Michael Werner}
+%\title{Abschlussbericht des Team $m^2$ zu dem \\Projektpraktikum Robotik und Automation:\\Künstliche Intelligenz}
+\title{Projektpraktikum Robotik und Automation:\\Künstliche Intelligenz}
+\author{Team $m^2$: Marius Krusen und F. J. Michael Werner}
 \maketitle
 
 \section{Aufgabenstellung}
@@ -32,23 +33,25 @@ Die zentralen Bausteine des Algorithmus sind:
 \end{itemize}
 In jeder Generation liegt eine Menge von Genomen (Population) vor. Durch eine Fitnessfunktion, wird die Performance der einzelnen Genome bestimmt. Anschließend werden basierend auf den stärkeren Genomen mithilfe von Mutation und Kreuzungen neue Genome für die nächste Generation erzeugt. 
 Für die Implementierung des Projektes wurde das Python-Package NEAT-Python \cite{python-neat} verwendet.
-\subsubsection*{Genetische Darstellung und Mutation}
-Jedes Genom besteht aus einer Liste von Kanten-Genen. Diese referieren jeweils auf zwei Knoten-Gene, die deren Eingangs- und Ausgangsknoten darstellen. Des Weiteren enthalten die Kanten-Gene Informationen über ihre Kantengewichte, ein Aktivierungsbit und eine Innovationsnummer. 
+ 
+%\subsubsection*{Genetische Darstellung und Mutation}
+%Jedes Genom besteht aus einer Liste von Kanten-Genen. Diese referieren jeweils auf zwei Knoten-Gene, die deren Eingangs- und Ausgangsknoten darstellen. Des Weiteren enthalten die Kanten-Gene Informationen über ihre Kantengewichte, ein Aktivierungsbit und eine Innovationsnummer. 
 
-Mutationen in \ac{NEAT} können die Kantengewichte und die Netzstruktur verändern. Die Mutation der Kantengewichte erfolgt über Entscheidung, basierend auf Wahrscheinlichkeiten, ob ein Knoten mutiert oder nicht. Die Mutation der Struktur kann auf zwei Weisen erfolgen. Zum einen kann ein einzelnes Kanten-Gen zwischen zwei bisher nicht verbunden Knoten-Genen hinzugefügt werden, zum anderen kann ein Kanten-Gen durch zwei neue Kanten-Gene und ein neues Knoten-Gen ersetzt werden. Das alte Kanten-Gen wird dabei deaktiviert. Dadurch wird ein neuer Knoten in die Netzstruktur eingefügt.
-\subsubsection*{Historie-Marker und Kreuzungen}
-Für die Kreuzung zweier Genome muss überprüft werden, welche Gene übereinstimmen. Dafür wird bei jedem neuen Gen eine globale Innovationsnummer erhöht und diesem Gen zugewiesen. Zwei Gene, die den gleichen historischen Ursprung haben, also eine gleiche Innovationsnummer besitzen, repräsentieren die gleiche Struktur. Während der Kreuzung kann so leicht bestimmt werden, welche Gene in beiden Elterngenomen vorliegen und übernommen werden können. Gene, die nicht in beiden Elterngenomen vorkommen, werden von dem Elterngenome mit dem höheren Fitnesswert vererbt.
+%Mutationen in \ac{NEAT} können die Kantengewichte und die Netzstruktur verändern. Die Mutation der Kantengewichte erfolgt über Entscheidung, basierend auf Wahrscheinlichkeiten, ob ein Knoten mutiert oder nicht. Die Mutation der Struktur kann auf zwei Weisen erfolgen. Zum einen kann ein einzelnes Kanten-Gen zwischen zwei bisher nicht verbunden Knoten-Genen hinzugefügt werden, zum anderen kann ein Kanten-Gen durch zwei neue Kanten-Gene und ein neues Knoten-Gen ersetzt werden. Das alte Kanten-Gen wird dabei deaktiviert. Dadurch wird ein neuer Knoten in die Netzstruktur eingefügt.
 
-\subsubsection*{Spezies}
-Durch das Hinzufügen einer neuen Struktur wird die Fitness anfänglich reduziert. Um eine neue Innovation zu schützen und ihr Zeit zur Optimierung zu geben, unterteilt \ac{NEAT} die Population in mehrere Spezies. Eine neue Innovation konkurriert erst mit den Genomen in der jeweiligen Spezies. Erst nach eine gewissen Zeit, wird eine Auslöschung durch einen Vergleich mit der restlichen Population möglich. Die Einteilung der Population in Spezies erfolgt durch die Berechnung einer Distanz zwischen zwei Genomen $\delta$:
-\begin{equation}
-\delta=\frac{c_1E}{N} + \frac{c_2D}{N} + c_3\cdot \overline{W},
-\end{equation}
-mit der Anzahl überflüssiger Gene $E$, die Anzahl verschiedener Gene $D$ und der durchschnittlichen Differenz der Kantengewichte übereinstimmender Gene $\overline{W}$. Die Koeffizienten $c_1, c_2, c_3$ dienen zur Gewichtung der Faktoren und $N$, die Anzahl an Genen in dem größeren Genom, dient zu Normalisierung der Distanz. Jedes Genom wird mit einem zufällig ausgewählten Genom einer Spezies verglichen. Wird ein Schwellenwert $\delta_t$ unterschritten, wird das Genom der Spezies hinzugefügt.
+%\subsubsection*{Historie-Marker und Kreuzungen}
+%Für die Kreuzung zweier Genome muss überprüft werden, welche Gene übereinstimmen. Dafür wird bei jedem neuen Gen eine globale Innovationsnummer erhöht und diesem Gen zugewiesen. Zwei Gene, die den gleichen historischen Ursprung haben, also eine gleiche Innovationsnummer besitzen, repräsentieren die gleiche Struktur. Während der Kreuzung kann so leicht bestimmt werden, welche Gene in beiden Elterngenomen vorliegen und übernommen werden können. Gene, die nicht in beiden Elterngenomen vorkommen, werden von dem Elterngenome mit dem höheren Fitnesswert vererbt.
 
-\subsubsection*{Minimierung der Dimensionalität}
-\ac{NEAT} sieht vor, dass die anfängliche Population aus Netzen besteht, die keine verdeckten Knoten und keine Kanten hat. Dadurch das Innovationen geschützt werden, können somit möglichst kleine Netze generiert werden, da nur neue Strukturen hinzugefügt werden, wenn sie im Sinne der Fitnessfunktion Verbesserungen einbringen.
-Allerdings ermöglicht die \ac{NEAT}-Implementierung aus \cite{python-neat}, dass auch mit nicht leeren Neuronalen Netzen begonnen werden kann. Diese Funktion wurde auch in unseren Experimenten verwendet.
+%\subsubsection*{Spezies}
+%Durch das Hinzufügen einer neuen Struktur wird die Fitness anfänglich reduziert. Um eine neue Innovation zu schützen und ihr Zeit zur Optimierung zu geben, unterteilt \ac{NEAT} die Population in mehrere Spezies. Eine neue Innovation konkurriert erst mit den Genomen in der jeweiligen Spezies. Erst nach eine gewissen Zeit, wird eine Auslöschung durch einen Vergleich mit der restlichen Population möglich. Die Einteilung der Population in Spezies erfolgt durch die Berechnung einer Distanz zwischen zwei Genomen $\delta$:
+%\begin{equation}
+%\delta=\frac{c_1E}{N} + \frac{c_2D}{N} + c_3\cdot \overline{W},
+%\end{equation}
+%mit der Anzahl überflüssiger Gene $E$, die Anzahl verschiedener Gene $D$ und der durchschnittlichen Differenz der Kantengewichte übereinstimmender Gene $\overline{W}$. Die Koeffizienten $c_1, c_2, c_3$ dienen zur Gewichtung der Faktoren und $N$, die Anzahl an Genen in dem größeren Genom, dient zu Normalisierung der Distanz. Jedes Genom wird mit einem zufällig ausgewählten Genom einer Spezies verglichen. Wird ein Schwellenwert $\delta_t$ unterschritten, wird das Genom der Spezies hinzugefügt.
+
+%\subsubsection*{Minimierung der Dimensionalität}
+%\ac{NEAT} sieht vor, dass die anfängliche Population aus Netzen besteht, die keine verdeckten Knoten und keine Kanten hat. Dadurch das Innovationen geschützt werden, können somit möglichst kleine Netze generiert werden, da nur neue Strukturen hinzugefügt werden, wenn sie im Sinne der Fitnessfunktion Verbesserungen einbringen.
+%Allerdings ermöglicht die \ac{NEAT}-Implementierung aus \cite{python-neat}, dass auch mit nicht leeren Neuronalen Netzen begonnen werden kann. Diese Funktion wurde auch in unseren Experimenten verwendet.
 
 \subsection{Streckenerkennung und Kontrollpunkte}
 Die Streckenerkennung und die Berechnung einer Art Ideallinie oder Leitlinie, die durch eine endliche Anzahl an Kontrollpunkten repräsentiert wird, beruht im Wesentlichen auf zwei Algorithmen. Mit Hilfe der Watershed-Algorithmus wird zunächst eine grobe Leitlinie erzeugt, die einen "sicheren" Verlauf entlang der Mitte der Strecke liefert. Anschließend wird diese Leitlinie durch Verwendung eines Snake-Algorithmus, der überflüssige Richtungsänderungen eliminiert und insgesamt einen kürzeren, glatteren Kurvenverlauf erzeugt, verbessert.
@@ -99,6 +102,7 @@ Für die Entwicklung unserer \ac{KI} haben wir verschiedene Parameter unseres Au
 Für alle Experimente gilt, das zum Abfahren der geforderten Runden jeweils 3 Minuten Zeit gewesen sind. Die verwendeten \ac{NEAT}-Parameter sind in der Tabelle \ref{tab:NEAT} zu finden.
 Zu dem wurden den initialen Population jeweils Kanten mit einer Wahrscheinlichkeit von 0,2 hinzugefügt.
 \begin{table}
+	\setlength\abovecaptionskip{-0.2\baselineskip}
 	\caption{Übersicht der verwendeten \ac{NEAT}-Parameter.}
 	\label{tab:NEAT}
 	\centering
@@ -145,7 +149,7 @@ f_1 = \#KP,
 mit $\#KP$ als die Anzahl der abgefahrenen Kontrollpunkte. Die verwendeten Strecken 1 und 3 bestehen aus 48 beziehungsweise 52 Kontrollpunkten.
 Die zweite Fitnessfunktion $f_2$ erweitert $f_1$ wie folgt:
 \begin{equation}
-f_2=\#KP + (180s-t) + (255 - s),
+f_2=\#KP + (180s-t) + 0,25\cdot(255 - s),
 \end{equation}
 mit $t$ als die benötigte Zeit in Sekunden und $s$ als der erlittene Schaden. Dabei sind 180s und 255 die jeweils maximal möglichen Werte. Die Erweiterung wurde jedoch nur angewendet, wenn das Genome erfolgreich im Ziel angekommen ist, um das Erreichen des Zieles zu belohnen.
 
@@ -156,6 +160,7 @@ Als letzten Parameter haben wir angegeben, welche Kontrollpunkten als Eingabe ve
 In Tabelle \ref{tab:experimente} sind die jeweiligen Parameter der Experimente dargestellt. Neben den Distanzen zu den jeweiligen Kontrollpunkten wurde die aktuelle Geschwindigkeit in x- und y-Richtung, sowie der Abstand zu dem nächsten Hindernis in der aktuellen Bewegungsrichtung als Eingabe verwendet. Der \ac{NEAT}-Algorithmus wurde auf einer Population der Größe 45 über 200 Generationen angewendet. Um die Laufzeit zu verringern wurde von drei Genomen zur gleichen Zeit der jeweilige Wert der Fitnessfunktion berechnet, indem sie gleichzeitig ein Rennen gefahren sind. Das Genome, das in der 200 Generation den höchsten Wert hat, repräsentiert nachfolgend das jeweilige Experiment.
 
 \begin{table}
+	\setlength\abovecaptionskip{-0.4\baselineskip}
 	\caption{Übersicht zu den einzelnen Parametern der jeweiligen Experimente.}
 	\label{tab:experimente}
 	\centering
@@ -172,6 +177,7 @@ In Tabelle \ref{tab:experimente} sind die jeweiligen Parameter der Experimente d
 Nach Anwendung des \ac{NEAT}-Algorithmus, haben wir die Repräsentanten der Experimente in einem Turnier in Zweierduellen gegen einander antreten lassen. In Tabelle \ref{tab:turnier} sind die jeweils benötige Zeit und der erlittene Schaden aus den Duellen zu finden. Dabei wird deutlich, dass das Netz aus Experiment 4 sich gegen alle anderen, im Bezug auf Zeit und Schaden durchsetzen konnte. Daher wird dieses auch in dem Turnier am Ende Projektpraktikums eingesetzt.
 
 \begin{table}
+	\setlength\abovecaptionskip{-0.2\baselineskip}
 	\caption{Vergleich der Performanz der durch die verschiedenen Experimente generierten Netze.}{Die Zelle in Zeile $n$ und Spalte $m$ enthält die gefahrene Zeit und den erhaltenen Schaden des Netzes $n$ aus dem direkten Vergleich zu Netz $m$. Die letzte Spalte enthält die Durchschnittswerte aus den Duell mit den anderen Netzen, sofern das Duell überlebt wurde. Mit rot, grün und grau, sind jeweils die Niederlagen, Siege oder Unentschieden gekennzeichnet.}
 	\label{tab:turnier}
 	\centering

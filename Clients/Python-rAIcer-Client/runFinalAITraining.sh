@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-python RunAITraining.py
+python RunFinalAITraining.py

@@ -5,7 +5,7 @@ sys.argv.append("--cp_ids")
 sys.argv.append("2")
 sys.argv.append("--output_mode_2")
 sys.argv.append("--restore_folder")
-sys.argv.append("2018-08-28_10-57-12")
+sys.argv.append("tmp")
 
 import RaicerSocket
 import pygame

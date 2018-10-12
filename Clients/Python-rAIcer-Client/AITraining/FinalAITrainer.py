@@ -1,15 +1,4 @@
 import sys
-sys.argv.append("--direc_dist")
-sys.argv.append("--speed")
-sys.argv.append("--cp_ids")
-sys.argv.append("2")
-sys.argv.append("--output_mode_2")
-sys.argv.append("--num_gen")
-sys.argv.append("200")
-sys.argv.append("--config")
-sys.argv.append("neat_config_no_hidden_5_features_2")
-
-
 import neat
 import datetime
 import os

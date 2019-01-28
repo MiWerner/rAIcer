@@ -1,16 +1,12 @@
 import pickle
 import os
-from Utils import PATH_TO_SAVINGS, ARGS, is_windows, start_server
+from Utils import PATH_TO_EXPERIMENTS, ARGS, is_windows, start_server
 import neat
 import multiprocessing
 from AITrunament.TournamentClient import TournamentClient
 
 ki_folders = [
-    "2018-07-20_13-06-09_5Inputs_4Outputs_partialDirect_success",
-    "2018-08-08_12-03-22_5Inputs_4Outputs_partialDirect_neueTrack_success",
-    "2018-08-20_10-12-24_5Inputs_2Outputs_partialDirect_neueTrack_success",
-    "2018-08-28_10-57-12_5Inputs_2Outputs_partialDirect_Track3_4laps_success",
-    "2018-09-17_08-58-21_7Inputs_2Outputs_partial_direct_0_2_Track3_4laps_weak_success"
+    "E1", "E2", "E3", "E4", "E5",
 ]
 
 cp_ids = [[1], [2], [2], [2], [2, 4]]
@@ -25,21 +21,21 @@ for id_home in [1]:
             continue
 
         # restore clients
-        genome_home = pickle.load(open(os.path.join(PATH_TO_SAVINGS, ki_folders[id_home], "winner.p"), "rb"))
+        genome_home = pickle.load(open(os.path.join(PATH_TO_EXPERIMENTS, ki_folders[id_home], "winner.p"), "rb"))
         neat_config_home = neat.Config(neat.DefaultGenome,
                                   neat.DefaultReproduction,
                                   neat.DefaultSpeciesSet,
                                   neat.DefaultStagnation,
-                                  os.path.join(PATH_TO_SAVINGS, ki_folders[id_home], "configfile"))
+                                  os.path.join(PATH_TO_EXPERIMENTS, ki_folders[id_home], "configfile"))
 
         net_home = neat.nn.FeedForwardNetwork.create(genome=genome_home, config=neat_config_home)
 
-        genome_guest = pickle.load(open(os.path.join(PATH_TO_SAVINGS, ki_folders[id_guest], "winner.p"), "rb"))
+        genome_guest = pickle.load(open(os.path.join(PATH_TO_EXPERIMENTS, ki_folders[id_guest], "winner.p"), "rb"))
         neat_config_guest = neat.Config(neat.DefaultGenome,
                                        neat.DefaultReproduction,
                                        neat.DefaultSpeciesSet,
                                        neat.DefaultStagnation,
-                                       os.path.join(PATH_TO_SAVINGS, ki_folders[id_guest], "configfile"))
+                                       os.path.join(PATH_TO_EXPERIMENTS, ki_folders[id_guest], "configfile"))
 
         net_guest = neat.nn.FeedForwardNetwork.create(genome=genome_guest, config=neat_config_guest)
 

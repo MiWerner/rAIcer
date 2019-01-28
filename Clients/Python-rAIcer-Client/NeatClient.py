@@ -10,7 +10,7 @@ sys.argv.append("tmp")
 import RaicerSocket
 import pygame
 from Utils import S_WAIT, S_COUNTDOWN, S_RUNNING, S_FINISHED, S_CRASHED, S_CANCELED, IMG_WIDTH, IMG_HEIGHT, print_debug
-from Utils import PATH_TO_SAVINGS, ARGS
+from Utils import PATH_TO_EXPERIMENTS, ARGS
 import pickle
 import numpy as np
 import os
@@ -23,12 +23,12 @@ fc = None
 display = pygame.display.set_mode((IMG_WIDTH, IMG_HEIGHT))
 display.fill((255, 64, 64))
 
-genome = pickle.load(open(os.path.join(PATH_TO_SAVINGS, ARGS.restore_folder, "winner.p"), "rb"))
+genome = pickle.load(open(os.path.join(PATH_TO_EXPERIMENTS, ARGS.restore_folder, "winner_short.p"), "rb"))
 neat_config = neat.Config(neat.DefaultGenome,
                           neat.DefaultReproduction,
                           neat.DefaultSpeciesSet,
                           neat.DefaultStagnation,
-                          os.path.join(PATH_TO_SAVINGS, ARGS.restore_folder, "configfile"))
+                          os.path.join(PATH_TO_EXPERIMENTS, ARGS.restore_folder, "configfile"))
 
 net = neat.nn.FeedForwardNetwork.create(genome=genome, config=neat_config)
 

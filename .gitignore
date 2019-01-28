@@ -112,3 +112,13 @@ Server/rAIcer_Data/output_log.txt
 Custom_Server_Linux/
 
 Clients/Python-rAIcer-Client/res/NEAT-AI/
+
+Clients/Python-rAIcer-Client/res/Experiments/E1/checkpoints/
+
+Clients/Python-rAIcer-Client/res/Experiments/E2/checkpoints/
+
+Clients/Python-rAIcer-Client/res/Experiments/E3/checkpoints/
+
+Clients/Python-rAIcer-Client/res/Experiments/E4/checkpoints/
+
+Clients/Python-rAIcer-Client/res/Experiments/E5/checkpoints/

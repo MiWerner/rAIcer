@@ -1,0 +1,14 @@
+digraph {
+	node [fontsize=9 height=0.2 shape=circle width=0.2]
+	direc_dist [fillcolor=lightgray shape=box style=filled]
+	vx [fillcolor=lightgray shape=box style=filled]
+	vy [fillcolor=lightgray shape=box style=filled]
+	cp2x [fillcolor=lightgray shape=box style=filled]
+	cp2y [fillcolor=lightgray shape=box style=filled]
+	vertical [fillcolor=lightblue style=filled]
+	horizontal [fillcolor=lightblue style=filled]
+	cp2x -> horizontal [label=-5.29 color=red penwidth=1.1575750078992317 style=solid]
+	vx -> horizontal [label=6.80 color=green penwidth=1.4599923980709224 style=solid]
+	cp2y -> vertical [label=-5.85 color=red penwidth=1.2694372111048278 style=solid]
+	vy -> vertical [label=5.29 color=green penwidth=1.1580385902607855 style=solid]
+}

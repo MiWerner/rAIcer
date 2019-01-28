@@ -8,6 +8,11 @@ sys.argv.append("--num_gen")
 sys.argv.append("1000")
 sys.argv.append("--config")
 sys.argv.append("neat_config_no_hidden_5_features_2")
+sys.argv.append("--restore")
+sys.argv.append("--restore_folder")
+sys.argv.append("2018-10-12_12-51-54")
+sys.argv.append("--checkpoint_id")
+sys.argv.append("4")
 
 from Utils import ARGS
 from AITraining import FinalAITrainer

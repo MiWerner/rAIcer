@@ -32,7 +32,7 @@ def fitness_function(genomes, config):
             sys.stdout.write("\rGenomes {} to {} of {} are in evaluation now ..."
                              .format(min_g_id, max_g_id, len(genomes)))
             sys.stdout.flush()
-            __eval_genomes(current_genomes, config, track_id)
+            __eval_genomes(genomes=current_genomes, config=config, track_id=track_id)
             current_genomes = []
             min_g_id += 3
             max_g_id += 3
@@ -42,7 +42,7 @@ def fitness_function(genomes, config):
         sys.stdout.write("\rGenomes {} to {} of {} are in evaluation now ..."
                          .format(min_g_id, len(genomes), len(genomes)))
         sys.stdout.flush()
-        __eval_genomes(current_genomes, config)
+        __eval_genomes(genomes=current_genomes, config=config, track_id=track_id)
     print("")
 
 

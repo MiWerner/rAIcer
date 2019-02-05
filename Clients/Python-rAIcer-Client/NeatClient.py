@@ -5,7 +5,7 @@ sys.argv.append("--cp_ids")
 sys.argv.append("2")
 sys.argv.append("--output_mode_2")
 sys.argv.append("--restore_folder")
-sys.argv.append("tmp")
+sys.argv.append("E4")
 
 import RaicerSocket
 import pygame
@@ -23,7 +23,7 @@ fc = None
 display = pygame.display.set_mode((IMG_WIDTH, IMG_HEIGHT))
 display.fill((255, 64, 64))
 
-genome = pickle.load(open(os.path.join(PATH_TO_EXPERIMENTS, ARGS.restore_folder, "winner_short.p"), "rb"))
+genome = pickle.load(open(os.path.join(PATH_TO_EXPERIMENTS, ARGS.restore_folder, "winner.p"), "rb"))
 neat_config = neat.Config(neat.DefaultGenome,
                           neat.DefaultReproduction,
                           neat.DefaultSpeciesSet,

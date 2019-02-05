@@ -122,3 +122,11 @@ Clients/Python-rAIcer-Client/res/Experiments/E3/checkpoints/
 Clients/Python-rAIcer-Client/res/Experiments/E4/checkpoints/
 
 Clients/Python-rAIcer-Client/res/Experiments/E5/checkpoints/
+
+*.nav
+
+*.out
+
+*.snm
+
+*.toc
